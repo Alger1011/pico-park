@@ -19,7 +19,7 @@ public:
     void NextPhase(const int phase) {
         auto temp = std::dynamic_pointer_cast<Util::Image>(m_Drawable);
         // 特別處理 Phase 3，使用地圖渲染
-        if (phase ==3) {
+        if (phase ==4) {
             std::vector<std::vector<int>> map = Map::LoadMap(GA_RESOURCE_DIR"/Map/first.txt");
             // 這裡可以進一步實現將地圖轉換為背景圖的邏輯
             temp->SetImage(CreateMapImage(map));

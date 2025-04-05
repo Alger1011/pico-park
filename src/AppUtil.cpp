@@ -108,7 +108,7 @@ void App::CreateMapTiles(const std::vector<std::vector<int>>& map){
 
     float tileSize = 32.0f;
     float startX = -450.0f; // 調整起始位置，使地圖更居中
-    float startY = 35.0f;  // 調整起始位置，使地圖更靠上
+    float startY = 100.0f;  // 調整起始位置，使地圖更靠上
 
     int tilesCreated = 0;
 
