@@ -73,7 +73,7 @@ void App::CreateMapTiles(const std::vector<std::vector<int>>& map){
         // 計算每行最多顯示的列數
         // size_t maxColumns = std::min(map[y].size(), static_cast<size_t>(16));
 
-        for (size_t x = 0; x < map.size(); ++x) {
+        for (size_t x = 0; x < map[y].size(); ++x) {
             if (map[y][x] == 1) {
                 // 創建磚塊
                 auto tile = std::make_shared<Character>(tileImagePath);
