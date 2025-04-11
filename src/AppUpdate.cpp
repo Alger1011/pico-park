@@ -54,7 +54,7 @@ void App::Update() {
     // 在移動前紀錄舊位置
 
     const float gravity = -20.0f;     // 模擬重力
-    const float groundLevel = -140.0f;  // 地面高度 (假設地面 y = 0)
+    const float groundLevel = -200.0f;  // 地面高度 (假設地面 y = 0)
 
     // m_pico1 (WAD 控制)
     float speed1 = 5.0f;
@@ -70,8 +70,15 @@ void App::Update() {
     glm::vec2 newPosition1 = Position1;
     glm::vec2 newPosition2 = Position2;
 
+    glm::vec2 pico1Size = m_pico1->GetScaledSize();
+    glm::vec2 pico2Size = m_pico2->GetScaledSize();
+
+    // --- feet position 判斷角色腳下方塊 ---
+    glm::vec2 feetPos1 = { newPosition1.x, newPosition1.y - pico1Size.y / 2 + 5.0f };
+    glm::vec2 feetPos2 = { newPosition2.x, newPosition2.y - pico2Size.y / 2 - 0.1f };
+
     // ---- m_pico1 移動邏輯 (WAD 控制) ----
-    if (Util::Input::IsKeyPressed(Util::Keycode::W) && (newPosition1.y <= groundLevel || m_pico2->IsStanding(m_pico1))) {
+    if (Util::Input::IsKeyPressed(Util::Keycode::W) && (m_MapManager->HasTileAt(feetPos1) || m_pico2->IsStanding(m_pico1))) {
         m_pico1 -> Isjumping();
     }
     if (Util::Input::IsKeyPressed(Util::Keycode::A)) {
@@ -81,7 +88,7 @@ void App::Update() {
         newPosition1.x += speed1;  // 右移
     }
     // ---- m_pico2 移動邏輯 (上下左右 控制) ----
-    if (Util::Input::IsKeyPressed(Util::Keycode::UP) && (newPosition2.y <= groundLevel || m_pico1->IsStanding(m_pico2))){
+    if (Util::Input::IsKeyPressed(Util::Keycode::UP) && (m_MapManager->HasTileAt(feetPos2) || m_pico1->IsStanding(m_pico2))){
         m_pico2 -> Isjumping();
     }
     if (Util::Input::IsKeyPressed(Util::Keycode::LEFT)) {
@@ -173,7 +180,6 @@ if (m_Phase == Phase::STAGE_THREE) {  // 只在 Phase::STAGE_THREE 階段啟用�
     }
 
 
-
     // For m_pico1 movement - add after updating newPosition1
     float width1 = 20.0f; // Approximate character width, adjust based on actual sprite
     float height1 = 40.0f; // Approximate character height, adjust based on actual sprite
@@ -237,9 +243,6 @@ if (m_Phase == Phase::STAGE_THREE) {  // 只在 Phase::STAGE_THREE 階段啟用�
     m_pico1->SetPosition(screenPos1);
     m_pico2->SetPosition(screenPos2);
 
-    glm::vec2 pico1Size = m_pico1->GetScaledSize();
-    glm::vec2 pico2Size = m_pico2->GetScaledSize();
-
     glm::vec2 correctedWorld1 = worldPos1;
     if (CheckTileCollision(newPosition1, pico1Size, correctedWorld1, velocityY1)) {
         newPosition1 = correctedWorld1;
@@ -279,15 +282,24 @@ if (m_Phase == Phase::STAGE_THREE) {  // 只在 Phase::STAGE_THREE 階段啟用�
     velocityY2 += gravity * 0.2f;
     newPosition2.y += velocityY2;
 
-    // 防止角色穿透地面
-    if (newPosition1.y < groundLevel) {
-        newPosition1.y = groundLevel;
+    // pico1 判定地磚
+    if (m_MapManager->HasTileAt(feetPos1)) {
+        int gridY1 = static_cast<int>((m_MapManager->GetStartY() - feetPos1.y) / m_MapManager->GetTileSize());
+        float tileTopY = m_MapManager->GetStartY() - gridY1 * m_MapManager->GetTileSize();
+        // LOG_DEBUG("pico1 feetY: {}, tileTopY: {}, heightOffset: {}", feetPos1.y, tileTopY, pico1Size.y / 2.0f);
+        newPosition1.y = tileTopY + pico1Size.y / 2.0f + 1.0f;
         velocityY1 = 0.0f;
     }
-    if (newPosition2.y < groundLevel) {
-        newPosition2.y = groundLevel;
+
+    // pico2 判定地磚
+    if (m_MapManager->HasTileAt(feetPos2)) {
+        int gridY2 = static_cast<int>((m_MapManager->GetStartY() - feetPos2.y) / m_MapManager->GetTileSize());
+        float tileTopY = m_MapManager->GetStartY() - gridY2 * m_MapManager->GetTileSize();
+        // LOG_DEBUG("pico2 feetY: {}, tileTopY: {}, heightOffset: {}", feetPos2.y, tileTopY, pico2Size.y / 2.0f);
+        newPosition2.y = tileTopY + pico2Size.y / 2.0f+ 1.0f;
         velocityY2 = 0.0f;
     }
+
 
     glm::vec2 deltaPosition2 = newPosition2 - Position2;
     glm::vec2 deltaPosition1 = newPosition1 - Position1;

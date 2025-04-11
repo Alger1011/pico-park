@@ -28,6 +28,9 @@ public:
         return m_MapTiles;
     }
 
+    float GetStartY() const { return m_StartY; }
+    float GetTileSize() const { return m_TileSize; }
+
 private:
     // 創建地圖磚塊
     void CreateMapTiles(const std::vector<std::vector<int>>& map);
