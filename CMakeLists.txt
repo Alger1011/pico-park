@@ -29,7 +29,9 @@ add_executable(${PROJECT_NAME} ${SRC_FILES} ${HEADER_FILES}
         src/Camera.cpp
         include/Camera.hpp
         src/MapManager.cpp
-        include/MapManager.hpp)
+        include/MapManager.hpp
+        include/Renderer.hpp
+        src/Renderer.cpp)
 
 if(MSVC)
     target_compile_options(${PROJECT_NAME} PRIVATE /W4)
