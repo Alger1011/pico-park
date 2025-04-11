@@ -30,10 +30,11 @@ void App::ValidTask() {
                 m_pico1->SetPosition({-100.0f, -155.5f});
                 m_pico1->SetVisible(true);
                 m_pico2->SetVisible(true);
+                m_key->SetVisible(true);
+                m_door1->SetVisible(true);
                 // 載入地圖
                 std::string mapPath = GA_RESOURCE_DIR"/Map/first.txt";
                 m_Map = Map::LoadMap(mapPath);
-
                 // 創建視覺化地圖磚塊
                 CreateMapTiles(m_Map);
                 // 在控制台渲染地圖以便調試
@@ -46,10 +47,29 @@ void App::ValidTask() {
         break;
 
         case Phase::STAGE_ONE:
-            m_Phase = Phase::BEE_ANIMATION;
-            m_Giraffe->SetVisible(false);
-            m_Bee->SetVisible(true);
-            m_PRM->NextPhase();
+            LOG_DEBUG("Key Pos: ({}, {})", m_key->GetPosition().x, m_key->GetPosition().y);
+            if (m_pico1->IfCollides(m_key) || m_pico2->IfCollides(m_key)) {
+                LOG_DEBUG("Pico collided with key!");
+                m_key->SetVisible(false);
+            }
+            if (m_key->GetVisibility() == false && (m_pico1->IfCollides(m_door1) || m_pico2->IfCollides(m_door1))){
+                m_Phase = Phase::BEE_ANIMATION;
+                m_Giraffe->SetVisible(false);
+                m_Bee->SetVisible(false);
+                // 確保地圖在 STAGE_THREE 開始時可見
+                for (auto& tile : m_MapManager->GetMapTiles()) {
+                    tile->SetVisible(true);
+                }
+                // 重置角色位置到適當的起始點
+                m_pico1->SetPosition({-100.0f, -155.5f});
+                m_pico2->SetPosition({50.0f, -155.5f});
+                m_pico1->SetVisible(true);
+                m_pico2->SetVisible(true);
+
+                m_PRM->NextPhase();
+            } else {
+                LOG_DEBUG("The door doesn't open or doesn't get the key.");
+            }
         break;
 
         case Phase::BEE_ANIMATION:
