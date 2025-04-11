@@ -317,14 +317,27 @@ if (m_Phase == Phase::STAGE_THREE) {  // 只在 Phase::STAGE_THREE 階段啟用�
     // === 🔼 角色移動邏輯結束 🔼 ===
 
     // === 🔽 讓長頸鹿碰到門，門就打開 🔽 ===
+    // if (m_Phase == Phase::STAGE_ONE) {
+    //     for (const auto& door : m_Doors) {
+    //         if (m_Giraffe->IfCollides(door)) {  // ✅ 碰撞檢測
+    //             door->SetVisible(true);  // ✅ 門打開
+    //             door->SetImage(GA_RESOURCE_DIR"/Image/Character/door_open.png");
+    //         }
+    //     }
+    // }
+
+    // === 🔽 pico in stage_ons 🔽 ===
     if (m_Phase == Phase::STAGE_ONE) {
-        for (const auto& door : m_Doors) {
-            if (m_Giraffe->IfCollides(door)) {  // ✅ 碰撞檢測
-                door->SetVisible(true);  // ✅ 門打開
-                door->SetImage(GA_RESOURCE_DIR"/Image/Character/door_open.png");
-            }
+        if (m_pico1->IfCollides(m_key) || m_pico2->IfCollides(m_key)) {
+            LOG_DEBUG("Pico collided with key!");
+            m_key->SetVisible(false);
+        }
+        if (m_key->GetVisibility() == false && (m_pico1->IfCollides(m_door1) || m_pico2->IfCollides(m_door1))) {
+            m_door1->SetImage(GA_RESOURCE_DIR"/Image/Character/door2.png");
+            LOG_DEBUG("The door is open");
         }
     }
+
     m_pico1 -> Ismoving();
     m_pico2 -> Ismoving();
     m_Root.Update();

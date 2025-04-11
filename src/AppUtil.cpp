@@ -47,15 +47,11 @@ void App::ValidTask() {
         break;
 
         case Phase::STAGE_ONE:
-            LOG_DEBUG("Key Pos: ({}, {})", m_key->GetPosition().x, m_key->GetPosition().y);
-            if (m_pico1->IfCollides(m_key) || m_pico2->IfCollides(m_key)) {
-                LOG_DEBUG("Pico collided with key!");
-                m_key->SetVisible(false);
-            }
-            if (m_key->GetVisibility() == false && (m_pico1->IfCollides(m_door1) || m_pico2->IfCollides(m_door1))){
+            //LOG_DEBUG("Key Pos: ({}, {})", m_key->GetPosition().x, m_key->GetPosition().y);
+
+            if (m_door1->GetImagePath() == GA_RESOURCE_DIR"/Image/Character/door2.png"){
+                m_door1->SetImage(GA_RESOURCE_DIR"/Image/Character/door1.png");
                 m_Phase = Phase::BEE_ANIMATION;
-                m_Giraffe->SetVisible(false);
-                m_Bee->SetVisible(false);
                 // 確保地圖在 STAGE_THREE 開始時可見
                 for (auto& tile : m_MapManager->GetMapTiles()) {
                     tile->SetVisible(true);
