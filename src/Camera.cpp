@@ -1,6 +1,7 @@
 #include "Camera.hpp"
 #include "Character.hpp"
 #include "Util/Logger.hpp"
+#include "App.hpp"
 #include <algorithm>
 #include <cmath>
 #include <cfloat>
@@ -18,21 +19,6 @@ Camera::Camera(float viewWidth, float viewHeight)
     LOG_INFO("Camera initialized with view dimensions: {}x{}", viewWidth, viewHeight);
 }
 
-void Camera::Update(const std::shared_ptr<Character>& pico1, const std::shared_ptr<Character>& pico2) {
-    // Calculate the midpoint between characters
-    glm::vec2 midpoint = (pico1->GetPosition() + pico2->GetPosition()) * 0.5f;
-
-    // Apply smooth camera movement
-    m_Position = glm::mix(m_Position, midpoint, m_SmoothFactor);
-
-    // Keep camera within map boundaries
-    m_Position.x = glm::clamp(m_Position.x, m_LeftBoundary + m_ViewWidth * 0.5f, m_RightBoundary - m_ViewWidth * 0.5f);
-    m_Position.y = glm::clamp(m_Position.y, m_BottomBoundary + m_ViewHeight * 0.5f, m_TopBoundary - m_ViewHeight * 0.5f);
-
-    // Check if either character is going off-screen and handle it
-    ForceCharactersInView(pico1, pico2);
-}
-
 void Camera::ForceCharactersInView(const std::shared_ptr<Character>& pico1, const std::shared_ptr<Character>& pico2) {
     glm::vec2 pico1Pos = pico1->GetPosition();
     glm::vec2 pico2Pos = pico2->GetPosition();
@@ -43,8 +29,8 @@ void Camera::ForceCharactersInView(const std::shared_ptr<Character>& pico1, cons
 
     // Define screen boundaries with some margin
     float margin = 50.0f;
-    float leftBound = -m_ViewWidth * 0.25f + margin;
-    float rightBound = m_ViewWidth * 0.25f - margin;
+    float leftBound =  m_Position.x - 450.0f ;
+    float rightBound = m_Position.x + 450.0f;
     float topBound = m_ViewHeight * 0.5f - margin;
     float bottomBound = -m_ViewHeight * 0.5f + margin;
 
@@ -83,6 +69,29 @@ void Camera::ForceCharactersInView(const std::shared_ptr<Character>& pico1, cons
             }
         }
     }
+}
+
+float Camera::Update(const std::shared_ptr<Character>& pico1, const std::shared_ptr<Character>& pico2) {
+    // Calculate the midpoint between characters
+    glm::vec2 midpoint = (pico1->GetPosition() + pico2->GetPosition()) * 0.5f;
+
+    // Apply smooth camera movement
+    //m_Position = glm::mix(m_Position, midpoint, m_SmoothFactor);
+
+    // Keep camera within map boundaries
+    float old_pos;
+    old_pos = m_Position.x;
+    static glm::vec2 worldPos1(0.0f, 0.0f);
+    static glm::vec2 worldPos2(0.0f, 0.0f);
+    worldPos1 = pico1->GetPosition();
+    worldPos2 = pico2->GetPosition();
+    m_Position.x = (worldPos1.x+worldPos2.x)/2;
+    dif_post = m_Position.x - old_pos;
+
+    // Check if either character is going off-screen and handle it
+    ForceCharactersInView(pico1, pico2);
+
+    return dif_post;
 }
 
 

@@ -5,8 +5,15 @@
 #include "Map.hpp"
 #include "MapManager.hpp"
 
+
 void App::Start() {
     LOG_TRACE("Start");
+    // gm = std::make_shared<Util::GameObject>();
+    //
+    //
+    // m_Root.AddChild(gm);
+
+
 
     m_Camera = std::make_unique<Camera>(800.0f, 600.0f);
 
@@ -68,11 +75,6 @@ void App::Start() {
         tile->SetVisible(false);
     }
 
-    if (m_MapManager->GetMapTiles().empty()) {
-        LOG_ERROR("Map loading failed. Please check the file path and permissions.");
-    } else {
-        LOG_INFO("Map loaded successfully. Tiles: {}", m_MapManager->GetMapTiles().size());
-    }
     std::vector<std::string> beeImages;
     beeImages.reserve(2);
     for (int i = 0; i < 2; ++i) {
