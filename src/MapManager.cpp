@@ -87,11 +87,10 @@ void MapManager::UpdateVisibility(const Camera& camera) {
 }
 
 bool MapManager::HasTileAt(const glm::vec2& position) const {
-    // 將世界座標轉換為地圖格子座標
+
     int gridX = static_cast<int>((position.x - m_StartX) / m_TileSize);
     int gridY = static_cast<int>((m_StartY - position.y) / m_TileSize);
 
-    // 檢查座標是否在地圖範圍內
     if (gridY >= 0 && gridY < m_MapData.size() &&
         gridX >= 0 && gridX < m_MapData[gridY].size()) {
         return m_MapData[gridY][gridX] == 1;
