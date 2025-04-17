@@ -80,7 +80,7 @@ void App::Update() {
     glm::vec2 pico2Size = m_pico2->GetScaledSize();
 
     // --- feet position 判斷角色腳下方塊 ---
-    glm::vec2 feetPos1 = { newPosition1.x, newPosition1.y - pico1Size.y / 2 + 5.0f };
+    glm::vec2 feetPos1 = { newPosition1.x, newPosition1.y - pico1Size.y / 2 - 0.1f };
     glm::vec2 feetPos2 = { newPosition2.x, newPosition2.y - pico2Size.y / 2 - 0.1f };
 
     // ---- m_pico1 移動邏輯 (WAD 控制) ----
@@ -293,7 +293,7 @@ if (m_Phase == Phase::STAGE_THREE) {  // 只在 Phase::STAGE_THREE 階段啟用�
         int gridY1 = static_cast<int>((m_MapManager->GetStartY() - feetPos1.y) / m_MapManager->GetTileSize());
         float tileTopY = m_MapManager->GetStartY() - gridY1 * m_MapManager->GetTileSize();
         // LOG_DEBUG("pico1 feetY: {}, tileTopY: {}, heightOffset: {}", feetPos1.y, tileTopY, pico1Size.y / 2.0f);
-        newPosition1.y = tileTopY + pico1Size.y / 2.0f + 1.0f;
+        newPosition1.y = tileTopY + pico1Size.y / 2.0f;
         velocityY1 = 0.0f;
     }
 
@@ -302,7 +302,7 @@ if (m_Phase == Phase::STAGE_THREE) {  // 只在 Phase::STAGE_THREE 階段啟用�
         int gridY2 = static_cast<int>((m_MapManager->GetStartY() - feetPos2.y) / m_MapManager->GetTileSize());
         float tileTopY = m_MapManager->GetStartY() - gridY2 * m_MapManager->GetTileSize();
         // LOG_DEBUG("pico2 feetY: {}, tileTopY: {}, heightOffset: {}", feetPos2.y, tileTopY, pico2Size.y / 2.0f);
-        newPosition2.y = tileTopY + pico2Size.y / 2.0f+ 1.0f;
+        newPosition2.y = tileTopY + pico2Size.y / 2.0f;
         velocityY2 = 0.0f;
     }
 
@@ -344,6 +344,10 @@ if (m_Phase == Phase::STAGE_THREE) {  // 只在 Phase::STAGE_THREE 階段啟用�
     //     }
     // }
 
+    ImGui::Begin("test");
+    ImGui::SetWindowSize({300, 300});
+    ImGui::DragFloat2("position", &m_key->m_Transform.translation[0],1,-100, 100);
+    ImGui::End();
     // === 🔽 pico in stage_ons 🔽 ===
     if (m_Phase == Phase::STAGE_ONE) {
         if (m_pico1->IfCollides(m_key) || m_pico2->IfCollides(m_key)) {
