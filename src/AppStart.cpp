@@ -54,7 +54,7 @@ void App::Start() {
 
     m_door1 = std::make_shared<Character>(GA_RESOURCE_DIR"/Image/Character/door1.png");
     m_door1->SetZIndex(5);
-    m_door1->SetPosition({150.5f, -130.5f});
+    m_door1->SetPosition({150.5f, -150.5f});
     m_door1->m_Transform.scale = glm::vec2(0.5f, 0.5f);
     m_door1->SetVisible(false);
     m_Root.AddChild(m_door1);
