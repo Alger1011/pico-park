@@ -36,7 +36,7 @@ private:
     std::string CreateMapImage(const std::vector<std::vector<int>>& map) {
         // TODO: 實現地圖到圖像的轉換
         // 可以使用 SDL, OpenGL 或其他圖像庫來動態生成背景
-        return GA_RESOURCE_DIR"/Image/Background/phase3.png";  // 暫時返回原本的圖
+        return GA_RESOURCE_DIR"/Image/Background/phase2.png";  // 暫時返回原本的圖
     }
 };
 
