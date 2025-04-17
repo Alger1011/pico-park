@@ -15,7 +15,7 @@ void App::ValidTask() {
     switch (m_Phase) {
         case Phase::Welcome:
             if (m_Giraffe->GetImagePath() == GA_RESOURCE_DIR"/Image/Character/giraffe.png") {
-                m_Phase = Phase::PICK_STAGE;
+                m_Phase = Phase::STAGE_ONE_LOADING;
                 m_PRM->NextPhase();
             } else {
                 LOG_DEBUG("The image is not correct");
@@ -23,7 +23,7 @@ void App::ValidTask() {
             }
         break;
 
-        case Phase::PICK_STAGE:
+        case Phase::STAGE_ONE_LOADING:
             if (m_pico1->GetImagePath() == GA_RESOURCE_DIR"/Image/Character/pico_stand1.png") {
                 m_Phase = Phase::STAGE_ONE;
                 m_pico2->SetPosition({50.0f, -140.5f});
@@ -47,65 +47,65 @@ void App::ValidTask() {
         break;
 
         case Phase::STAGE_ONE:
-            //LOG_DEBUG("Key Pos: ({}, {})", m_key->GetPosition().x, m_key->GetPosition().y);
-
-            if (m_door1->GetImagePath() == GA_RESOURCE_DIR"/Image/Character/door2.png"){
+            if (!m_pico1->GetVisibility() && !m_pico2->GetVisibility()){
                 m_door1->SetImage(GA_RESOURCE_DIR"/Image/Character/door1.png");
-                m_Phase = Phase::BEE_ANIMATION;
+                m_Phase = Phase::STAGE_TWO_LOADING;
+                // 角色設置不可見
+                for (auto& tile : m_MapManager->GetMapTiles()) {
+                    tile->SetVisible(false);
+                }
+                m_pico1->SetVisible(false);
+                m_pico2->SetVisible(false);
+                m_key->SetVisible(false);
+                m_door1->SetVisible(false);
+                m_PRM->NextPhase();
+            } else {
+                LOG_DEBUG("ERROR.");
+            }
+        break;
+
+        case Phase::STAGE_TWO_LOADING:
+            if (m_pico1->GetImagePath() == GA_RESOURCE_DIR"/Image/Character/pico_stand1.png"){
+                //m_door1->SetImage(GA_RESOURCE_DIR"/Image/Character/door1.png");
+                m_Phase = Phase::STAGE_TWO;
                 // 確保地圖在 STAGE_THREE 開始時可見
                 for (auto& tile : m_MapManager->GetMapTiles()) {
                     tile->SetVisible(true);
                 }
+                // 載入地圖
+                std::string mapPath = GA_RESOURCE_DIR"/Map/second.txt";
+                m_MapManager->LoadMap(mapPath);
+                CreateMapTiles(m_Map);
+                Map::RenderMap(m_Map);
                 // 重置角色位置到適當的起始點
                 m_pico1->SetPosition({-100.0f, -155.5f});
                 m_pico2->SetPosition({50.0f, -155.5f});
                 m_pico1->SetVisible(true);
                 m_pico2->SetVisible(true);
-
+                m_key->SetVisible(true);
+                m_door1->SetVisible(true);
                 m_PRM->NextPhase();
             } else {
                 LOG_DEBUG("The door doesn't open or doesn't get the key.");
             }
         break;
 
-        case Phase::BEE_ANIMATION:
-            isBeeLooping = m_Bee->IsLooping();
-            isBeePlaying = m_Bee->IsPlaying();
-
-            if (isBeeLooping && isBeePlaying) {
-                m_Phase = Phase::STAGE_THREE; // 改為直接進入 STAGE_THREE
-                m_Giraffe->SetVisible(false);
-                m_Bee->SetVisible(false);
-                // 確保地圖在 STAGE_THREE 開始時可見
+        case Phase::STAGE_TWO:
+            if (!m_pico1->GetVisibility() && !m_pico2->GetVisibility()){
+                m_door1->SetImage(GA_RESOURCE_DIR"/Image/Character/door1.png");
+                m_Phase = Phase::OPEN_THE_DOORS;
+                // 角色設置不可見
                 for (auto& tile : m_MapManager->GetMapTiles()) {
-                tile->SetVisible(true);
+                    tile->SetVisible(false);
                 }
-                // 重置角色位置到適當的起始點
-                m_pico1->SetPosition({-100.0f, -155.5f});
-                m_pico2->SetPosition({50.0f, -155.5f});
-                m_pico1->SetVisible(true);
-                m_pico2->SetVisible(true);
-
+                m_pico1->SetVisible(false);
+                m_pico2->SetVisible(false);
+                m_key->SetVisible(false);
+                m_door1->SetVisible(false);
                 m_PRM->NextPhase();
             } else {
-                LOG_DEBUG("The bee animation is {} but not {}", isBeeLooping ? "looping" : "playing",
-                      isBeeLooping ? "playing" : "looping");
+                LOG_DEBUG("ERROR.");
             }
-        break;
-
-        case Phase::STAGE_THREE:
-            // 完成第三階段後的處理
-            m_Phase = Phase::OPEN_THE_DOORS;
-            m_Giraffe->SetPosition({-112.5f, -140.5f});
-            m_Giraffe->SetVisible(true);
-            m_Bee->SetVisible(false);
-            // 隱藏地圖磚塊
-            for (auto& tile : m_MapManager->GetMapTiles()) {
-                tile->SetVisible(false);
-            }
-            std::for_each(m_Doors.begin(), m_Doors.end(), [](const auto& door) { door->SetVisible(true); });
-
-            m_PRM->NextPhase();
         break;
 
         case Phase::OPEN_THE_DOORS:

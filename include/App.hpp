@@ -31,21 +31,22 @@ public:
 
     bool CheckTileCollision(glm::vec2 charPos, glm::vec2 charSize, glm::vec2& correctedPos, float& velocityY);
 
+    void PassCheck();
 
 private:
     void ValidTask();
 
     enum class Phase {
         Welcome,
-        PICK_STAGE,
+        STAGE_ONE_LOADING,
         STAGE_ONE,
-        // STAGE_TWO,
-        STAGE_THREE,
+        STAGE_TWO_LOADING,
+        STAGE_TWO,
         STAGE_FOUR,
         //CHANGE_CHARACTER_IMAGE,
         //ABLE_TO_MOVE,
         //COLLIDE_DETECTION,
-        BEE_ANIMATION,
+        //BEE_ANIMATION,
         OPEN_THE_DOORS,
         COUNTDOWN,
     };
