@@ -12,7 +12,7 @@ public:
                                          append_string_views(s_PhaseTasks[0], s_Validation),
                                          Util::Color::FromName(Util::Colors::WHITE)),
             100) {
-        m_Transform.translation = {0.0F, -270.F};
+        m_Transform.translation = {0.0F, -250.F};
     }
 
     void NextPhase(const int phase) {
@@ -26,14 +26,14 @@ private:
     }
 
     static constexpr std::string_view s_PhaseTasks[6] = {
+            " ",
             "  ",
             "  ",
             "  ",
             "  ",
-            "  ",
-            "  "
+            "Press Enter to proceed to the next page."
     };
-    static constexpr std::string_view s_Validation = "Press Enter to proceed to the next page.";
+    static constexpr std::string_view s_Validation = " ";
 };
 
 

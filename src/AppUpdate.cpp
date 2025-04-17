@@ -111,9 +111,8 @@ void App::Update() {
     // ---- m_pico1 移動邏輯 (WAD 控制) ----
     if (Util::Input::IsKeyPressed(Util::Keycode::W)) {
         bool isOnGround = m_MapManager->HasTileAt(feetPos1);
-        bool isOnOtherPico = m_pico2->IsStanding(m_pico1);
-        bool someoneOnMyHead = m_pico1->IsStanding(m_pico2); // 頭上有人
-
+        bool isOnOtherPico = m_pico2->GetVisibility() && m_pico2->IsStanding(m_pico1);
+        bool someoneOnMyHead = m_pico2->GetVisibility() && m_pico1->IsStanding(m_pico2);
         if ((isOnGround || isOnOtherPico) && !someoneOnMyHead) {
             m_pico1->Isjumping();
         }
@@ -127,9 +126,8 @@ void App::Update() {
     // ---- m_pico2 移動邏輯 (上下左右 控制) ----
     if (Util::Input::IsKeyPressed(Util::Keycode::UP)) {
         bool isOnGround = m_MapManager->HasTileAt(feetPos2);
-        bool isOnOtherPico = m_pico1->IsStanding(m_pico2);
-        bool someoneOnMyHead = m_pico2->IsStanding(m_pico1);
-
+        bool isOnOtherPico = m_pico1->GetVisibility() && m_pico1->IsStanding(m_pico2);
+        bool someoneOnMyHead = m_pico1->GetVisibility() && m_pico2->IsStanding(m_pico1);
         if ((isOnGround || isOnOtherPico) && !someoneOnMyHead) {
             m_pico2->Isjumping();
         }

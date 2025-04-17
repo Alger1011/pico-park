@@ -66,7 +66,7 @@ void App::ValidTask() {
 
         case Phase::STAGE_TWO_LOADING:
             if (m_pico1->GetImagePath() == GA_RESOURCE_DIR"/Image/Character/pico_stand1.png"){
-                //m_door1->SetImage(GA_RESOURCE_DIR"/Image/Character/door1.png");
+                m_door1->SetImage(GA_RESOURCE_DIR"/Image/Character/door1.png");
                 m_Phase = Phase::STAGE_TWO;
                 // 確保地圖在 STAGE_THREE 開始時可見
                 for (auto& tile : m_MapManager->GetMapTiles()) {
