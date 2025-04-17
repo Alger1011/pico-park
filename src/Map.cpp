@@ -61,9 +61,9 @@ void App::CreateMapTiles(const std::vector<std::vector<int>>& map){
     LOG_DEBUG("Creating Map Tiles - Total Map Rows: {}", map.size());
 
     // 增大磚塊尺寸
-    float tileSize = 55.0f;
-    float startX = -387.0f; // 調整起始位置，使地圖更居中
-    float startY = 223.0f;  // 調整起始位置，使地圖更靠上
+    float tileSize = 62.0f;
+    float startX = -463.5f; // 調整起始位置，使地圖更居中
+    float startY = 244.5f;  // 調整起始位置，使地圖更靠上
 
     int tilesCreated = 0;
 

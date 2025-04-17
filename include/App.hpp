@@ -73,6 +73,7 @@ private:
     std::shared_ptr<AnimatedCharacter> m_Bee;
     std::shared_ptr<AnimatedCharacter> m_Ball;
 
+    std::shared_ptr<Util::GameObject> gm;
     std::shared_ptr<PhaseResourceManger> m_PRM;
 
     std::unique_ptr<Camera> m_Camera;
@@ -80,6 +81,7 @@ private:
 
 
     bool m_EnterDown = false;
+    bool m_IsCharacterOutOfBounds = false;
 };
 
 #endif

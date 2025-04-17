@@ -4,6 +4,7 @@
 #include "Util/Logger.hpp"
 #include "Util/Input.hpp"
 #include "Util/Keycode.hpp"
+#include "Camera.hpp"
 
 bool App::CheckTileCollision(glm::vec2 charPos, glm::vec2 charSize, glm::vec2& correctedPos, float& velocityY){
     for (auto& tile : m_MapTiles) {
@@ -51,6 +52,9 @@ void App::PassCheck() {
 
 
 void App::Update() {
+    // ImGui::Begin("gm");
+    // ImGui::DragFloat("x", &gm->m_Transform.translation.x);
+    // ImGui::End();
 
     if (Util::Input::IsKeyPressed(Util::Keycode::ESCAPE) || Util::Input::IfExit()) {
         m_CurrentState = State::END;
@@ -84,11 +88,13 @@ void App::Update() {
     // m_pico1 (WAD 控制)
     float speed1 = 5.0f;
     glm::vec2 Position1 = m_pico1->GetPosition();
+    glm::vec2 Position2 = m_pico2->GetPosition();
     float velocityY1 = 0.0f;  // 垂直速度 (用於重力與跳躍)
+    m_pico1->m_Transform.translation.x -= m_Camera->Update(m_pico1, m_pico2);
 
     // m_pico2 (上下左右 控制)
     float speed2 = 5.0f;
-    glm::vec2 Position2 = m_pico2->GetPosition();
+
     float velocityY2 = 0.0f;  // 垂直速度 (用於重力與跳躍)
 
     // 先用舊位置初始化新位置，稍後修改
