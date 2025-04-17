@@ -5,8 +5,15 @@
 #include "Map.hpp"
 #include "MapManager.hpp"
 
+
 void App::Start() {
     LOG_TRACE("Start");
+    // gm = std::make_shared<Util::GameObject>();
+    //
+    //
+    // m_Root.AddChild(gm);
+
+
 
     m_Camera = std::make_unique<Camera>(800.0f, 600.0f);
 
@@ -58,8 +65,8 @@ void App::Start() {
     m_MapManager->LoadMap(mapPath);
 
     // 設置相機邊界
-    float left = -387.0f;
-    float right = 387.0f;
+    float left = -275.0f;
+    float right = 275.0f;
     float top = 223.0f;
     float bottom = -223.0f;
     m_Camera->SetBoundaries(left, right, top, bottom);
@@ -68,11 +75,6 @@ void App::Start() {
         tile->SetVisible(false);
     }
 
-    if (m_MapManager->GetMapTiles().empty()) {
-        LOG_ERROR("Map loading failed. Please check the file path and permissions.");
-    } else {
-        LOG_INFO("Map loaded successfully. Tiles: {}", m_MapManager->GetMapTiles().size());
-    }
     std::vector<std::string> beeImages;
     beeImages.reserve(2);
     for (int i = 0; i < 2; ++i) {

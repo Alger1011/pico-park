@@ -5,6 +5,8 @@
 
 #include "Util/GameObject.hpp"
 
+class Camera;
+
 class Character : public Util::GameObject {
 public:
     explicit Character(const std::string& ImagePath);

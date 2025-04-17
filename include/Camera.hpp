@@ -8,8 +8,10 @@ class Camera {
 public:
     Camera(float viewWidth, float viewHeight);
 
-    void Update(const std::shared_ptr<Character>& pico1, const std::shared_ptr<Character>& pico2);
+    float Update(const std::shared_ptr<Character>& pico1, const std::shared_ptr<Character>& pico2);
     void SetBoundaries(float left, float right, float top, float bottom);
+    bool IsCharacterOutOfBounds(const std::shared_ptr<Character>& character) const;
+    void ForceCharactersInView(const std::shared_ptr<Character>& pico1, const std::shared_ptr<Character>& pico2);
 
     glm::vec2 WorldToScreenPosition(const glm::vec2& worldPos) const;
     glm::vec2 ScreenToWorldPosition(const glm::vec2& screenPos) const;
@@ -19,7 +21,11 @@ public:
     float GetViewWidth() const { return m_ViewWidth; }
     float GetViewHeight() const { return m_ViewHeight; }
 
+
+
+
 private:
+    float dif_post;
     glm::vec2 m_Position;
     float m_ViewWidth;
     float m_ViewHeight;
