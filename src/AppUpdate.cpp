@@ -338,6 +338,10 @@ if (m_Phase == Phase::STAGE_THREE) {  // 只在 Phase::STAGE_THREE 階段啟用�
     //     }
     // }
 
+    ImGui::Begin("test");
+    ImGui::SetWindowSize({300, 300});
+    ImGui::DragFloat2("position", &m_key->m_Transform.translation[0],1,-100, 100);
+    ImGui::End();
     // === 🔽 pico in stage_ons 🔽 ===
     if (m_Phase == Phase::STAGE_ONE) {
         if (m_pico1->IfCollides(m_key) || m_pico2->IfCollides(m_key)) {
