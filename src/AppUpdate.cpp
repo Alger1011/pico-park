@@ -35,14 +35,14 @@ void App::PassCheck() {
         LOG_DEBUG("The door is open");
     }
     // pico1 進門
-    if (m_pico1->IfCollides(m_door1) && Util::Input::IsKeyPressed(Util::Keycode::W)) {
+    if (m_pico1->IfCollides(m_door1) && Util::Input::IsKeyPressed(Util::Keycode::W) && m_door1->GetImagePath() == GA_RESOURCE_DIR"/Image/Character/door2.png") {
         if (m_pico1->GetVisibility()) {
             m_pico1->SetVisible(false);
             LOG_DEBUG("pico1 entered the door");
         }
     }
     // pico2 進門
-    if (m_pico2->IfCollides(m_door1) && Util::Input::IsKeyPressed(Util::Keycode::UP)) {
+    if (m_pico2->IfCollides(m_door1) && Util::Input::IsKeyPressed(Util::Keycode::UP) && m_door1->GetImagePath() == GA_RESOURCE_DIR"/Image/Character/door2.png") {
         if (m_pico2->GetVisibility()) {
             m_pico2->SetVisible(false);
             LOG_DEBUG("pico2 entered the door");
