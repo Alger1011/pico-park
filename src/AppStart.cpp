@@ -64,9 +64,11 @@ void App::Start() {
     std::string mapPath = GA_RESOURCE_DIR"/Map/first.txt";
     m_MapManager->LoadMap(mapPath);
 
+    m_Camera->SetMapManager(m_MapManager.get());
+
     // 設置相機邊界
-    float left = -275.0f;
-    float right = 275.0f;
+    float left = -500.0f;
+    float right = 500.0f;
     float top = 223.0f;
     float bottom = -223.0f;
     m_Camera->SetBoundaries(left, right, top, bottom);
