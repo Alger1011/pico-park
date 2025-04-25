@@ -32,6 +32,7 @@ void App::ValidTask() {
                 m_pico2->SetVisible(true);
                 m_key->SetVisible(true);
                 m_door1->SetVisible(true);
+                m_board1->SetVisible(true);
                 // 載入地圖
                 std::string mapPath = GA_RESOURCE_DIR"/Map/first.txt";
                 m_Map = Map::LoadMap(mapPath);
