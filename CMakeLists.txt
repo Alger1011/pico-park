@@ -11,9 +11,9 @@ set(FETCHCONTENT_QUIET FALSE)
 FetchContent_Declare(
         ptsd
 
-        URL  https://github.com/ntut-open-source-club/practical-tools-for-simple-design/archive/refs/tags/v0.3-rc1.zip
+        URL  https://github.com/ntut-open-source-club/practical-tools-for-simple-design/archive/refs/tags/v0.3-rc2.zip
 
-        # Or alternatively if you want to use a specific git commit instead of a release:
+        # Or alternatively if you want to use a specific git commit insted of a release:
         # GIT_REPOSITORY  https://github.com/ntut-open-source-club/practical-tools-for-simple-design.git
         # GIT_TAG         <git_tag>
 

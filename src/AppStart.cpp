@@ -15,7 +15,7 @@ void App::Start() {
 
 
 
-    m_Camera = std::make_unique<Camera>(800.0f, 600.0f);
+    m_Camera = std::make_unique<Camera>(1000.0f, 600.0f);
 
     // 玩家 1（PICO1）
     m_pico1 = std::make_shared<Character>(GA_RESOURCE_DIR"/Image/Character/pico_stand1.png");
