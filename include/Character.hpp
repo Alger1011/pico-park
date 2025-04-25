@@ -2,7 +2,7 @@
 #define CHARACTER_HPP
 
 #include <string>
-
+#include "Object.hpp"
 #include "Util/GameObject.hpp"
 
 class Camera;
@@ -37,7 +37,13 @@ public:
 
     bool IfCollides(const std::shared_ptr<Character>& other) const;
 
+    int IfCollidesObject(const std::shared_ptr<Object>& other) const;
+
+    void SetSpeed(int direction, float speed);
+
     bool IsStanding(const std::shared_ptr<Character>& character) const;
+
+    bool IsStandingOnBoard(const std::shared_ptr<Character>& character) const;
 
     glm::vec2 GetScaledSize() const {
         // 假設有一個原始大小
@@ -55,6 +61,7 @@ private:
     int JumpVelocity = 0;
     std::string m_ImagePath;
     glm::vec2 Cha_size = {50, 50};
+    std::vector<float> m_speed = {0, 0, 0, 0}; //上下左右
 };
 
 

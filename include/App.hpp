@@ -64,7 +64,7 @@ private:
 
     std::shared_ptr<Character> m_key;
     std::shared_ptr<Character> m_door1;
-    std::shared_ptr<Character> m_door2;
+    std::shared_ptr<Character> m_board1;
 
     std::shared_ptr<Character> m_Giraffe;
     std::shared_ptr<Character> m_Chest;

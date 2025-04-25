@@ -89,17 +89,17 @@ void App::Update() {
     float speed1 = 5.0f;
     glm::vec2 Position1 = m_pico1->GetPosition();
     glm::vec2 Position2 = m_pico2->GetPosition();
+    glm::vec2 Board_Position = m_board1->GetPosition();
     float velocityY1 = 0.0f;  // 垂直速度 (用於重力與跳躍)
     m_pico1->m_Transform.translation.x -= m_Camera->Update(m_pico1, m_pico2);
-
-    // m_pico2 (上下左右 控制)
     float speed2 = 5.0f;
-
-    float velocityY2 = 0.0f;  // 垂直速度 (用於重力與跳躍)
+    float board_speed = 5.0f;
+    float velocityY2 = 0.0f;
 
     // 先用舊位置初始化新位置，稍後修改
     glm::vec2 newPosition1 = Position1;
     glm::vec2 newPosition2 = Position2;
+    glm::vec2 new_Board_Position = Board_Position;
 
     glm::vec2 pico1Size = m_pico1->GetScaledSize();
     glm::vec2 pico2Size = m_pico2->GetScaledSize();
@@ -342,22 +342,35 @@ void App::Update() {
 
     glm::vec2 deltaPosition2 = newPosition2 - Position2;
     glm::vec2 deltaPosition1 = newPosition1 - Position1;
+    glm::vec2 delta_Board_Position = new_Board_Position - Board_Position;
 
     // 檢查角色是否站立在對方上並調整位置與速度
     if (m_pico1->IsStanding(m_pico2)) {
         glm::vec2 pico2Pos = m_pico2->GetPosition();
-        //glm::vec2 pico1Size = m_pico1->GetScaledSize();
         newPosition2.y = pico2Pos.y - pico1Size.y;
         newPosition2.y = pico2Pos.y;
         newPosition2 += deltaPosition1;
     }
-
     if (m_pico2->IsStanding(m_pico1)) {
         glm::vec2 pico1Pos = m_pico1->GetPosition();
         //glm::vec2 pico2Size = m_pico2->GetScaledSize();
         newPosition1.y = pico1Pos.y - pico2Size.y;
         newPosition1.y = pico1Pos.y;
         newPosition1 += deltaPosition2;
+    }
+
+    // 站在板子上
+    float gound = -150.0f;
+    if (m_pico1->IsStandingOnBoard(m_board1) || m_pico2->IsStandingOnBoard(m_board1)) {
+        new_Board_Position += board_speed;
+        glm::vec2 pico1Pos = m_pico1->GetPosition();
+        glm::vec2 BoardSize = m_board1->GetScaledSize();
+        newPosition1.y = pico1Pos.y - BoardSize.y;
+        newPosition1.y = pico1Pos.y;
+        newPosition1 += delta_Board_Position;
+    }
+    else if (new_Board_Position.y >= gound) {
+        new_Board_Position -= board_speed;
     }
 
     // 設定角色新位置

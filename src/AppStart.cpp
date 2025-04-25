@@ -59,6 +59,13 @@ void App::Start() {
     m_door1->SetVisible(false);
     m_Root.AddChild(m_door1);
 
+    m_board1 = std::make_shared<Character>(GA_RESOURCE_DIR"/Image/Character/board2.png");
+    m_board1->SetZIndex(5);
+    m_board1->SetPosition({320.5f, -150.5f});
+    //m_board1->m_Transform.scale = glm::vec2(0.5f, 0.5f);
+    m_board1->SetVisible(false);
+    m_Root.AddChild(m_board1);
+
     m_MapManager = std::make_unique<MapManager>(m_Root);
 
     std::string mapPath = GA_RESOURCE_DIR"/Map/first.txt";
