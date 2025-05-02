@@ -10,6 +10,7 @@
 #include "AnimatedCharacter.hpp"
 #include "Camera.hpp"
 #include "MapManager.hpp"
+#include "Object.hpp"
 
 class App {
 public:
@@ -33,6 +34,8 @@ public:
 
     void PassCheck();
 
+    void CreateMapTiles(const std::string& filename);
+
 private:
     void ValidTask();
 
@@ -55,12 +58,15 @@ private:
     Phase m_Phase = Phase::Welcome;
 
     Util::Renderer m_Root;
-
     std::vector<std::vector<int>> m_Map;
     std::vector<std::shared_ptr<Character>> m_MapTiles;
 
+    std::vector<std::shared_ptr<Object>> m_Objects;
+
     std::shared_ptr<Character> m_pico1;
     std::shared_ptr<Character> m_pico2;
+
+    std::vector<std::shared_ptr<Character>> m_pico;
 
     std::shared_ptr<Character> m_key;
     std::shared_ptr<Character> m_door1;

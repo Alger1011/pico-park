@@ -22,7 +22,7 @@ void App::Start() {
     m_pico1->m_Transform.translation = {-100.0f, -155.5f};
     m_pico1->SetZIndex(50);
     m_pico1->SetVisible(false);
-    m_pico1->m_Transform.scale = glm::vec2(0.25f, 0.25f);  // 放大 0.25 倍
+    m_pico1->m_Transform.scale = glm::vec2(0.198f, 0.17f);  // 放大 0.25 倍
     m_Root.AddChild(m_pico1);
 
     // 玩家 2（PICO2）
@@ -30,8 +30,11 @@ void App::Start() {
     m_pico2->m_Transform.translation = {50.0f, -155.5f};
     m_pico2->SetZIndex(50);
     m_pico2->SetVisible(false);
-    m_pico2->m_Transform.scale = glm::vec2(0.25f, 0.25f);  // 放大 0.25 倍
+    m_pico2->m_Transform.scale = glm::vec2(0.195f, 0.17f);  // 放大 0.25 倍
     m_Root.AddChild(m_pico2);
+
+    m_pico.push_back(m_pico1);
+    m_pico.push_back(m_pico2);
 
     m_Giraffe = std::make_shared<Character>(GA_RESOURCE_DIR"/Image/Character/giraffe.png");
     m_Giraffe->SetPosition({-112.5f, -140.5f});
