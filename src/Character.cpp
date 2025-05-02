@@ -162,4 +162,81 @@ void Character::HeadCorrection(const std::shared_ptr<Character>& other) {
     m_Transform.translation.y = other->GetPosition().y + other->GetSize().y/2 + Cha_size.y/2 ;
 }
 
+int Character::IfCollidesCha(const std::shared_ptr<Character>& other) const {
+    glm::vec2 posA = other->m_Transform.translation;
+    glm::vec2 sizeA = other->GetSize();
 
+    // 物體 A 的邊界 (左, 右, 上, 下)
+    float leftA = posA.x - sizeA.x / 2;
+    float rightA = posA.x + sizeA.x / 2;
+    float topA = posA.y + sizeA.y / 2;  // 上邊界
+    float bottomA = posA.y - sizeA.y / 2;  // 下邊界
+
+    glm::vec2 posB = m_Transform.translation;
+    glm::vec2 sizeB = Cha_size;
+
+    // 物體 B 的邊界 (左, 右, 上, 下)
+    float leftB = posB.x - sizeB.x / 2;
+    float rightB = posB.x + sizeB.x / 2;
+    float topB = posB.y + sizeB.y / 2;  // 上邊界
+    float bottomB = posB.y - sizeB.y / 2;  // 下邊界
+
+    // 檢查碰撞邏輯 (上下左右)
+    bool isCollided = !(rightB <= leftA || leftB >= rightA || topB <= bottomA || bottomB >= topA);
+
+    if (isCollided) {
+        // 當碰撞發生時，根據物體 B 的位置來處理不同的情況
+
+        // 判斷上下碰撞：
+        if (posB.y > posA.y) {
+            // 物體 B 在物體 A 之下
+            // 如果物體 B 的下邊界 > 物體 A 的上邊界，則發生碰撞
+            if (bottomB < topA && (posB.x < rightA && posB.x > leftA)){
+                // 物體 B 往上移動的碰撞反應
+                return 0;
+            }
+        } else if (posB.y < posA.y) {
+            // 物體 B 在物體 A 之上
+            if (topB > bottomA && (posB.x < rightA && posB.x > leftA)) {
+                // 物體 B 往下移動的碰撞反應
+                return 1;
+            }
+        }
+
+        // 判斷左右碰撞：
+        if (posB.x > posA.x) {
+            // 物體 B 在物體 A 的右邊
+            if (leftB < rightA && (posB.y <= topA && posB.y >= bottomA)) {
+                // 物體 B 往左移動的碰撞反應
+                return 3;
+            }
+        } else if (posB.x < posA.x) {
+            // 物體 B 在物體 A 的左邊
+            if (rightB > leftA && (posB.y <= topA && posB.y >= bottomA)) {
+                // 物體 B 往右移動的碰撞反應
+                return 2;
+            }
+        }
+    }
+    // 沒有碰撞
+    return -1;
+}
+
+void Character::ChaPositionCorrection(int direction, const std::shared_ptr<Character>& other) {
+    if (direction == 0) {
+        float posY = other->GetPosition().y + other->GetSize().y/2 + Cha_size.y/2 - 1;
+        m_Transform.translation.y = posY;
+    }
+    else if (direction == 1) {
+        float posY = other->GetPosition().y - other->GetSize().y/2 - Cha_size.y/2;
+        m_Transform.translation.y = posY;
+    }
+    else if (direction == 2) {
+        float posX = other->GetPosition().x - other->GetSize().x/2 - Cha_size.x/2 + 1;
+        m_Transform.translation.x = posX;
+    }
+    else if (direction == 3) {
+        float posX = other->GetPosition().x + other->GetSize().x/2 + Cha_size.x/2 - 1;
+        m_Transform.translation.x = posX;
+    }
+}

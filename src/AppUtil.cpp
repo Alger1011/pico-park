@@ -27,7 +27,7 @@ void App::ValidTask() {
         break;
 
         case Phase::STAGE_ONE_LOADING:
-            if (m_pico1->GetImagePath() == GA_RESOURCE_DIR"/Image/Character/pico_stand1.png") {
+            if (m_pico1->GetImagePath() == GA_RESOURCE_DIR"/Image/Character/right_pico_stand1.png") {
                 m_Phase = Phase::STAGE_ONE;
                 m_pico2->SetPosition({50.0f, 0.0f});
                 m_pico1->SetPosition({-100.0f, 0.0f});
@@ -35,22 +35,16 @@ void App::ValidTask() {
                 m_pico2->SetVisible(true);
                 // m_key->SetVisible(true);
                 // m_door1->SetVisible(true);
-                // m_board1->SetVisible(true);
+
                 m_pico1 -> SetSpeed(1, -m_pico1 -> GetSpeed(1));
                 m_pico2 -> SetSpeed(1, -m_pico2 -> GetSpeed(1));
                 // 載入地圖
                 std::string mapPath = GA_RESOURCE_DIR"/Map/first.txt";
                 CreateMapTiles(mapPath);
-
-                auto object = std::make_shared<Board>(GA_RESOURCE_DIR"/Image/Character/board_1.png", glm::vec2( 0, -100), glm::vec2(200,16));
+                // 載入板子
+                auto object = std::make_shared<Board>(GA_RESOURCE_DIR"/Image/Character/board.png", glm::vec2( 0, -100), glm::vec2(200,16));
                 m_Objects.push_back(object);
                 m_Root.AddChild(object);
-
-                // m_Map = Map::LoadMap(mapPath);
-                // // 創建視覺化地圖磚塊
-                // CreateMapTiles(m_Map);
-                // // 在控制台渲染地圖以便調試
-                // Map::RenderMap(m_Map);
                 m_PRM->NextPhase();
             } else {
                 LOG_INFO("The level is not yet available.");

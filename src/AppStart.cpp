@@ -12,13 +12,12 @@ void App::Start() {
     //
     //
     // m_Root.AddChild(gm);
+  
+    m_Camera = std::make_unique<Camera>(800.0f, 600.0f);
 
-
-
-    m_Camera = std::make_unique<Camera>(1000.0f, 600.0f);
 
     // 玩家 1（PICO1）
-    m_pico1 = std::make_shared<Character>(GA_RESOURCE_DIR"/Image/Character/pico_stand1.png");
+    m_pico1 = std::make_shared<Character>(GA_RESOURCE_DIR"/Image/Character/right_pico_stand1.png");
     m_pico1->m_Transform.translation = {-100.0f, -155.5f};
     m_pico1->SetZIndex(50);
     m_pico1->SetVisible(false);
@@ -26,7 +25,7 @@ void App::Start() {
     m_Root.AddChild(m_pico1);
 
     // 玩家 2（PICO2）
-    m_pico2 = std::make_shared<Character>(GA_RESOURCE_DIR"/Image/Character/pico_stand2.png");
+    m_pico2 = std::make_shared<Character>(GA_RESOURCE_DIR"/Image/Character/right_pico_stand2.png");
     m_pico2->m_Transform.translation = {50.0f, -155.5f};
     m_pico2->SetZIndex(50);
     m_pico2->SetVisible(false);
