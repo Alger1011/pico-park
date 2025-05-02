@@ -12,8 +12,9 @@ void App::Start() {
     //
     //
     // m_Root.AddChild(gm);
-
+  
     m_Camera = std::make_unique<Camera>(800.0f, 600.0f);
+
 
     // 玩家 1（PICO1）
     m_pico1 = std::make_shared<Character>(GA_RESOURCE_DIR"/Image/Character/right_pico_stand1.png");
@@ -72,9 +73,11 @@ void App::Start() {
     std::string mapPath = GA_RESOURCE_DIR"/Map/first.txt";
     m_MapManager->LoadMap(mapPath);
 
+    m_Camera->SetMapManager(m_MapManager.get());
+
     // 設置相機邊界
-    float left = -275.0f;
-    float right = 275.0f;
+    float left = -500.0f;
+    float right = 500.0f;
     float top = 223.0f;
     float bottom = -223.0f;
     m_Camera->SetBoundaries(left, right, top, bottom);
