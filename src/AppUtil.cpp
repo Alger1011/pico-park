@@ -107,6 +107,7 @@ void App::ValidTask() {
                 m_pico2->SetVisible(false);
                 m_key->SetVisible(false);
                 m_door1->SetVisible(false);
+                //_Map->SetVisible();
                 m_PRM->NextPhase();
             } else {
                 LOG_DEBUG("ERROR.");
