@@ -267,7 +267,6 @@ void App::Update() {
             pico -> SetSpeed(1, -pico -> GetSpeed(1));
         }
     }
-    // 掉落重置--------------
 
     m_pico1 -> Ismoving();
     m_pico2 -> Ismoving();
