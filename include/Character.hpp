@@ -38,6 +38,8 @@ public:
 
     int IfCollidesObject(const std::shared_ptr<Object>& other) const;
 
+    int IfCollidesCha(const std::shared_ptr<Character>& other) const;
+
     void SetSpeed(int direction, float speed);
 
     bool IsStanding(const std::shared_ptr<Character>& character) const;
@@ -47,6 +49,8 @@ public:
     float GetSpeed(int direction) {return m_speed[direction];}
 
     void PositionCorrection(int direction, const std::shared_ptr<Object>& other);
+
+    void ChaPositionCorrection(int direction, const std::shared_ptr<Character>& other);
 
     void HeadCorrection(const std::shared_ptr<Character>& other);
 
@@ -65,8 +69,6 @@ public:
     }
 
     bool CheckTileCollision();
-
-
 
 
 private:

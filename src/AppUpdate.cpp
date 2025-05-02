@@ -72,41 +72,14 @@ void App::Update() {
     }
     m_EnterDown = Util::Input::IsKeyPressed(Util::Keycode::RETURN);
 
-    // // === 🔽 碰撞檢測 🔽 ===
-    // if (m_Giraffe->IfCollides(m_Chest)) {
-    //     m_Chest->SetVisible(false);  // 隱藏寶箱
-    // }
-    //
-    // // === 🔼 碰撞檢測結束 🔼 ===
 
     // === 🔽 加入角色移動邏輯 🔽 ===
-    // 在移動前紀錄舊位置
-
     const float jump = 30.0f;
-    const float gravity = 1.0f;     // 模擬重力
+    const float gravity = 1.0f;
     const float speed = 5.0f;
-
-    // m_pico1 (WAD 控制)
-    // glm::vec2 Position1 = m_pico1->GetPosition();
-    // glm::vec2 Position2 = m_pico2->GetPosition();
-    // glm::vec2 Board_Position = m_board1->GetPosition();
-    // m_pico1->m_Transform.translation.x -= m_Camera->Update(m_pico1, m_pico2);
-    // float board_speed = 5.0f;
 
     m_pico1 -> SetSpeed(1, gravity);
     m_pico2 -> SetSpeed(1, gravity);
-
-    // 先用舊位置初始化新位置，稍後修改
-    // glm::vec2 newPosition1 = Position1;
-    // glm::vec2 newPosition2 = Position2;
-    // glm::vec2 new_Board_Position = Board_Position;
-
-    // glm::vec2 pico1Size = m_pico1->GetScaledSize();
-    // glm::vec2 pico2Size = m_pico2->GetScaledSize();
-
-    // --- feet position 判斷角色腳下方塊 ---
-    // glm::vec2 feetPos1 = { newPosition1.x, newPosition1.y - pico1Size.y / 2 - 0.1f };
-    // glm::vec2 feetPos2 = { newPosition2.x, newPosition2.y - pico2Size.y / 2 - 0.1f };
 
     bool someoneOnMyHead = m_pico2->GetVisibility() && m_pico1->IsStanding(m_pico2);
     if (someoneOnMyHead) {
@@ -128,17 +101,9 @@ void App::Update() {
             m_pico1 -> SetOnHead(false);
         }
     }
-    // LOG_ERROR(m_pico1 -> GetJumpState());
-    // LOG_ERROR(m_pico2 -> GetJumpState());
 
-    // ---- m_pico1 移動邏輯 (WAD 控制) ----
+    // ---- m_pico 移動邏輯 (WAD 控制) --------
     if (Util::Input::IsKeyPressed(Util::Keycode::W)) {
-        // bool isOnGround = m_MapManager->HasTileAt(feetPos1);
-        // bool isOnOtherPico = m_pico2->GetVisibility() && m_pico2->IsStanding(m_pico1);
-        // bool someoneOnMyHead = m_pico2->GetVisibility() && m_pico1->IsStanding(m_pico2);
-        // if ((isOnGround || isOnOtherPico) && !someoneOnMyHead) {
-        //     m_pico1 -> SetSpeed(0, jump);
-        // }
         if (m_pico1 -> GetJumpState()) {
             if (m_pico1 -> GetSpeed(0) == 0) {
                 m_pico1 -> SetSpeed(0, jump);
@@ -148,18 +113,14 @@ void App::Update() {
     }
     if (Util::Input::IsKeyPressed(Util::Keycode::A)) {
         m_pico1 -> SetSpeed(2, speed);  // 左移
+        m_pico1->SetImage(GA_RESOURCE_DIR"/Image/Character/left_pico_stand1.png");
     }
     if (Util::Input::IsKeyPressed(Util::Keycode::D)) {
         m_pico1 -> SetSpeed(3, speed);  // 右移
+        m_pico1->SetImage(GA_RESOURCE_DIR"/Image/Character/right_pico_stand1.png");
     }
     // ---- m_pico2 移動邏輯 (上下左右 控制) ----
     if (Util::Input::IsKeyPressed(Util::Keycode::UP)) {
-        // bool isOnGround = m_MapManager->HasTileAt(feetPos2);
-        // bool isOnOtherPico = m_pico1->GetVisibility() && m_pico1->IsStanding(m_pico2);
-        // bool someoneOnMyHead = m_pico1->GetVisibility() && m_pico2->IsStanding(m_pico1);
-        // if ((isOnGround || isOnOtherPico) && !someoneOnMyHead) {
-        //     m_pico2->SetSpeed(0, jump);
-        // }
         if (m_pico2 -> GetJumpState()) {
             if (m_pico2 -> GetSpeed(0) == 0) {
                 m_pico2 -> SetSpeed(0, jump);
@@ -169,77 +130,17 @@ void App::Update() {
     }
     if (Util::Input::IsKeyPressed(Util::Keycode::LEFT)) {
         m_pico2 -> SetSpeed(2, speed);  // 左移
+        m_pico2->SetImage(GA_RESOURCE_DIR"/Image/Character/left_pico_stand2.png");
     }
     if (Util::Input::IsKeyPressed(Util::Keycode::RIGHT)) {
         m_pico2 -> SetSpeed(3, speed);  // 右移
+        m_pico2->SetImage(GA_RESOURCE_DIR"/Image/Character/right_pico_stand2.png");
     }
-    // m_Camera->Update(m_pico1, m_pico2);
+    // ---- m_pico 移動邏輯 (WAD 控制) ----------
 
-    // pico1 判定地磚
-    // if (m_MapManager->HasTileAt(feetPos1)) {
-    //     int gridY1 = static_cast<int>((m_MapManager->GetStartY() - feetPos1.y) / m_MapManager->GetTileSize());
-    //     float tileTopY = m_MapManager->GetStartY() - gridY1 * m_MapManager->GetTileSize();
-    //     // LOG_DEBUG("pico1 feetY: {}, tileTopY: {}, heightOffset: {}", feetPos1.y, tileTopY, pico1Size.y / 2.0f);
-    //     newPosition1.y = tileTopY + pico1Size.y / 2.0f;
-    //     // velocityY1 = 0.0f;
-    // }
-
-    // pico2 判定地磚
-    // if (m_MapManager->HasTileAt(feetPos2)) {
-    //     int gridY2 = static_cast<int>((m_MapManager->GetStartY() - feetPos2.y) / m_MapManager->GetTileSize());
-    //     float tileTopY = m_MapManager->GetStartY() - gridY2 * m_MapManager->GetTileSize();
-    //     // LOG_DEBUG("pico2 feetY: {}, tileTopY: {}, heightOffset: {}", feetPos2.y, tileTopY, pico2Size.y / 2.0f);
-    //     newPosition2.y = tileTopY + pico2Size.y / 2.0f;
-    //     // velocityY2 = 0.0f;
-    // }
-
-    // glm::vec2 deltaPosition2 = newPosition2 - Position2;
-    // glm::vec2 deltaPosition1 = newPosition1 - Position1;
-    // glm::vec2 delta_Board_Position = new_Board_Position - Board_Position;
-
-    // 檢查角色是否站立在對方上並調整位置與速度
-    // if (m_pico1->IsStanding(m_pico2)) {
-    //     glm::vec2 pico2Pos = m_pico2->GetPosition();
-    //     newPosition2.y = pico2Pos.y - pico1Size.y;
-    //     newPosition2.y = pico2Pos.y;
-    //     newPosition2 += deltaPosition1;
-    // }
-    // if (m_pico2->IsStanding(m_pico1)) {
-    //     glm::vec2 pico1Pos = m_pico1->GetPosition();
-    //     //glm::vec2 pico2Size = m_pico2->GetScaledSize();
-    //     newPosition1.y = pico1Pos.y - pico2Size.y;
-    //     newPosition1.y = pico1Pos.y;
-    //     newPosition1 += deltaPosition2;
-    // }
-
-    // 站在板子上
-    // float gound = -150.0f;
-    // if (m_pico1->IsStandingOnBoard(m_board1) || m_pico2->IsStandingOnBoard(m_board1)) {
-    //     new_Board_Position += board_speed;
-    //     glm::vec2 pico1Pos = m_pico1->GetPosition();
-    //     glm::vec2 BoardSize = m_board1->GetScaledSize();
-    //     newPosition1.y = pico1Pos.y - BoardSize.y;
-    //     newPosition1.y = pico1Pos.y;
-    //     newPosition1 += delta_Board_Position;
-    // }
-    // else if (new_Board_Position.y >= gound) {
-    //     new_Board_Position -= board_speed;
-    // }
-
-    // 設定角色新位置
-    // m_pico1->SetPosition(newPosition1);
-    // m_pico2->SetPosition(newPosition2);
-    // === 🔼 角色移動邏輯結束 🔼 ===
-
-    // === 🔽 pico in stage_ons 🔽 ===
-    // if (m_Phase == Phase::STAGE_ONE) {
-    //     PassCheck();
-    // }
-    // // === 🔽 pico in stage_two 🔽 ===
-    // if (m_Phase == Phase::STAGE_TWO) {
-    //     PassCheck();
-    // }
     PassCheck();
+
+    // 物體與pico的碰撞----------------
     bool SomeOneOnHead = m_pico1 -> GetOnHead() || m_pico2 -> GetOnHead();
     for (auto& obj : m_Objects) {
         for (auto& pico : m_pico) {
@@ -272,6 +173,46 @@ void App::Update() {
             }
         }
     }
+    // 物體與pico的碰撞----------------
+    // pico之間的碰撞------------
+    int Cha1_result = m_pico1 -> IfCollidesCha(m_pico2);
+    if (Cha1_result == 0) {
+        m_pico1 -> SetSpeed(1, -m_pico1 -> GetSpeed(1));
+        m_pico1 -> ChaPositionCorrection(0, m_pico2);
+        m_pico1 -> SetJumpState(true);
+    }
+    if (Cha1_result == 1) {
+        m_pico1 -> SetSpeed(0, -m_pico1 -> GetSpeed(0));
+        m_pico1 -> ChaPositionCorrection(1, m_pico2);
+    }
+    if (Cha1_result == 2) {
+        m_pico1 -> SetSpeed(3, -m_pico1 -> GetSpeed(3));
+        m_pico1 -> ChaPositionCorrection(2, m_pico2);
+    }
+    if (Cha1_result == 3) {
+        m_pico1 -> SetSpeed(2, -m_pico1 -> GetSpeed(2));
+        m_pico1 -> ChaPositionCorrection(3, m_pico2);
+    }
+
+    int Cha2_result = m_pico2 -> IfCollidesCha(m_pico1);
+    if (Cha2_result == 0) {
+        m_pico2 -> SetSpeed(1, -m_pico2 -> GetSpeed(1));
+        m_pico2 -> ChaPositionCorrection(0, m_pico1);
+        m_pico2 -> SetJumpState(true);
+    }
+    if (Cha2_result == 1) {
+        m_pico2 -> SetSpeed(0, -m_pico2 -> GetSpeed(0));
+        m_pico2 -> ChaPositionCorrection(1, m_pico1);
+    }
+    if (Cha2_result == 2) {
+        m_pico2 -> SetSpeed(3, -m_pico2 -> GetSpeed(3));
+        m_pico2 -> ChaPositionCorrection(2, m_pico1);
+    }
+    if (Cha2_result == 3) {
+        m_pico2 -> SetSpeed(2, -m_pico2 -> GetSpeed(2));
+        m_pico2 -> ChaPositionCorrection(3, m_pico1);
+    }
+    //------------------------
 
     if (m_pico1 -> GetOnHead()) {
         m_pico1 -> HeadCorrection(m_pico2);
@@ -309,7 +250,6 @@ void App::Update() {
     m_pico2 -> m_Transform.translation.x -= diff;
 
 
-
     for (auto& pico : m_pico) {
         if (pico -> m_Transform.translation.x < -500) {
             pico -> m_Transform.translation.x = -500 + pico -> GetSize().x/2;
@@ -318,8 +258,16 @@ void App::Update() {
             pico -> m_Transform.translation.x = 500 - pico -> GetSize().x/2;
         }
     }
-    // glm::vec2 position = Util::Input::GetCursorPosition ();
-    // LOG_ERROR(position);
+
+    // 掉落重置--------------
+    for (auto& pico : m_pico) {
+        if (pico -> m_Transform.translation.y < -500) {
+            float x = pico -> m_Transform.translation.x - 200.0f;
+            pico -> SetPosition({x, 200.0f});
+            pico -> SetSpeed(1, -pico -> GetSpeed(1));
+        }
+    }
+    // 掉落重置--------------
 
     m_pico1 -> Ismoving();
     m_pico2 -> Ismoving();
