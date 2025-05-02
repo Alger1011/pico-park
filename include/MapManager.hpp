@@ -5,6 +5,7 @@
 #include <memory>
 #include "Character.hpp"
 #include "Util/Renderer.hpp"
+#include <glm/glm.hpp>  // 確保包含 glm 頭文件
 
 class Camera;
 
@@ -24,8 +25,16 @@ public:
     // 獲取地圖邊界
     void GetMapBoundaries(float& left, float& right, float& top, float& bottom) const;
 
+    // 根據相機移動更新所有磚塊位置
+    void UpdateTilePositions(float cameraDeltaX);
+
     const std::vector<std::shared_ptr<Character>>& GetMapTiles() const {
         return m_MapTiles;
+    }
+
+    // 獲取磚塊位置矩陣
+    const std::vector<glm::vec2>& GetTilePositions() const {
+        return m_TilePositions;
     }
 
     float GetStartY() const { return m_StartY; }
@@ -37,6 +46,7 @@ private:
 
     std::vector<std::vector<int>> m_MapData;
     std::vector<std::shared_ptr<Character>> m_MapTiles;
+    std::vector<glm::vec2> m_TilePositions;  // 記錄每個磚塊的實際位置
     Util::Renderer& m_Root;
 
     float m_TileSize;

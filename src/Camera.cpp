@@ -2,6 +2,7 @@
 #include "Character.hpp"
 #include "Util/Logger.hpp"
 #include "App.hpp"
+#include "MapManager.hpp"  // 添加 MapManager 頭文件
 #include <algorithm>
 #include <cmath>
 #include <cfloat>
@@ -15,6 +16,8 @@ Camera::Camera(float viewWidth, float viewHeight)
     , m_TopBoundary(FLT_MAX)
     , m_BottomBoundary(-FLT_MAX)
     , m_SmoothFactor(0.1f)
+    , dif_post(0.0f)
+    , m_MapManager(nullptr)
 {
     LOG_INFO("Camera initialized with view dimensions: {}x{}", viewWidth, viewHeight);
 }
@@ -72,28 +75,32 @@ void Camera::ForceCharactersInView(const std::shared_ptr<Character>& pico1, cons
 }
 
 float Camera::Update(const std::shared_ptr<Character>& pico1, const std::shared_ptr<Character>& pico2) {
-    // Calculate the midpoint between characters
-    glm::vec2 midpoint = (pico1->GetPosition() + pico2->GetPosition()) * 0.5f;
+    // 保存舊的相機位置以計算位移量
+    float old_pos = m_Position.x;
 
-    // Apply smooth camera movement
-    //m_Position = glm::mix(m_Position, midpoint, m_SmoothFactor);
-
-    // Keep camera within map boundaries
-    float old_pos;
-    old_pos = m_Position.x;
+    // 計算兩個角色的世界座標
     static glm::vec2 worldPos1(0.0f, 0.0f);
     static glm::vec2 worldPos2(0.0f, 0.0f);
     worldPos1 = pico1->GetPosition();
     worldPos2 = pico2->GetPosition();
-    m_Position.x = (worldPos1.x+worldPos2.x)/2;
+
+    // 更新相機位置為兩個角色的中點
+    m_Position.x = (worldPos1.x + worldPos2.x) / 2;
+
+    // 計算相機 X 軸的位移量
     dif_post = m_Position.x - old_pos;
 
-    // Check if either character is going off-screen and handle it
+    // 檢查是否有角色超出視圖並處理
     ForceCharactersInView(pico1, pico2);
+
+    // 更新地圖磚塊的位置（如果 MapManager 已設置）
+    if (m_MapManager != nullptr && dif_post != 0.0f) {
+        m_MapManager->UpdateTilePositions(dif_post);
+        LOG_DEBUG("Camera moved by dX: {}, updating map tiles", dif_post);
+    }
 
     return dif_post;
 }
-
 
 void Camera::SetBoundaries(float left, float right, float top, float bottom) {
     m_LeftBoundary = left;
@@ -127,7 +134,6 @@ glm::vec2 Camera::CheckBoundaries(const glm::vec2& characterPos, const glm::vec2
     return newPos;
 }
 
-// In Camera.cpp - Add this new method
 bool Camera::IsCharacterOutOfBounds(const std::shared_ptr<Character>& character) const {
     glm::vec2 position = character->GetPosition();
 
