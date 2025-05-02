@@ -154,22 +154,10 @@ void App::CreateMapTiles(const std::string& filename) {
             matrix.push_back(row);
         }
     }
-    // for (size_t y = 0; y < matrix.size(); ++y) {
-    //     // 計算每行最多顯示的列數
-    //     size_t maxColumns = std::min(matrix[y].size(), static_cast<size_t>(16));
-    //
-    //     for (size_t x = 0; x < maxColumns; ++x) {
-    //         if (matrix[y][x] == 1) {
-    //             // 創建磚塊
-    //             float posX = m_StartX + x * m_TileSize;
-    //             float posY = m_StartY - y * m_TileSize;
-    //             auto object = std::make_shared<Object>(GA_RESOURCE_DIR"/Image/Character/orange_tile.png", glm::vec2(posX, posY), glm::vec2(72,72));
-    //
-    //             m_Root.AddChild(object);
-    //             m_Objects.push_back(object);
-    //         }
-    //     }
-    // }
+
+    // 磚塊設定---------------
+    // 改size的同時記得改圖片大小，江子文說的
+
     int Total = 0;
     for (size_t y = 0; y < matrix.size(); ++y) {
         // 計算每行最多顯示的列數
