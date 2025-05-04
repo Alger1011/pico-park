@@ -138,9 +138,9 @@ void App::ValidTask() {
 }
 
 void App::CreateMapTiles(const std::string& filename) {
-    float m_TileSize = 55.0f;
-    float m_StartX = -387.0f;
-    float m_StartY = 223.0f;
+    float m_TileSize = 62.0f;
+    float m_StartX = -500.0f;
+    float m_StartY = 251.0f;
     std::vector<std::vector<int>> matrix;
     std::ifstream file(filename);
     std::string line;
@@ -157,7 +157,9 @@ void App::CreateMapTiles(const std::string& filename) {
     }
 
     // 磚塊設定---------------
+
     // 改size的同時記得改圖片大小，江子文說的
+
 
     int Total = 0;
     for (size_t y = 0; y < matrix.size(); ++y) {
