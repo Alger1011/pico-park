@@ -230,25 +230,117 @@ void App::Update() {
         m_pico2 -> SetSpeed(3, m_pico1 -> GetSpeed(3));
     }
 
-    float centerX = (m_pico1 -> m_Transform.translation.x + m_pico2 -> m_Transform.translation.x) / 2;
-    float diff = 0;
-    for (auto& pico : m_pico) {
-        if (pico -> m_Transform.translation.x > 430) {
-            diff += pico -> GetSpeed(3);
-        }
-        else if (pico -> m_Transform.translation.x < -430) {
-            diff -= pico -> GetSpeed(2);
-        }
-    }
-    if (diff == 0) {
-        diff = centerX - 0;
-    }
-    for (auto& obj : m_Objects) {
-        obj ->m_Transform.translation.x -= diff;
-    }
-    m_pico1 -> m_Transform.translation.x -= diff;
-    m_pico2 -> m_Transform.translation.x -= diff;
+// 修改App::Update()中的相机滚动逻辑部分
 
+// 需要替换原代码中的这部分:
+/*
+float centerX = (m_pico1 -> m_Transform.translation.x + m_pico2 -> m_Transform.translation.x) / 2;
+float diff = 0;
+for (auto& pico : m_pico) {
+    if (pico -> m_Transform.translation.x > 430) {
+        diff += pico -> GetSpeed(3);
+    }
+    else if (pico -> m_Transform.translation.x < -430) {
+        diff -= pico -> GetSpeed(2);
+    }
+}
+if (diff == 0) {
+    diff = centerX - 0;
+}
+for (auto& obj : m_Objects) {
+    obj ->m_Transform.translation.x -= diff;
+}
+m_pico1 -> m_Transform.translation.x -= diff;
+m_pico2 -> m_Transform.translation.x -= diff;
+*/
+
+// 新的相机滚动逻辑，替换上面的代码
+float centerX = (m_pico1->m_Transform.translation.x + m_pico2->m_Transform.translation.x) / 2;
+float diff = 0;
+
+// 检查是否有任何角色接近右边缘
+bool nearRightEdge = false;
+for (auto& pico : m_pico) {
+    if (pico->m_Transform.translation.x > 460 && pico->GetSpeed(3) > 0) {
+        nearRightEdge = true;
+        diff += pico->GetSpeed(3);
+    }
+}
+
+// 检查是否有角色接近左边缘
+bool nearLeftEdge = false;
+for (auto& pico : m_pico) {
+    if (pico->m_Transform.translation.x < -460 && pico->GetSpeed(2) > 0) {
+        nearLeftEdge = true;
+        diff -= pico->GetSpeed(2);
+    }
+}
+
+// 检查最左侧的砖块是否已经出现在屏幕上
+bool leftmostTileVisible = false;
+float leftmostTileX = 9999.0f;
+for (auto& obj : m_Objects) {
+    if (obj->m_Transform.translation.x < leftmostTileX) {
+        leftmostTileX = obj->m_Transform.translation.x;
+    }
+}
+
+// 如果最左侧砖块位置大于-430（即已经出现在屏幕左侧），则标记为可见
+if (leftmostTileX > -465) {
+    leftmostTileVisible = true;
+}
+
+    bool rightmostTileVisible = false;
+    float rightmostTileX = -9999.0f;
+    for (auto& obj : m_Objects) {
+        if (obj->m_Transform.translation.x > rightmostTileX) {
+            rightmostTileX = obj->m_Transform.translation.x;
+        }
+    }
+
+    // 如果最右側磚塊位置小於480（即已經出現在螢幕右側），則標記為可見
+    if (rightmostTileX < 465) {
+        rightmostTileVisible = true;
+    }
+
+    // 情況1: 靠近邊緣且該邊緣的磚塊尚未全部可見時，移動相機
+    if ((nearRightEdge && !rightmostTileVisible) || (nearLeftEdge && !leftmostTileVisible)) {
+        // 應用相機移動
+        for (auto& obj : m_Objects) {
+            obj->m_Transform.translation.x -= diff;
+        }
+        m_pico1->m_Transform.translation.x -= diff;
+        m_pico2->m_Transform.translation.x -= diff;
+    }
+    // 情況2: 角色中心點遠離中心，且邊緣尚未全部可見時，調整相機
+    else if (!leftmostTileVisible && !rightmostTileVisible) {
+        diff = centerX - 0;  // 根據角色中心點調整
+        if (diff != 0) {  // 確保只在需要調整時才進行調整
+            for (auto& obj : m_Objects) {
+                obj->m_Transform.translation.x -= diff;
+            }
+            m_pico1->m_Transform.translation.x -= diff;
+            m_pico2->m_Transform.translation.x -= diff;
+        }
+    }
+    // 情況3: 當左邊界可見但右邊界不可見，且角色向右移動超過480時，進行糾正
+    else if (leftmostTileVisible && !rightmostTileVisible && centerX > 0) {
+        float correction = centerX - 0;
+        for (auto& obj : m_Objects) {
+            obj->m_Transform.translation.x -= correction;
+        }
+        m_pico1->m_Transform.translation.x -= correction;
+        m_pico2->m_Transform.translation.x -= correction;
+    }
+    // 情況4: 當右邊界可見但左邊界不可見，且角色向左移動超過-480時，進行糾正
+    else if (!leftmostTileVisible && rightmostTileVisible && centerX < 0) {
+        float correction = centerX + 0;
+        for (auto& obj : m_Objects) {
+            obj->m_Transform.translation.x -= correction;
+        }
+        m_pico1->m_Transform.translation.x -= correction;
+        m_pico2->m_Transform.translation.x -= correction;
+    }
 
     for (auto& pico : m_pico) {
         if (pico -> m_Transform.translation.x < -500) {
