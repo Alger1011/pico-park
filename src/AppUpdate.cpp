@@ -254,11 +254,11 @@ m_pico1 -> m_Transform.translation.x -= diff;
 m_pico2 -> m_Transform.translation.x -= diff;
 */
 
-// 新的相机滚动逻辑，替换上面的代码
+// 新的相机邏辑
 float centerX = (m_pico1->m_Transform.translation.x + m_pico2->m_Transform.translation.x) / 2;
 float diff = 0;
 
-// 检查是否有任何角色接近右边缘
+// 檢查是否接近右邊
 bool nearRightEdge = false;
 for (auto& pico : m_pico) {
     if (pico->m_Transform.translation.x > 460 && pico->GetSpeed(3) > 0) {
@@ -267,7 +267,7 @@ for (auto& pico : m_pico) {
     }
 }
 
-// 检查是否有角色接近左边缘
+// 檢查是否接近左邊
 bool nearLeftEdge = false;
 for (auto& pico : m_pico) {
     if (pico->m_Transform.translation.x < -460 && pico->GetSpeed(2) > 0) {
@@ -276,7 +276,7 @@ for (auto& pico : m_pico) {
     }
 }
 
-// 检查最左侧的砖块是否已经出现在屏幕上
+// 檢查最左侧的磚块是否已经出现
 bool leftmostTileVisible = false;
 float leftmostTileX = 9999.0f;
 for (auto& obj : m_Objects) {
@@ -285,7 +285,7 @@ for (auto& obj : m_Objects) {
     }
 }
 
-// 如果最左侧砖块位置大于-430（即已经出现在屏幕左侧），则标记为可见
+// 如果最左側已经出現在屏幕，標記可見
 if (leftmostTileX > -465) {
     leftmostTileVisible = true;
 }
@@ -298,7 +298,7 @@ if (leftmostTileX > -465) {
         }
     }
 
-    // 如果最右側磚塊位置小於480（即已經出現在螢幕右側），則標記為可見
+    // 如果最右側已经出現在屏幕，標記可見
     if (rightmostTileX < 465) {
         rightmostTileVisible = true;
     }
