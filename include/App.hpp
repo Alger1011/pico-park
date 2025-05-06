@@ -85,7 +85,7 @@ private:
     std::unique_ptr<Camera> m_Camera;
     std::unique_ptr<MapManager> m_MapManager;
 
-
+    bool m_spaceDown = false;
     bool m_EnterDown = false;
     bool m_IsCharacterOutOfBounds = false;
 };

@@ -65,12 +65,21 @@ void App::Update() {
     //    ValidTask();
     //}
 
+    // 使用空格鍵報告pico1的座標位置
+
+    if (Util::Input::IsKeyPressed(Util::Keycode::SPACE)) {
+        // 在按下空格鍵時報告 X 座標
+        // 使用 LOG_INFO 或其他您偏好的日誌級別
+        LOG_INFO("Pico1 X {}", m_pico1->GetPosition().x);
+    }
+
     if (m_EnterDown) {
         if (!Util::Input::IsKeyPressed(Util::Keycode::RETURN)) {
             ValidTask();
        }
     }
     m_EnterDown = Util::Input::IsKeyPressed(Util::Keycode::RETURN);
+
 
 
     // === 🔽 加入角色移動邏輯 🔽 ===
@@ -254,41 +263,41 @@ m_pico1 -> m_Transform.translation.x -= diff;
 m_pico2 -> m_Transform.translation.x -= diff;
 */
 
-// 新的相机邏辑
-float centerX = (m_pico1->m_Transform.translation.x + m_pico2->m_Transform.translation.x) / 2;
-float diff = 0;
+    // 新的相机邏辑
+    float centerX = (m_pico1->m_Transform.translation.x + m_pico2->m_Transform.translation.x) / 2;
+    float diff = 0;
 
-// 檢查是否接近右邊
-bool nearRightEdge = false;
-for (auto& pico : m_pico) {
-    if (pico->m_Transform.translation.x > 460 && pico->GetSpeed(3) > 0) {
-        nearRightEdge = true;
-        diff += pico->GetSpeed(3);
+    // 檢查是否接近右邊
+    bool nearRightEdge = false;
+    for (auto& pico : m_pico) {
+        if (pico->m_Transform.translation.x > 460 && pico->GetSpeed(3) > 0) {
+            nearRightEdge = true;
+            diff += pico->GetSpeed(3);
+        }
     }
-}
 
-// 檢查是否接近左邊
-bool nearLeftEdge = false;
-for (auto& pico : m_pico) {
-    if (pico->m_Transform.translation.x < -460 && pico->GetSpeed(2) > 0) {
-        nearLeftEdge = true;
-        diff -= pico->GetSpeed(2);
+    // 檢查是否接近左邊
+    bool nearLeftEdge = false;
+    for (auto& pico : m_pico) {
+        if (pico->m_Transform.translation.x < -460 && pico->GetSpeed(2) > 0) {
+            nearLeftEdge = true;
+            diff -= pico->GetSpeed(2);
+        }
     }
-}
 
-// 檢查最左侧的磚块是否已经出现
-bool leftmostTileVisible = false;
-float leftmostTileX = 9999.0f;
-for (auto& obj : m_Objects) {
-    if (obj->m_Transform.translation.x < leftmostTileX) {
-        leftmostTileX = obj->m_Transform.translation.x;
+    // 檢查最左侧的磚块是否已经出现
+    bool leftmostTileVisible = false;
+    float leftmostTileX = 9999.0f;
+    for (auto& obj : m_Objects) {
+        if (obj->m_Transform.translation.x < leftmostTileX) {
+            leftmostTileX = obj->m_Transform.translation.x;
+        }
     }
-}
 
-// 如果最左側已经出現在屏幕，標記可見
-if (leftmostTileX > -465) {
-    leftmostTileVisible = true;
-}
+    // 如果最左側已经出現在屏幕，標記可見
+    if (leftmostTileX > -465) {
+        leftmostTileVisible = true;
+    }
 
     bool rightmostTileVisible = false;
     float rightmostTileX = -9999.0f;

@@ -33,6 +33,10 @@ void App::ValidTask() {
                 m_pico1->SetPosition({-100.0f, 0.0f});
                 m_pico1->SetVisible(true);
                 m_pico2->SetVisible(true);
+
+                //key會釘在畫面內
+                // m_key->SetPosition({-500.0f, 25.0f});
+                // m_key->m_Transform.scale = glm::vec2(1.0f, 1.0f);
                 // m_key->SetVisible(true);
                 // m_door1->SetVisible(true);
 
@@ -42,9 +46,26 @@ void App::ValidTask() {
                 std::string mapPath = GA_RESOURCE_DIR"/Map/first.txt";
                 CreateMapTiles(mapPath);
                 // 載入板子
-                auto object = std::make_shared<Board>(GA_RESOURCE_DIR"/Image/Character/board.png", glm::vec2( 0, -100), glm::vec2(200,16));
+                auto object = std::make_shared<Board>(GA_RESOURCE_DIR"/Image/Character/board.png", glm::vec2( 2200, -175), glm::vec2(200,16));
                 m_Objects.push_back(object);
                 m_Root.AddChild(object);
+
+                auto keyobject = std::make_shared<Object>(GA_RESOURCE_DIR"/Image/Character/key.png", glm::vec2(2050, 110), glm::vec2(0.5, 0.5));
+                m_Objects.push_back(keyobject);
+                m_Root.AddChild(keyobject);
+
+                auto doorObject = std::make_shared<Object>(GA_RESOURCE_DIR"/Image/Character/door1.png", glm::vec2(2500, 40), glm::vec2(0.5, 0.5));
+                m_Objects.push_back(doorObject);
+                m_Root.AddChild(doorObject);
+
+                auto button = std::make_shared<Object>(GA_RESOURCE_DIR"/Image/Character/button.png", glm::vec2(1500, -225), glm::vec2(0.5, 0.5));
+                m_Objects.push_back(button);
+                m_Root.AddChild(button);
+
+                auto recobject = std::make_shared<Object>(GA_RESOURCE_DIR"/Image/Character/rectangle.png", glm::vec2(1300, -250), glm::vec2(0.5, 0.5));
+                m_Objects.push_back(recobject);
+                m_Root.AddChild(recobject);
+
                 m_PRM->NextPhase();
             } else {
                 LOG_INFO("The level is not yet available.");
@@ -137,28 +158,25 @@ void App::ValidTask() {
     }
 }
 
-void App::CreateMapTiles(const std::string& filename) {
-    float m_TileSize = 62.0f;
-    float m_StartX = -500.0f;
-    float m_StartY = 251.0f;
-    std::vector<std::vector<int>> matrix;
-    std::ifstream file(filename);
-    std::string line;
-    while (std::getline(file, line)) {
-        std::vector<int> row;
-        std::istringstream iss(line);
-        int value;
-        while (iss >> value) {
-            row.push_back(value);
-        }
-        if (!row.empty()) {
-            matrix.push_back(row);
-        }
-    }
-
     // 磚塊設定---------------
-
-    // 改size的同時記得改圖片大小，江子文說的
+    void App::CreateMapTiles(const std::string& filename) {
+        float m_TileSize = 62.0f;
+        float m_StartX = -500.0f;
+        float m_StartY = 251.0f;
+        std::vector<std::vector<int>> matrix;
+        std::ifstream file(filename);
+        std::string line;
+        while (std::getline(file, line)) {
+            std::vector<int> row;
+            std::istringstream iss(line);
+            int value;
+            while (iss >> value) {
+                row.push_back(value);
+            }
+            if (!row.empty()) {
+                matrix.push_back(row);
+            }
+        }
 
 
     int Total = 0;
