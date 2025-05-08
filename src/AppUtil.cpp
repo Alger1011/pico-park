@@ -34,37 +34,34 @@ void App::ValidTask() {
                 m_pico1->SetVisible(true);
                 m_pico2->SetVisible(true);
 
-                //key會釘在畫面內
-                // m_key->SetPosition({-500.0f, 25.0f});
-                // m_key->m_Transform.scale = glm::vec2(1.0f, 1.0f);
-                // m_key->SetVisible(true);
-                // m_door1->SetVisible(true);
-
                 m_pico1 -> SetSpeed(1, -m_pico1 -> GetSpeed(1));
                 m_pico2 -> SetSpeed(1, -m_pico2 -> GetSpeed(1));
                 // 載入地圖
                 std::string mapPath = GA_RESOURCE_DIR"/Map/first.txt";
                 CreateMapTiles(mapPath);
                 // 載入板子
-                auto object = std::make_shared<Board>(GA_RESOURCE_DIR"/Image/Character/board.png", glm::vec2( 2200, -175), glm::vec2(200,16));
+                auto object = std::make_shared<Board>(GA_RESOURCE_DIR"/Image/Character/board.png", glm::vec2( 2200, -190), glm::vec2(200,16));
                 m_Objects.push_back(object);
                 m_Root.AddChild(object);
 
-                auto keyobject = std::make_shared<Object>(GA_RESOURCE_DIR"/Image/Character/key.png", glm::vec2(2050, 110), glm::vec2(0.5, 0.5));
-                m_Objects.push_back(keyobject);
-                m_Root.AddChild(keyobject);
+                auto key = std::make_shared<Key>(GA_RESOURCE_DIR"/Image/Character/key.png", glm::vec2(2050, 110), glm::vec2(31, 61));
+                key -> SetZIndex(10);
+                m_Objects.push_back(key);
+                m_Root.AddChild(key);
 
-                auto doorObject = std::make_shared<Object>(GA_RESOURCE_DIR"/Image/Character/door1.png", glm::vec2(2500, 40), glm::vec2(0.5, 0.5));
-                m_Objects.push_back(doorObject);
-                m_Root.AddChild(doorObject);
+                auto door = std::make_shared<Door>(GA_RESOURCE_DIR"/Image/Character/door1.png", glm::vec2(2500, 75), glm::vec2(83, 80));
+                door -> SetZIndex(5);
+                m_Objects.push_back(door);
+                m_Root.AddChild(door);
 
-                auto button = std::make_shared<Object>(GA_RESOURCE_DIR"/Image/Character/button.png", glm::vec2(1500, -225), glm::vec2(0.5, 0.5));
+                auto button = std::make_shared<Button>(GA_RESOURCE_DIR"/Image/Character/button.png", glm::vec2(1500, -225), glm::vec2(22, 51));
                 m_Objects.push_back(button);
                 m_Root.AddChild(button);
 
-                auto recobject = std::make_shared<Object>(GA_RESOURCE_DIR"/Image/Character/rectangle.png", glm::vec2(1300, -250), glm::vec2(0.5, 0.5));
-                m_Objects.push_back(recobject);
-                m_Root.AddChild(recobject);
+                auto platform = std::make_shared<Platform>(GA_RESOURCE_DIR"/Image/Character/rectangle.png", glm::vec2(1600, -250), glm::vec2(300, 36));
+                m_Objects.push_back(platform);
+                m_Root.AddChild(platform);
+                platform->SetButton(button);
 
                 m_PRM->NextPhase();
             } else {

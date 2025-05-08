@@ -26,26 +26,43 @@ bool App::CheckTileCollision(glm::vec2 charPos, glm::vec2 charSize, glm::vec2& c
 }
 
 void App::PassCheck() {
-    if (m_pico1->IfCollides(m_key) || m_pico2->IfCollides(m_key)) {
-        LOG_DEBUG("Pico collided with key!");
-        m_key->SetVisible(false);
-    }
-    if (m_key->GetVisibility() == false && (m_pico1->IfCollides(m_door1) || m_pico2->IfCollides(m_door1))) {
-        m_door1->SetImage(GA_RESOURCE_DIR"/Image/Character/door2.png");
-        LOG_DEBUG("The door is open");
-    }
-    // pico1 進門
-    if (m_door1 -> GetVisibility() && m_pico1->IfCollides(m_door1) && Util::Input::IsKeyPressed(Util::Keycode::W) && m_door1->GetImagePath() == GA_RESOURCE_DIR"/Image/Character/door2.png") {
-        if (m_pico1->GetVisibility()) {
-            m_pico1->SetVisible(false);
-            LOG_DEBUG("pico1 entered the door");
+    std::shared_ptr<Character> picoWithKey = nullptr;
+    // 找出拿鑰匙的 pico
+    for (auto& obj : m_Objects) {
+        if (obj -> GetType() == "Key") {
+            auto key = std::dynamic_pointer_cast<Key>(obj);
+            if (key && key->IsBound()) {
+                picoWithKey = key->GetBoundPico();
+                break;
+            }
         }
     }
-    // pico2 進門
-    if (m_door1 -> GetVisibility() && m_pico2->IfCollides(m_door1) && Util::Input::IsKeyPressed(Util::Keycode::UP) && m_door1->GetImagePath() == GA_RESOURCE_DIR"/Image/Character/door2.png") {
-        if (m_pico2->GetVisibility()) {
-            m_pico2->SetVisible(false);
-            LOG_DEBUG("pico2 entered the door");
+
+    if (!picoWithKey) return;
+
+    for (auto& obj : m_Objects) {
+        if (obj -> GetType() != "Door") break;
+        // 拿鑰匙的人撞到門 → 門變開
+        if (obj -> GetImagePath() == GA_RESOURCE_DIR"/Image/Character/door1.png" &&
+            picoWithKey -> IfCollidesObject(obj)) {
+            obj -> SetImage(GA_RESOURCE_DIR"/Image/Character/door2.png");
+            LOG_INFO("Door opened");
+            }
+
+        // 門必須是 open，角色當下也要撞門，才能進門
+        if (obj -> GetImagePath() == GA_RESOURCE_DIR"/Image/Character/door2.png") {
+            if (m_pico1 -> IfCollidesObject(obj) && Util::Input::IsKeyPressed(Util::Keycode::W)) {
+                if (m_pico1 -> GetVisibility()) {
+                    m_pico1 -> SetVisible(false);
+                    LOG_INFO("pico1 entered the door");
+                }
+            }
+            if (m_pico2 -> IfCollidesObject(obj) && Util::Input::IsKeyPressed(Util::Keycode::UP)) {
+                if (m_pico2 -> GetVisibility()) {
+                    m_pico2 -> SetVisible(false);
+                    LOG_INFO("pico2 entered the door");
+                }
+            }
         }
     }
 }
@@ -69,7 +86,6 @@ void App::Update() {
 
     if (Util::Input::IsKeyPressed(Util::Keycode::SPACE)) {
         // 在按下空格鍵時報告 X 座標
-        // 使用 LOG_INFO 或其他您偏好的日誌級別
         LOG_INFO("Pico1 X {}", m_pico1->GetPosition().x);
     }
 
@@ -81,10 +97,9 @@ void App::Update() {
     m_EnterDown = Util::Input::IsKeyPressed(Util::Keycode::RETURN);
 
 
-
     // === 🔽 加入角色移動邏輯 🔽 ===
     const float jump = 30.0f;
-    const float gravity = 1.0f;
+    const float gravity = 0.5f;
     const float speed = 5.0f;
 
     m_pico1 -> SetSpeed(1, gravity);
@@ -153,12 +168,13 @@ void App::Update() {
     bool SomeOneOnHead = m_pico1 -> GetOnHead() || m_pico2 -> GetOnHead();
     for (auto& obj : m_Objects) {
         for (auto& pico : m_pico) {
+            if (obj->GetType() == "Key" && obj->IsBound()) continue;
             int result = pico -> IfCollidesObject(obj);
             if (result == 0) {
                 pico -> SetSpeed(1, -pico -> GetSpeed(1));
                 pico -> PositionCorrection(0, obj);
                 pico -> SetJumpState(true);
-                if (obj -> GetType() == "Board") {
+                if (obj -> GetType() == "Board" || obj -> GetType() == "Button") {
                     if (SomeOneOnHead) {
                         obj -> AddCurrNumber(m_pico1);
                         obj -> AddCurrNumber(m_pico2);
@@ -167,21 +183,34 @@ void App::Update() {
                         obj -> AddCurrNumber(pico);
                     }
                 }
+                if (obj -> GetType() == "Key" && !obj -> IsBound()) {
+                    obj->BindTo(pico);
+                }
             }
             if (result == 1) {
                 pico -> SetSpeed(0, -pico -> GetSpeed(0));
                 pico -> PositionCorrection(1, obj);
+                if (obj -> GetType() == "Key" && !obj -> IsBound()) {
+                    obj->BindTo(pico);
+                }
             }
             if (result == 2) {
                 pico -> SetSpeed(3, -pico -> GetSpeed(3));
                 pico -> PositionCorrection(2, obj);
+                if (obj -> GetType() == "Key" && !obj -> IsBound()) {
+                    obj->BindTo(pico);
+                }
             }
             if (result == 3) {
                 pico -> SetSpeed(2, -pico -> GetSpeed(2));
                 pico -> PositionCorrection(3, obj);
+                if (obj -> GetType() == "Key" && !obj -> IsBound()) {
+                    obj->BindTo(pico);
+                }
             }
         }
     }
+
     // 物體與pico的碰撞----------------
     // pico之間的碰撞------------
     int Cha1_result = m_pico1 -> IfCollidesCha(m_pico2);
