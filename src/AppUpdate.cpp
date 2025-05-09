@@ -99,7 +99,7 @@ void App::Update() {
 
     // === 🔽 加入角色移動邏輯 🔽 ===
     const float jump = 30.0f;
-    const float gravity = 0.5f;
+    const float gravity = 1.0f;
     const float speed = 5.0f;
 
     m_pico1 -> SetSpeed(1, gravity);
