@@ -6,6 +6,7 @@
 #include <memory>
 #include <vector>
 #include "Util/GameObject.hpp"
+#include "Util/Logger.hpp"
 
 class Character;
 // 基礎類別 Object
@@ -92,10 +93,14 @@ public:
     void BindTo(const std::shared_ptr<Character>& pico) override;
     bool IsBound() override;
     std::shared_ptr<Character> GetBoundPico() const override;
+    void SetHoldKey(bool hold_key) {
+        Hold_key = hold_key;
+    }
 
 private:
     glm::vec2 origin_position;
     std::shared_ptr<Character> m_BoundPico = nullptr;
+    bool Hold_key = true;
 };
 
 // door
