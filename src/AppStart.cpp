@@ -47,12 +47,12 @@ void App::Start() {
     m_Chest->SetVisible(false);
     m_Root.AddChild(m_Chest);
 
-    m_key = std::make_shared<Character>(GA_RESOURCE_DIR"/Image/Character/key.png");
-    m_key->SetZIndex(5);
-    m_key->SetPosition({50.5f, -10.5f});
-    m_key->SetVisible(false);
-    m_key->m_Transform.scale = glm::vec2(0.5f, 0.5f);
-    m_Root.AddChild(m_key);
+    // m_key = std::make_shared<Character>(GA_RESOURCE_DIR"/Image/Character/key.png");
+    // m_key->SetZIndex(5);
+    // m_key->SetPosition({50.5f, -10.5f});
+    // m_key->SetVisible(false);
+    // m_key->m_Transform.scale = glm::vec2(0.5f, 0.5f);
+    // m_Root.AddChild(m_key);
 
     m_door1 = std::make_shared<Character>(GA_RESOURCE_DIR"/Image/Character/door1.png");
     m_door1->SetZIndex(5);

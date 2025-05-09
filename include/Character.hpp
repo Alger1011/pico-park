@@ -71,6 +71,7 @@ public:
     bool CheckTileCollision();
 
 
+
 private:
     void ResetPosition() { m_Transform.translation = {0, 0}; }
     std::string m_ImagePath;
