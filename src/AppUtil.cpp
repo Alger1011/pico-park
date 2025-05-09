@@ -46,6 +46,7 @@ void App::ValidTask() {
 
                 auto key = std::make_shared<Key>(GA_RESOURCE_DIR"/Image/Character/key.png", glm::vec2(2050, 140), glm::vec2(31, 61));
                 key -> SetZIndex(10);
+                m_key = key;
                 m_Objects.push_back(key);
                 m_Root.AddChild(key);
 
@@ -65,22 +66,17 @@ void App::ValidTask() {
 
                 m_PRM->NextPhase();
             } else {
-                LOG_INFO("The level is not yet available.");
+                LOG_INFO("The door doesn't open or doesn't get the key.");
             }
         break;
 
         case Phase::STAGE_ONE:
             if (!m_pico1->GetVisibility() && !m_pico2->GetVisibility()){
-                m_door1->SetImage(GA_RESOURCE_DIR"/Image/Character/door1.png");
                 m_Phase = Phase::STAGE_TWO_LOADING;
-                // 角色設置不可見
-                for (auto& tile : m_MapManager->GetMapTiles()) {
-                    tile->SetVisible(false);
-                }
+                Reset();
                 m_pico1->SetVisible(false);
                 m_pico2->SetVisible(false);
                 m_key->SetVisible(false);
-                m_door1->SetVisible(false);
                 m_PRM->NextPhase();
             } else {
                 LOG_DEBUG("ERROR.");
@@ -88,7 +84,8 @@ void App::ValidTask() {
         break;
 
         case Phase::STAGE_TWO_LOADING:
-            if (m_pico1->GetImagePath() == GA_RESOURCE_DIR"/Image/Character/pico_stand1.png"){
+
+              if (m_pico1->GetImagePath() == GA_RESOURCE_DIR"/Image/Character/pico_stand1.png"){
                 m_Phase = Phase::STAGE_TWO;
                 m_pico2->SetPosition({50.0f, 0.0f});
                 m_pico1->SetPosition({-100.0f, 0.0f});
@@ -101,6 +98,7 @@ void App::ValidTask() {
                 std::string mapPath = GA_RESOURCE_DIR"/Map/second.txt";
                 CreateMapTiles(mapPath);
                 // 載入板子
+
                 auto box1 = std::make_shared<Object>(GA_RESOURCE_DIR"/Image/Character/long1.png", glm::vec2( -300, 2), glm::vec2(200,16));
                 m_Objects.push_back(box1);
                 m_Root.AddChild(box1);
@@ -122,7 +120,7 @@ void App::ValidTask() {
                 door -> SetZIndex(5);
                 m_Objects.push_back(door);
                 m_Root.AddChild(door);
-
+        
                 m_PRM->NextPhase();
             } else {
                 LOG_DEBUG("The door doesn't open or doesn't get the key.");
@@ -131,17 +129,11 @@ void App::ValidTask() {
 
         case Phase::STAGE_TWO:
             if (!m_pico1->GetVisibility() && !m_pico2->GetVisibility()){
-                m_door1->SetImage(GA_RESOURCE_DIR"/Image/Character/door1.png");
                 m_Phase = Phase::OPEN_THE_DOORS;
-                // 角色設置不可見
-                for (auto& tile : m_MapManager->GetMapTiles()) {
-                    tile->SetVisible(false);
-                }
+                Reset();
                 m_pico1->SetVisible(false);
                 m_pico2->SetVisible(false);
                 m_key->SetVisible(false);
-                m_door1->SetVisible(false);
-                //_Map->SetVisible();
                 m_PRM->NextPhase();
             } else {
                 LOG_DEBUG("ERROR.");
@@ -208,4 +200,11 @@ void App::ValidTask() {
         }
     }
     LOG_ERROR(Total);
+}
+
+void App::Reset() {
+    for (auto& obj : m_Objects) {
+        m_Root.RemoveChild(obj);
+    }
+    m_Objects.clear();
 }
