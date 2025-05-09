@@ -14,9 +14,11 @@
 void App::ValidTask() {
     bool isBeeLooping;
     bool isBeePlaying;
+
     LOG_DEBUG("Validating the task {}", static_cast<int>(m_Phase));
     switch (m_Phase) {
         case Phase::Welcome:
+            LOG_INFO("Welcome");
             if (m_Giraffe->GetImagePath() == GA_RESOURCE_DIR"/Image/Character/giraffe.png") {
                 m_Phase = Phase::STAGE_ONE_LOADING;
                 m_PRM->NextPhase();

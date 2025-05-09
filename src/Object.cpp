@@ -91,7 +91,12 @@ Key::Key(const std::string& ImagePath, glm::vec2 position, glm::vec2 size) : Obj
 }
 
 void Key::BindTo(const std::shared_ptr<Character>& character) {
-    if (!IsBound()) m_BoundPico = character;
+    if (Hold_key || !IsBound()) {
+        if (m_BoundPico != character) {
+            m_BoundPico = character;
+            Hold_key = false;
+        }
+    }
 }
 
 bool Key::IsBound() {

@@ -95,7 +95,7 @@ void App::Update() {
        }
     }
     m_EnterDown = Util::Input::IsKeyPressed(Util::Keycode::RETURN);
-
+    LOG_INFO("0");
 
     // === 🔽 加入角色移動邏輯 🔽 ===
     const float jump = 30.0f;
@@ -233,17 +233,23 @@ void App::Update() {
         m_pico1 -> ChaPositionCorrection(0, m_pico2);
         m_pico1 -> SetJumpState(true);
     }
-    if (Cha1_result == 1) {
+    else if (Cha1_result == 1) {
         m_pico1 -> SetSpeed(0, -m_pico1 -> GetSpeed(0));
         m_pico1 -> ChaPositionCorrection(1, m_pico2);
     }
-    if (Cha1_result == 2) {
+    else if (Cha1_result == 2) {
         m_pico1 -> SetSpeed(3, -m_pico1 -> GetSpeed(3));
         m_pico1 -> ChaPositionCorrection(2, m_pico2);
     }
-    if (Cha1_result == 3) {
+    else if (Cha1_result == 3) {
         m_pico1 -> SetSpeed(2, -m_pico1 -> GetSpeed(2));
         m_pico1 -> ChaPositionCorrection(3, m_pico2);
+    }
+    if (Cha1_result == -1) {
+        m_key -> SetHoldKey(true);
+    }
+    else if (m_key -> IsBound()){
+        m_key -> BindTo(m_pico1);
     }
 
     int Cha2_result = m_pico2 -> IfCollidesCha(m_pico1);
@@ -252,18 +258,37 @@ void App::Update() {
         m_pico2 -> ChaPositionCorrection(0, m_pico1);
         m_pico2 -> SetJumpState(true);
     }
-    if (Cha2_result == 1) {
+    else if (Cha2_result == 1) {
         m_pico2 -> SetSpeed(0, -m_pico2 -> GetSpeed(0));
         m_pico2 -> ChaPositionCorrection(1, m_pico1);
     }
-    if (Cha2_result == 2) {
+    else if (Cha2_result == 2) {
         m_pico2 -> SetSpeed(3, -m_pico2 -> GetSpeed(3));
         m_pico2 -> ChaPositionCorrection(2, m_pico1);
     }
-    if (Cha2_result == 3) {
+    else if (Cha2_result == 3) {
         m_pico2 -> SetSpeed(2, -m_pico2 -> GetSpeed(2));
         m_pico2 -> ChaPositionCorrection(3, m_pico1);
     }
+    if (Cha2_result == -1) {
+        m_key -> SetHoldKey(true);
+    }
+    else if (m_key -> IsBound()){
+        m_key -> BindTo(m_pico2);
+    }
+    // 鑰匙傳遞判斷----------------
+    // if (m_pico1 -> IfCollidesCha(m_pico2) && m_key -> IsBound() && m_key -> GetBoundPico() == m_pico1) {
+    //     if (Hold_key) {
+    //         m_key -> BindTo(m_pico2);
+    //         Hold_key = false;
+    //     }
+    // }
+    // else if (m_pico2 -> IfCollidesCha(m_pico1) && m_key -> IsBound() && m_key -> GetBoundPico() == m_pico2) {
+    //     if (Hold_key) {
+    //         m_key -> BindTo(m_pico1);
+    //         Hold_key = false;
+    //     }
+    // }
     //------------------------
 
     if (m_pico1 -> GetOnHead()) {
@@ -404,39 +429,21 @@ m_pico2 -> m_Transform.translation.x -= diff;
             pico -> m_Transform.translation.x = 500 - pico -> GetSize().x/2;
             z = true;
         }
-        // if (z){
-        //     for (auto& obj : m_Objects) {
-        //         int result = pico -> IfCollidesObject(obj);
-        //         if (result == 2) {
-        //             int x = pico -> m_Transform.translation.x;
-        //             pico -> PositionCorrection(2, obj);
-        //             int diff = x - pico -> m_Transform.translation.x;
-        //             for (auto& obj : m_Objects) {
-        //                 obj -> m_Transform.translation.x -= diff;
-        //             }
-        //             if (pico == m_pico1) {
-        //                 m_pico2 -> m_Transform.translation.x -= diff;
-        //             }
-        //             else{
-        //                 m_pico1 -> m_Transform.translation.x -= diff;
-        //             }
-        //         }
-        //         else if (result == 3) {
-        //             int x = pico -> m_Transform.translation.x;
-        //             pico -> PositionCorrection(3, obj);
-        //             int diff = pico -> m_Transform.translation.x - x;
-        //             for (auto& obj : m_Objects) {
-        //                 obj -> m_Transform.translation.x += diff;
-        //             }
-        //             if (pico == m_pico1) {
-        //                 m_pico2 -> m_Transform.translation.x += diff;
-        //             }
-        //             else{
-        //                 m_pico1 -> m_Transform.translation.x += diff;
-        //             }
-        //         }
-        //     }
-        // }
+        if (z){
+            for (auto& obj : m_Objects) {
+                int result = pico -> IfCollidesObject(obj);
+                if (result == 2) {
+                    float x = pico -> m_Transform.translation.x + 100.0f;
+                    pico -> SetPosition({x, 100.0f});
+                    pico -> SetSpeed(1, -pico -> GetSpeed(1));
+                }
+                else if (result == 3) {
+                    float x = pico -> m_Transform.translation.x - 100.0f;
+                    pico -> SetPosition({x, 100.0f});
+                    pico -> SetSpeed(1, -pico -> GetSpeed(1));
+                }
+            }
+        }
     }
 
     // 掉落重置--------------
