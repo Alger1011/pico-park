@@ -36,6 +36,7 @@ void Character::Ismoving() {
 }
 
 int Character::IfCollidesObject(const std::shared_ptr<Object>& other) const {
+    int collision = -1;
     glm::vec2 posA = other->m_Transform.translation;
     glm::vec2 sizeA = other->GetSize();
 
@@ -66,13 +67,13 @@ int Character::IfCollidesObject(const std::shared_ptr<Object>& other) const {
             // 如果物體 B 的下邊界 > 物體 A 的上邊界，則發生碰撞
             if (bottomB < topA && (posB.x < rightA && posB.x > leftA)){
                 // 物體 B 往上移動的碰撞反應
-                return 0;
+                collision = 0;
             }
         } else if (posB.y < posA.y) {
             // 物體 B 在物體 A 之上
             if (topB > bottomA && (posB.x < rightA && posB.x > leftA)) {
                 // 物體 B 往下移動的碰撞反應
-                return 1;
+                collision = 1;
             }
         }
 
@@ -81,19 +82,22 @@ int Character::IfCollidesObject(const std::shared_ptr<Object>& other) const {
             // 物體 B 在物體 A 的右邊
             if (leftB < rightA && (posB.y <= topA && posB.y >= bottomA)) {
                 // 物體 B 往左移動的碰撞反應
-                return 3;
+                collision = 3;
             }
         } else if (posB.x < posA.x) {
             // 物體 B 在物體 A 的左邊
             if (rightB > leftA && (posB.y <= topA && posB.y >= bottomA)) {
                 // 物體 B 往右移動的碰撞反應
-                return 2;
+                collision = 2;
             }
         }
     }
+    if (collision != -1 && other -> GetType() == "Door") {
+        return 4;
+    }
 
     // 沒有碰撞
-    return -1;
+    return collision;
 }
 
 
@@ -240,3 +244,4 @@ void Character::ChaPositionCorrection(int direction, const std::shared_ptr<Chara
         m_Transform.translation.x = posX;
     }
 }
+

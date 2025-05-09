@@ -36,6 +36,8 @@ public:
 
     void CreateMapTiles(const std::string& filename);
 
+    void Reset();
+
 private:
     void ValidTask();
 
@@ -68,7 +70,7 @@ private:
 
     std::vector<std::shared_ptr<Character>> m_pico;
 
-    std::shared_ptr<Character> m_key;
+    std::shared_ptr<Object> m_key;
     std::shared_ptr<Character> m_door1;
     std::shared_ptr<Character> m_board1;
 
