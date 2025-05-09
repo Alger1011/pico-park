@@ -44,7 +44,7 @@ void App::ValidTask() {
                 m_Objects.push_back(object);
                 m_Root.AddChild(object);
 
-                auto key = std::make_shared<Key>(GA_RESOURCE_DIR"/Image/Character/key.png", glm::vec2(2050, 110), glm::vec2(31, 61));
+                auto key = std::make_shared<Key>(GA_RESOURCE_DIR"/Image/Character/key.png", glm::vec2(2050, 140), glm::vec2(31, 61));
                 key -> SetZIndex(10);
                 m_Objects.push_back(key);
                 m_Root.AddChild(key);
@@ -58,7 +58,7 @@ void App::ValidTask() {
                 m_Objects.push_back(button);
                 m_Root.AddChild(button);
 
-                auto platform = std::make_shared<Platform>(GA_RESOURCE_DIR"/Image/Character/rectangle.png", glm::vec2(1600, -250), glm::vec2(300, 36));
+                auto platform = std::make_shared<Platform>(GA_RESOURCE_DIR"/Image/Character/rectangle.png", glm::vec2(1540, -227), glm::vec2(300, 36));
                 m_Objects.push_back(platform);
                 m_Root.AddChild(platform);
                 platform->SetButton(button);
@@ -89,24 +89,40 @@ void App::ValidTask() {
 
         case Phase::STAGE_TWO_LOADING:
             if (m_pico1->GetImagePath() == GA_RESOURCE_DIR"/Image/Character/pico_stand1.png"){
-                m_door1->SetImage(GA_RESOURCE_DIR"/Image/Character/door1.png");
                 m_Phase = Phase::STAGE_TWO;
-                // 確保地圖在 STAGE_THREE 開始時可見
-                for (auto& tile : m_MapManager->GetMapTiles()) {
-                    tile->SetVisible(true);
-                }
-                // 載入地圖
-                std::string mapPath = GA_RESOURCE_DIR"/Map/second.txt";
-                m_MapManager->LoadMap(mapPath);
-                CreateMapTiles(m_Map);
-                Map::RenderMap(m_Map);
-                // 重置角色位置到適當的起始點
-                m_pico1->SetPosition({-100.0f, 0.0f});
                 m_pico2->SetPosition({50.0f, 0.0f});
+                m_pico1->SetPosition({-100.0f, 0.0f});
                 m_pico1->SetVisible(true);
                 m_pico2->SetVisible(true);
-                m_key->SetVisible(true);
-                m_door1->SetVisible(true);
+
+                m_pico1 -> SetSpeed(1, -m_pico1 -> GetSpeed(1));
+                m_pico2 -> SetSpeed(1, -m_pico2 -> GetSpeed(1));
+                // 載入地圖
+                std::string mapPath = GA_RESOURCE_DIR"/Map/second.txt";
+                CreateMapTiles(mapPath);
+                // 載入板子
+                auto box1 = std::make_shared<Object>(GA_RESOURCE_DIR"/Image/Character/long1.png", glm::vec2( -300, 2), glm::vec2(200,16));
+                m_Objects.push_back(box1);
+                m_Root.AddChild(box1);
+
+                auto box2 = std::make_shared<Object>(GA_RESOURCE_DIR"/Image/Character/long2.png", glm::vec2( 300, 2), glm::vec2(200,16));
+                m_Objects.push_back(box2);
+                m_Root.AddChild(box2);
+
+                auto key = std::make_shared<Key>(GA_RESOURCE_DIR"/Image/Character/key.png", glm::vec2(-400, 10), glm::vec2(31, 61));
+                key -> SetZIndex(10);
+                m_Objects.push_back(key);
+                m_Root.AddChild(key);
+
+                auto box3 = std::make_shared<Object>(GA_RESOURCE_DIR"/Image/Character/square.png", glm::vec2( 1100, -155), glm::vec2(200,16));
+                m_Objects.push_back(box3);
+                m_Root.AddChild(box3);
+
+                auto door = std::make_shared<Door>(GA_RESOURCE_DIR"/Image/Character/door1.png", glm::vec2(1800, -108), glm::vec2(83, 80));
+                door -> SetZIndex(5);
+                m_Objects.push_back(door);
+                m_Root.AddChild(door);
+
                 m_PRM->NextPhase();
             } else {
                 LOG_DEBUG("The door doesn't open or doesn't get the key.");
