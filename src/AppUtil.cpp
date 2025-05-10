@@ -86,7 +86,8 @@ void App::ValidTask() {
         break;
 
         case Phase::STAGE_TWO_LOADING:
-            if (true){
+
+              if (m_pico1->GetImagePath() == GA_RESOURCE_DIR"/Image/Character/pico_stand1.png"){
                 m_Phase = Phase::STAGE_TWO;
                 m_pico2->SetPosition({50.0f, 0.0f});
                 m_pico1->SetPosition({-100.0f, 0.0f});
@@ -98,6 +99,7 @@ void App::ValidTask() {
                 // 載入地圖
                 std::string mapPath = GA_RESOURCE_DIR"/Map/second.txt";
                 CreateMapTiles(mapPath);
+
                 // 載入物件
                 auto box1 = std::make_shared<Object>(GA_RESOURCE_DIR"/Image/Character/long1.png", glm::vec2( -300, 2), glm::vec2(200,16));
                 m_Objects.push_back(box1);
@@ -106,10 +108,9 @@ void App::ValidTask() {
                 auto box2 = std::make_shared<Object>(GA_RESOURCE_DIR"/Image/Character/long2.png", glm::vec2( 300, 2), glm::vec2(200,16));
                 m_Objects.push_back(box2);
                 m_Root.AddChild(box2);
-
+                
                 auto key = std::make_shared<Key>(GA_RESOURCE_DIR"/Image/Character/key.png", glm::vec2(-400, 10), glm::vec2(31, 61));
                 key -> SetZIndex(10);
-                m_key = key;
                 m_Objects.push_back(key);
                 m_Root.AddChild(key);
 
