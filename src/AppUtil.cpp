@@ -42,11 +42,11 @@ void App::ValidTask() {
                 std::string mapPath = GA_RESOURCE_DIR"/Map/first.txt";
                 CreateMapTiles(mapPath);
                 // 載入板子
-                auto object = std::make_shared<Board>(GA_RESOURCE_DIR"/Image/Character/board.png", glm::vec2( 2200, -190), glm::vec2(200,16));
+                auto object = std::make_shared<Board>(GA_RESOURCE_DIR"/Image/Character/board.png", glm::vec2( 2210, -190), glm::vec2(200,16));
                 m_Objects.push_back(object);
                 m_Root.AddChild(object);
 
-                auto key = std::make_shared<Key>(GA_RESOURCE_DIR"/Image/Character/key.png", glm::vec2(2050, 110), glm::vec2(31, 61));
+                auto key = std::make_shared<Key>(GA_RESOURCE_DIR"/Image/Character/key.png", glm::vec2(2050, 140), glm::vec2(31, 61));
                 key -> SetZIndex(10);
                 m_key = key;
                 m_Objects.push_back(key);
@@ -61,7 +61,7 @@ void App::ValidTask() {
                 m_Objects.push_back(button);
                 m_Root.AddChild(button);
 
-                auto platform = std::make_shared<Platform>(GA_RESOURCE_DIR"/Image/Character/rectangle.png", glm::vec2(1600, -250), glm::vec2(300, 36));
+                auto platform = std::make_shared<Platform>(GA_RESOURCE_DIR"/Image/Character/rectangle.png", glm::vec2(1540, -227), glm::vec2(300, 36));
                 m_Objects.push_back(platform);
                 m_Root.AddChild(platform);
                 platform->SetButton(button);
@@ -98,30 +98,29 @@ void App::ValidTask() {
                 // 載入地圖
                 std::string mapPath = GA_RESOURCE_DIR"/Map/second.txt";
                 CreateMapTiles(mapPath);
-                // 載入板子
-                auto object = std::make_shared<Board>(GA_RESOURCE_DIR"/Image/Character/board.png", glm::vec2( 2200, -190), glm::vec2(200,16));
-                m_Objects.push_back(object);
-                m_Root.AddChild(object);
+                // 載入物件
+                auto box1 = std::make_shared<Object>(GA_RESOURCE_DIR"/Image/Character/long1.png", glm::vec2( -300, 2), glm::vec2(200,16));
+                m_Objects.push_back(box1);
+                m_Root.AddChild(box1);
 
-                auto key = std::make_shared<Key>(GA_RESOURCE_DIR"/Image/Character/key.png", glm::vec2(2050, 110), glm::vec2(31, 61));
+                auto box2 = std::make_shared<Object>(GA_RESOURCE_DIR"/Image/Character/long2.png", glm::vec2( 300, 2), glm::vec2(200,16));
+                m_Objects.push_back(box2);
+                m_Root.AddChild(box2);
+
+                auto key = std::make_shared<Key>(GA_RESOURCE_DIR"/Image/Character/key.png", glm::vec2(-400, 10), glm::vec2(31, 61));
                 key -> SetZIndex(10);
                 m_key = key;
                 m_Objects.push_back(key);
                 m_Root.AddChild(key);
 
-                auto door = std::make_shared<Door>(GA_RESOURCE_DIR"/Image/Character/door1.png", glm::vec2(2500, 75), glm::vec2(83, 80));
+                auto box3 = std::make_shared<Object>(GA_RESOURCE_DIR"/Image/Character/square.png", glm::vec2( 1100, -155), glm::vec2(200,16));
+                m_Objects.push_back(box3);
+                m_Root.AddChild(box3);
+
+                auto door = std::make_shared<Door>(GA_RESOURCE_DIR"/Image/Character/door1.png", glm::vec2(1800, -108), glm::vec2(83, 80));
                 door -> SetZIndex(5);
                 m_Objects.push_back(door);
                 m_Root.AddChild(door);
-
-                auto button = std::make_shared<Button>(GA_RESOURCE_DIR"/Image/Character/button.png", glm::vec2(1500, -225), glm::vec2(22, 51));
-                m_Objects.push_back(button);
-                m_Root.AddChild(button);
-
-                auto platform = std::make_shared<Platform>(GA_RESOURCE_DIR"/Image/Character/rectangle.png", glm::vec2(1600, -250), glm::vec2(300, 36));
-                m_Objects.push_back(platform);
-                m_Root.AddChild(platform);
-                platform->SetButton(button);
 
                 m_PRM->NextPhase();
             } else {
