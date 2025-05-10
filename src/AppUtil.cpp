@@ -42,7 +42,7 @@ void App::ValidTask() {
                 std::string mapPath = GA_RESOURCE_DIR"/Map/first.txt";
                 CreateMapTiles(mapPath);
                 // 載入板子
-                auto object = std::make_shared<Board>(GA_RESOURCE_DIR"/Image/Character/board.png", glm::vec2( 2200, -190), glm::vec2(200,16));
+                auto object = std::make_shared<Board>(GA_RESOURCE_DIR"/Image/Character/board.png", glm::vec2( 2210, -190), glm::vec2(200,16));
                 m_Objects.push_back(object);
                 m_Root.AddChild(object);
 
@@ -99,8 +99,8 @@ void App::ValidTask() {
                 // 載入地圖
                 std::string mapPath = GA_RESOURCE_DIR"/Map/second.txt";
                 CreateMapTiles(mapPath);
-                // 載入板子
 
+                // 載入物件
                 auto box1 = std::make_shared<Object>(GA_RESOURCE_DIR"/Image/Character/long1.png", glm::vec2( -300, 2), glm::vec2(200,16));
                 m_Objects.push_back(box1);
                 m_Root.AddChild(box1);
@@ -108,7 +108,7 @@ void App::ValidTask() {
                 auto box2 = std::make_shared<Object>(GA_RESOURCE_DIR"/Image/Character/long2.png", glm::vec2( 300, 2), glm::vec2(200,16));
                 m_Objects.push_back(box2);
                 m_Root.AddChild(box2);
-
+                
                 auto key = std::make_shared<Key>(GA_RESOURCE_DIR"/Image/Character/key.png", glm::vec2(-400, 10), glm::vec2(31, 61));
                 key -> SetZIndex(10);
                 m_Objects.push_back(key);
@@ -122,7 +122,7 @@ void App::ValidTask() {
                 door -> SetZIndex(5);
                 m_Objects.push_back(door);
                 m_Root.AddChild(door);
-        
+
                 m_PRM->NextPhase();
             } else {
                 LOG_DEBUG("The door doesn't open or doesn't get the key.");

@@ -95,12 +95,11 @@ void App::Update() {
        }
     }
     m_EnterDown = Util::Input::IsKeyPressed(Util::Keycode::RETURN);
-    LOG_INFO("0");
 
     // === 🔽 加入角色移動邏輯 🔽 ===
-    const float jump = 30.0f;
+    const float jump = 25.0f;
     const float gravity = 1.0f;
-    const float speed = 5.0f;
+    const float speed = 6.0f;
 
     m_pico1 -> SetSpeed(1, gravity);
     m_pico2 -> SetSpeed(1, gravity);
