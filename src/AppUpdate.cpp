@@ -197,7 +197,15 @@ void App::Update() {
                 pico -> SetSpeed(3, -pico -> GetSpeed(3));
                 pico -> PositionCorrection(2, obj);
                 if (obj -> GetType() == "Key" && !obj -> IsBound()) {
-                    obj->BindTo(pico);
+                    obj -> BindTo(pico);
+                }
+                if (obj -> GetType() == "Box") {
+                    std::shared_ptr<Box> box = std::dynamic_pointer_cast<Box>(obj);
+                    if (box && (pico == m_pico1 && Util::Input::IsKeyPressed(Util::Keycode::D)) ||
+                        (pico == m_pico2 && Util::Input::IsKeyPressed(Util::Keycode::RIGHT))) {
+                        pico -> SetSpeed(3, 4.0f);
+                        box -> Push(pico -> GetSpeed(3));
+                    }
                 }
             }
             else if (result == 3) {
@@ -205,6 +213,14 @@ void App::Update() {
                 pico -> PositionCorrection(3, obj);
                 if (obj -> GetType() == "Key" && !obj -> IsBound()) {
                     obj->BindTo(pico);
+                }
+                if (obj -> GetType() == "Box") {
+                    std::shared_ptr<Box> box = std::dynamic_pointer_cast<Box>(obj);
+                    if (box && (pico == m_pico1 && Util::Input::IsKeyPressed(Util::Keycode::A)) ||
+                        (pico == m_pico2 && Util::Input::IsKeyPressed(Util::Keycode::LEFT))) {
+                        pico -> SetSpeed(2, 4.0f);
+                        box -> Push(-pico -> GetSpeed(2));
+                    }
                 }
             }
             else if (result == 4) {
@@ -275,21 +291,10 @@ void App::Update() {
     else if (m_key -> IsBound()){
         m_key -> BindTo(m_pico2);
     }
-    // 鑰匙傳遞判斷----------------
-    // if (m_pico1 -> IfCollidesCha(m_pico2) && m_key -> IsBound() && m_key -> GetBoundPico() == m_pico1) {
-    //     if (Hold_key) {
-    //         m_key -> BindTo(m_pico2);
-    //         Hold_key = false;
-    //     }
-    // }
-    // else if (m_pico2 -> IfCollidesCha(m_pico1) && m_key -> IsBound() && m_key -> GetBoundPico() == m_pico2) {
-    //     if (Hold_key) {
-    //         m_key -> BindTo(m_pico1);
-    //         Hold_key = false;
-    //     }
-    // }
     //------------------------
 
+
+    //------------------------
     if (m_pico1 -> GetOnHead()) {
         m_pico1 -> HeadCorrection(m_pico2);
         m_pico1 -> SetSpeed(0, m_pico2 -> GetSpeed(0));
@@ -457,9 +462,11 @@ m_pico2 -> m_Transform.translation.x -= diff;
     m_pico1 -> Ismoving();
     m_pico2 -> Ismoving();
 
+
     for (auto obj : m_Objects) {
         obj -> Move();
         obj -> ResetCurrNumber();
+
     }
 
     m_Root.Update();

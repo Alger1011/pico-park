@@ -17,6 +17,8 @@ public:
     void SetImage(const std::string& ImagePath);
     void SetPosition(glm::vec2 position) { m_Transform.translation = position; }
     [[nodiscard]] const std::string& GetImagePath() const { return m_ImagePath; }
+    int IfCollidesObj(const std::shared_ptr<Object>& other) const;
+    void ObjPositionCorrection(int direction, const std::shared_ptr<Object>& other);
 
     glm::vec2 GetSize() const { return m_size; }
     glm::vec2 GetPosition() const { return m_Transform.translation; }
@@ -115,6 +117,27 @@ public:
 
 private:
     glm::vec2 origin_position;
+};
+
+// 可以推動的箱子
+class Box : public Object {
+public:
+    explicit Box(const std::string& ImagePath, glm::vec2 position, glm::vec2 size);
+
+    void AddCurrNumber(std::shared_ptr<Character>& character) override { curr_number.push_back(character); }
+    void Move() override;
+    std::string GetType() override { return "Box"; }
+    void ResetCurrNumber() override { curr_number.clear(); }
+    void Push(float force);
+    void BoxMoving();
+
+private:
+    int max_low = 200;
+    glm::vec2 origin_position;
+    int max_number = 2;
+    std::vector<std::shared_ptr<Character>> curr_number;
+    std::vector<float> m_Boxspeed = {0, 0, 0, 0}; //上下左右
+    float m_fallSpeed = 5.0f;
 };
 
 #endif // OBJECT_HPP

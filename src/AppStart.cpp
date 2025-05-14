@@ -105,8 +105,6 @@ void App::Start() {
         m_Root.AddChild(m_Doors[i]);
     }
 
-    // TODO: The counting down ball for phase 6
-
     m_PRM = std::make_shared<PhaseResourceManger>();
     m_Root.AddChildren(m_PRM->GetChildren());
 

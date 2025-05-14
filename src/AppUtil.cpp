@@ -99,11 +99,11 @@ void App::ValidTask() {
                 std::string mapPath = GA_RESOURCE_DIR"/Map/second.txt";
                 CreateMapTiles(mapPath);
                 // 載入物件
-                auto box1 = std::make_shared<Object>(GA_RESOURCE_DIR"/Image/Character/long1.png", glm::vec2( -300, 2), glm::vec2(200,16));
+                auto box1 = std::make_shared<Box>(GA_RESOURCE_DIR"/Image/Character/long1.png", glm::vec2( -300, 2), glm::vec2(56,425));
                 m_Objects.push_back(box1);
                 m_Root.AddChild(box1);
 
-                auto box2 = std::make_shared<Object>(GA_RESOURCE_DIR"/Image/Character/long2.png", glm::vec2( 300, 2), glm::vec2(200,16));
+                auto box2 = std::make_shared<Box>(GA_RESOURCE_DIR"/Image/Character/long2.png", glm::vec2( 300, 2), glm::vec2(56,425));
                 m_Objects.push_back(box2);
                 m_Root.AddChild(box2);
 
@@ -200,7 +200,7 @@ void App::ValidTask() {
             Total ++;
         }
     }
-    LOG_ERROR(Total);
+    //LOG_ERROR(Total);
 }
 
 void App::Reset() {
