@@ -142,6 +142,120 @@ void App::ValidTask() {
             }
         break;
 
+        case Phase::STAGE_THREE_LOADING:
+
+              if (m_pico1->GetImagePath() == GA_RESOURCE_DIR"/Image/Character/pico_stand1.png"){
+                m_Phase = Phase::STAGE_TWO;
+                m_pico2->SetPosition({50.0f, 0.0f});
+                m_pico1->SetPosition({-100.0f, 0.0f});
+                m_pico1->SetVisible(true);
+                m_pico2->SetVisible(true);
+
+                m_pico1 -> SetSpeed(1, -m_pico1 -> GetSpeed(1));
+                m_pico2 -> SetSpeed(1, -m_pico2 -> GetSpeed(1));
+                // 載入地圖
+                std::string mapPath = GA_RESOURCE_DIR"/Map/third.txt";
+                CreateMapTiles(mapPath);
+
+                // 載入物件
+                auto box1 = std::make_shared<Box>(GA_RESOURCE_DIR"/Image/Character/long1.png", glm::vec2( -300, 2), glm::vec2(56,425));
+                m_Objects.push_back(box1);
+                m_Root.AddChild(box1);
+
+                auto box2 = std::make_shared<Box>(GA_RESOURCE_DIR"/Image/Character/long2.png", glm::vec2( 300, 2), glm::vec2(56,425));
+                m_Objects.push_back(box2);
+                m_Root.AddChild(box2);
+                
+                auto key = std::make_shared<Key>(GA_RESOURCE_DIR"/Image/Character/key.png", glm::vec2(-400, 10), glm::vec2(31, 61));
+                key -> SetZIndex(10);
+                m_Objects.push_back(key);
+                m_Root.AddChild(key);
+
+                auto box3 = std::make_shared<Object>(GA_RESOURCE_DIR"/Image/Character/square.png", glm::vec2( 1100, -155), glm::vec2(200,16));
+                m_Objects.push_back(box3);
+                m_Root.AddChild(box3);
+
+                auto door = std::make_shared<Door>(GA_RESOURCE_DIR"/Image/Character/door1.png", glm::vec2(1800, -108), glm::vec2(83, 80));
+                door -> SetZIndex(5);
+                m_Objects.push_back(door);
+                m_Root.AddChild(door);
+
+                m_PRM->NextPhase();
+            } else {
+                LOG_DEBUG("The door doesn't open or doesn't get the key.");
+            }
+        break;
+
+        case Phase::STAGE_THREE:
+            if (!m_pico1->GetVisibility() && !m_pico2->GetVisibility()){
+                m_Phase = Phase::OPEN_THE_DOORS;
+                Reset();
+                m_pico1->SetVisible(false);
+                m_pico2->SetVisible(false);
+                m_key->SetVisible(false);
+                m_PRM->NextPhase();
+            } else {
+                LOG_DEBUG("ERROR.");
+            }
+        break;
+
+        case Phase::STAGE_FOUR_LOADING:
+
+              if (m_pico1->GetImagePath() == GA_RESOURCE_DIR"/Image/Character/pico_stand1.png"){
+                m_Phase = Phase::STAGE_TWO;
+                m_pico2->SetPosition({50.0f, 0.0f});
+                m_pico1->SetPosition({-100.0f, 0.0f});
+                m_pico1->SetVisible(true);
+                m_pico2->SetVisible(true);
+
+                m_pico1 -> SetSpeed(1, -m_pico1 -> GetSpeed(1));
+                m_pico2 -> SetSpeed(1, -m_pico2 -> GetSpeed(1));
+                // 載入地圖
+                std::string mapPath = GA_RESOURCE_DIR"/Map/forth.txt";
+                CreateMapTiles(mapPath);
+
+                // 載入物件
+                auto box1 = std::make_shared<Box>(GA_RESOURCE_DIR"/Image/Character/long1.png", glm::vec2( -300, 2), glm::vec2(56,425));
+                m_Objects.push_back(box1);
+                m_Root.AddChild(box1);
+
+                auto box2 = std::make_shared<Box>(GA_RESOURCE_DIR"/Image/Character/long2.png", glm::vec2( 300, 2), glm::vec2(56,425));
+                m_Objects.push_back(box2);
+                m_Root.AddChild(box2);
+                
+                auto key = std::make_shared<Key>(GA_RESOURCE_DIR"/Image/Character/key.png", glm::vec2(-400, 10), glm::vec2(31, 61));
+                key -> SetZIndex(10);
+                m_Objects.push_back(key);
+                m_Root.AddChild(key);
+
+                auto box3 = std::make_shared<Object>(GA_RESOURCE_DIR"/Image/Character/square.png", glm::vec2( 1100, -155), glm::vec2(200,16));
+                m_Objects.push_back(box3);
+                m_Root.AddChild(box3);
+
+                auto door = std::make_shared<Door>(GA_RESOURCE_DIR"/Image/Character/door1.png", glm::vec2(1800, -108), glm::vec2(83, 80));
+                door -> SetZIndex(5);
+                m_Objects.push_back(door);
+                m_Root.AddChild(door);
+
+                m_PRM->NextPhase();
+            } else {
+                LOG_DEBUG("The door doesn't open or doesn't get the key.");
+            }
+        break;
+
+        case Phase::STAGE_FOUR:
+            if (!m_pico1->GetVisibility() && !m_pico2->GetVisibility()){
+                m_Phase = Phase::OPEN_THE_DOORS;
+                Reset();
+                m_pico1->SetVisible(false);
+                m_pico2->SetVisible(false);
+                m_key->SetVisible(false);
+                m_PRM->NextPhase();
+            } else {
+                LOG_DEBUG("ERROR.");
+            }
+        break;
+
         case Phase::OPEN_THE_DOORS:
             if (AreAllDoorsOpen(m_Doors)) {
                 m_Phase = Phase::COUNTDOWN;
