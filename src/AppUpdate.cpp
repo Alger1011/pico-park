@@ -452,11 +452,22 @@ m_pico2 -> m_Transform.translation.x -= diff;
 
     // 掉落重置--------------
     for (auto& pico : m_pico) {
-        if (pico -> m_Transform.translation.y < -500) {
-            float x = pico -> m_Transform.translation.x - 200.0f;
-            pico -> SetPosition({x, 200.0f});
-            pico -> SetSpeed(1, -pico -> GetSpeed(1));
-        }
+
+            if (pico -> m_Transform.translation.y < -500) {
+                float x = pico -> m_Transform.translation.x - 200.0f, x1 = pico -> m_Transform.translation.x;
+                if (m_Phase == Phase::STAGE_THREE ) {
+                    if (x1>20) {
+                        pico -> SetPosition({x1-100, 200.0f});
+                    }
+                    else {
+                        pico -> SetPosition({30, 200.0f});
+                    }
+                }
+                else {
+                    pico -> SetPosition({x, 200.0f});
+                }
+                pico -> SetSpeed(1, -pico -> GetSpeed(1));
+           }
     }
 
     m_pico1 -> Ismoving();

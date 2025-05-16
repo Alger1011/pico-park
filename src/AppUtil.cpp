@@ -86,8 +86,7 @@ void App::ValidTask() {
         break;
 
         case Phase::STAGE_TWO_LOADING:
-
-              if (m_pico1->GetImagePath() == GA_RESOURCE_DIR"/Image/Character/pico_stand1.png"){
+            if (true){
                 m_Phase = Phase::STAGE_TWO;
                 m_pico2->SetPosition({50.0f, 0.0f});
                 m_pico1->SetPosition({-100.0f, 0.0f});
@@ -108,7 +107,7 @@ void App::ValidTask() {
                 auto box2 = std::make_shared<Box>(GA_RESOURCE_DIR"/Image/Character/long2.png", glm::vec2( 300, 2), glm::vec2(56,425));
                 m_Objects.push_back(box2);
                 m_Root.AddChild(box2);
-                
+
                 auto key = std::make_shared<Key>(GA_RESOURCE_DIR"/Image/Character/key.png", glm::vec2(-400, 10), glm::vec2(31, 61));
                 key -> SetZIndex(10);
                 m_Objects.push_back(key);
@@ -143,11 +142,10 @@ void App::ValidTask() {
         break;
 
         case Phase::STAGE_THREE_LOADING:
-
-              if (m_pico1->GetImagePath() == GA_RESOURCE_DIR"/Image/Character/pico_stand1.png"){
-                m_Phase = Phase::STAGE_TWO;
-                m_pico2->SetPosition({50.0f, 0.0f});
-                m_pico1->SetPosition({-100.0f, 0.0f});
+            if (true){
+                m_Phase = Phase::STAGE_THREE;
+                m_pico2->SetPosition({30.0f, 100.0f});
+                m_pico1->SetPosition({40.0f, 0.0f});
                 m_pico1->SetVisible(true);
                 m_pico2->SetVisible(true);
 
@@ -158,27 +156,27 @@ void App::ValidTask() {
                 CreateMapTiles(mapPath);
 
                 // 載入物件
-                auto box1 = std::make_shared<Box>(GA_RESOURCE_DIR"/Image/Character/long1.png", glm::vec2( -300, 2), glm::vec2(56,425));
+                auto box1 = std::make_shared<Object>(GA_RESOURCE_DIR"/Image/Character/brick.png", glm::vec2( 35, 250), glm::vec2(56,40));
                 m_Objects.push_back(box1);
                 m_Root.AddChild(box1);
 
-                auto box2 = std::make_shared<Box>(GA_RESOURCE_DIR"/Image/Character/long2.png", glm::vec2( 300, 2), glm::vec2(56,425));
+                auto box2 = std::make_shared<Object>(GA_RESOURCE_DIR"/Image/Character/brick.png", glm::vec2( 900, -180), glm::vec2(56,10));
                 m_Objects.push_back(box2);
                 m_Root.AddChild(box2);
-                
-                auto key = std::make_shared<Key>(GA_RESOURCE_DIR"/Image/Character/key.png", glm::vec2(-400, 10), glm::vec2(31, 61));
+
+                auto key = std::make_shared<Key>(GA_RESOURCE_DIR"/Image/Character/key.png", glm::vec2(1000, 250), glm::vec2(31, 61));
                 key -> SetZIndex(10);
                 m_Objects.push_back(key);
                 m_Root.AddChild(key);
-
-                auto box3 = std::make_shared<Object>(GA_RESOURCE_DIR"/Image/Character/square.png", glm::vec2( 1100, -155), glm::vec2(200,16));
-                m_Objects.push_back(box3);
-                m_Root.AddChild(box3);
-
-                auto door = std::make_shared<Door>(GA_RESOURCE_DIR"/Image/Character/door1.png", glm::vec2(1800, -108), glm::vec2(83, 80));
-                door -> SetZIndex(5);
-                m_Objects.push_back(door);
-                m_Root.AddChild(door);
+                //
+                // auto box3 = std::make_shared<Object>(GA_RESOURCE_DIR"/Image/Character/brick.png", glm::vec2( 1700, -155), glm::vec2(200,16));
+                // m_Objects.push_back(box3);
+                // m_Root.AddChild(box3);
+                //
+                // auto door = std::make_shared<Door>(GA_RESOURCE_DIR"/Image/Character/door1.png", glm::vec2(1800, -108), glm::vec2(83, 80));
+                // door -> SetZIndex(5);
+                // m_Objects.push_back(door);
+                // m_Root.AddChild(door);
 
                 m_PRM->NextPhase();
             } else {
@@ -222,7 +220,7 @@ void App::ValidTask() {
                 auto box2 = std::make_shared<Box>(GA_RESOURCE_DIR"/Image/Character/long2.png", glm::vec2( 300, 2), glm::vec2(56,425));
                 m_Objects.push_back(box2);
                 m_Root.AddChild(box2);
-                
+
                 auto key = std::make_shared<Key>(GA_RESOURCE_DIR"/Image/Character/key.png", glm::vec2(-400, 10), glm::vec2(31, 61));
                 key -> SetZIndex(10);
                 m_Objects.push_back(key);
