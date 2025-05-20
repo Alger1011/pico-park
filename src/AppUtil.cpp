@@ -182,7 +182,7 @@ void App::ValidTask() {
                 m_Root.AddChild(button1);
 
                 auto rec2 = std::make_shared<Platform>(GA_RESOURCE_DIR"/Image/Character/vrec-third.png", glm::vec2( 600, 220), glm::vec2(10,16));
-                m_Objects.push_back(rec2);//向上移
+                m_Objects.push_back(rec2);//按到按鈕後要往下移至目前座標的位置
                 m_Root.AddChild(rec2);
 
                 auto rec3 = std::make_shared<Platform>(GA_RESOURCE_DIR"/Image/Character/vrec-third.png", glm::vec2(1500, 220), glm::vec2(200,16));
