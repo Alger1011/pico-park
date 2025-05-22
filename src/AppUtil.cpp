@@ -29,7 +29,7 @@ void App::ValidTask() {
         break;
 
         case Phase::STAGE_ONE_LOADING:
-            if (m_pico1->GetImagePath() == GA_RESOURCE_DIR"/Image/Character/right_pico_stand1.png") {
+            if (true) {
                 m_Phase = Phase::STAGE_ONE;
                 m_pico2->SetPosition({50.0f, 0.0f});
                 m_pico1->SetPosition({-100.0f, 0.0f});
@@ -73,7 +73,8 @@ void App::ValidTask() {
         break;
 
         case Phase::STAGE_ONE:
-            if (!m_pico1->GetVisibility() && !m_pico2->GetVisibility()){
+            if (true){
+                // !m_pico1->GetVisibility() && !m_pico2->GetVisibility()
                 m_Phase = Phase::STAGE_TWO_LOADING;
                 Reset();
                 m_pico1->SetVisible(false);
@@ -98,7 +99,6 @@ void App::ValidTask() {
                 // 載入地圖
                 std::string mapPath = GA_RESOURCE_DIR"/Map/second.txt";
                 CreateMapTiles(mapPath);
-
                 // 載入物件
                 auto box1 = std::make_shared<Box>(GA_RESOURCE_DIR"/Image/Character/long1.png", glm::vec2( -300, 2), glm::vec2(56,425));
                 m_Objects.push_back(box1);
@@ -110,10 +110,11 @@ void App::ValidTask() {
 
                 auto key = std::make_shared<Key>(GA_RESOURCE_DIR"/Image/Character/key.png", glm::vec2(-400, 10), glm::vec2(31, 61));
                 key -> SetZIndex(10);
+                m_key = key;
                 m_Objects.push_back(key);
                 m_Root.AddChild(key);
 
-                auto box3 = std::make_shared<Object>(GA_RESOURCE_DIR"/Image/Character/square.png", glm::vec2( 1100, -155), glm::vec2(200,16));
+                auto box3 = std::make_shared<Square_Box>(GA_RESOURCE_DIR"/Image/Character/square.png", glm::vec2( 1100, -155), glm::vec2(108,108));
                 m_Objects.push_back(box3);
                 m_Root.AddChild(box3);
 
@@ -121,7 +122,6 @@ void App::ValidTask() {
                 door -> SetZIndex(5);
                 m_Objects.push_back(door);
                 m_Root.AddChild(door);
-
                 m_PRM->NextPhase();
             } else {
                 LOG_DEBUG("The door doesn't open or doesn't get the key.");
@@ -129,8 +129,9 @@ void App::ValidTask() {
         break;
 
         case Phase::STAGE_TWO:
-            if (!m_pico1->GetVisibility() && !m_pico2->GetVisibility()){
-                m_Phase = Phase::OPEN_THE_DOORS;
+            if (true){
+                // !m_pico1->GetVisibility() && !m_pico2->GetVisibility()
+                m_Phase = Phase::STAGE_THREE_LOADING;
                 Reset();
                 m_pico1->SetVisible(false);
                 m_pico2->SetVisible(false);
@@ -154,7 +155,6 @@ void App::ValidTask() {
                 // 載入地圖
                 std::string mapPath = GA_RESOURCE_DIR"/Map/third.txt";
                 CreateMapTiles(mapPath);
-
                 // 載入物件
                 auto box1 = std::make_shared<Object>(GA_RESOURCE_DIR"/Image/Character/brick.png", glm::vec2( 35, 250), glm::vec2(56,40));
                 m_Objects.push_back(box1);
@@ -213,7 +213,6 @@ void App::ValidTask() {
                 door -> SetZIndex(5);
                 m_Objects.push_back(door);
                 m_Root.AddChild(door);
-
                 m_PRM->NextPhase();
             } else {
                 LOG_DEBUG("The door doesn't open or doesn't get the key.");
@@ -222,7 +221,7 @@ void App::ValidTask() {
 
         case Phase::STAGE_THREE:
             if (!m_pico1->GetVisibility() && !m_pico2->GetVisibility()){
-                m_Phase = Phase::OPEN_THE_DOORS;
+                m_Phase = Phase::STAGE_FOUR_LOADING;
                 Reset();
                 m_pico1->SetVisible(false);
                 m_pico2->SetVisible(false);
@@ -236,7 +235,7 @@ void App::ValidTask() {
         case Phase::STAGE_FOUR_LOADING:
 
               if (m_pico1->GetImagePath() == GA_RESOURCE_DIR"/Image/Character/pico_stand1.png"){
-                m_Phase = Phase::STAGE_TWO;
+                m_Phase = Phase::STAGE_FOUR;
                 m_pico2->SetPosition({50.0f, 0.0f});
                 m_pico1->SetPosition({-100.0f, 0.0f});
                 m_pico1->SetVisible(true);
@@ -279,7 +278,7 @@ void App::ValidTask() {
 
         case Phase::STAGE_FOUR:
             if (!m_pico1->GetVisibility() && !m_pico2->GetVisibility()){
-                m_Phase = Phase::OPEN_THE_DOORS;
+                m_CurrentState = State::END;
                 Reset();
                 m_pico1->SetVisible(false);
                 m_pico2->SetVisible(false);
@@ -290,26 +289,6 @@ void App::ValidTask() {
             }
         break;
 
-        case Phase::OPEN_THE_DOORS:
-            if (AreAllDoorsOpen(m_Doors)) {
-                m_Phase = Phase::COUNTDOWN;
-                std::for_each(m_Doors.begin(), m_Doors.end(), [](const auto& door) { door->SetVisible(false); });
-                m_Giraffe->SetVisible(false);
-
-                m_PRM->NextPhase();
-            } else {
-                LOG_DEBUG("At least one door is not open");
-            }
-        break;
-
-        case Phase::COUNTDOWN:
-            if (m_Ball->IfAnimationEnds()) {
-                LOG_DEBUG("Congratulations! You have completed Giraffe Adventure!");
-                m_CurrentState = State::END;
-            } else{
-                LOG_DEBUG("The ball animation is not ended");
-            }
-        break;
     }
 }
 

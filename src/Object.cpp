@@ -100,6 +100,10 @@ void Object::ObjPositionCorrection(int direction, const std::shared_ptr<Object>&
     }
 }
 
+void Object::SetSpeed(int direction, float speed){
+    m_speed[direction] += speed;
+}
+
 
 std::shared_ptr<Character> Object::GetBoundPico() const {
     return nullptr;
@@ -212,37 +216,58 @@ Box::Box(const std::string& ImagePath, glm::vec2 position, glm::vec2 size) : Obj
 
 void Box::Move() {
     if (curr_number.size() == 0) {
-        SetImage(GA_RESOURCE_DIR"/Image/Character/long0.png");
+        SetImage(GA_RESOURCE_DIR"/Image/Character/long2.png");
     } else if (curr_number.size() == 1) {
         SetImage(GA_RESOURCE_DIR"/Image/Character/long1.png");
     } else {
-        SetImage(GA_RESOURCE_DIR"/Image/Character/long2.png");
+        SetImage(GA_RESOURCE_DIR"/Image/Character/long0.png");
     }
 
-    // m_Transform.translation.y -= m_fallSpeed;
-    // if (m_Transform.translation.y < -150) {
-    //     m_Transform.translation.y = -100;
-    //     m_fallSpeed = 0;
-    // }
+    if (m_Transform.translation.y > max_low) {
+        m_Transform.translation.y -= 5.0f;
+    }
+    if (isFall == true && dropped == false) {
+        m_Transform.translation.x += 22.0f;
+        dropped = true;
+    }
+    if (curr_number.size() == max_number && isFall == false) {
+        m_Transform.translation.x += force;
+        for (auto pico : curr_number) {
+            pico -> m_Transform.translation.x += force;
+        }
+    }
+    isFall = true;
 }
 
-void Box::Push(float force) {
-    m_Transform.translation.x += force;
-    // glm::vec2 oldPos = m_Transform.translation;
+void Box::Push(float F) {
+    force = F;
 }
 
-void Box::BoxMoving() {
-    m_Transform.translation.y += m_Boxspeed[0];
-    m_Transform.translation.y -= m_Boxspeed[1];
-    m_Transform.translation.x -= m_Boxspeed[2];
-    m_Transform.translation.x += m_Boxspeed[3];
-    m_Boxspeed[0] = std::max(m_Boxspeed[0] - m_Boxspeed[1], 0.0f);
-    // m_speed[1] = 0;
-    m_Boxspeed[2] = 0;
-    m_Boxspeed[3] = 0;
 
+Square_Box::Square_Box(const std::string& ImagePath, glm::vec2 position, glm::vec2 size) : Object(ImagePath, position, size)
+{
+    origin_position = position;
 }
 
+void Square_Box::Move() {
+    if (curr_number.size() == 0) {
+        SetImage(GA_RESOURCE_DIR"/Image/Character/square.png");
+    } else if (curr_number.size() == 1) {
+        SetImage(GA_RESOURCE_DIR"/Image/Character/square0.png");
+    } else {
+        SetImage(GA_RESOURCE_DIR"/Image/Character/square.png");
+    }
+    if (curr_number.size() >= max_number) {
+        m_Transform.translation.x += force;
+        for (auto pico : curr_number) {
+            pico -> m_Transform.translation.x += force;
+        }
+    }
+}
+
+void Square_Box::Push(float F) {
+    force = F;
+}
 
 // void Door::SetKey(const std::shared_ptr<Key>& key) {
 //     m_Key = key;
