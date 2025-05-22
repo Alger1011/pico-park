@@ -77,6 +77,9 @@ void App::Update() {
         m_CurrentState = State::END;
     }
 
+    if (Util::Input::IsKeyPressed(Util::Keycode::Q)) {
+        ValidTask();
+    }
     // 簡化 Enter 按鍵處理
     //if (Util::Input::IsKeyPressed(Util::Keycode::RETURN)) {
     //    ValidTask();
@@ -199,14 +202,30 @@ void App::Update() {
                 if (obj -> GetType() == "Key" && !obj -> IsBound()) {
                     obj -> BindTo(pico);
                 }
-                if (obj -> GetType() == "Box") {
-                    std::shared_ptr<Box> box = std::dynamic_pointer_cast<Box>(obj);
-                    if (box && (pico == m_pico1 && Util::Input::IsKeyPressed(Util::Keycode::D)) ||
-                        (pico == m_pico2 && Util::Input::IsKeyPressed(Util::Keycode::RIGHT))) {
-                        pico -> SetSpeed(3, 4.0f);
-                        box -> Push(pico -> GetSpeed(3));
+                if (obj -> GetType() == "Box" || obj -> GetType() == "Square_Box") {
+                    bool p1Pushing = pico == m_pico1 && Util::Input::IsKeyPressed(Util::Keycode::D);
+                    bool p2Pushing = pico == m_pico2 && Util::Input::IsKeyPressed(Util::Keycode::RIGHT);
+                    if (p1Pushing || p2Pushing) {
+                        obj -> Push(4.0f);
+                        if (pico -> GetSide() == 2) {
+                            if ((pico == m_pico2 && Util::Input::IsKeyPressed(Util::Keycode::D)) || (pico == m_pico1 && Util::Input::IsKeyPressed(Util::Keycode::RIGHT))) {
+                                obj -> AddCurrNumber(m_pico1);
+                                obj -> AddCurrNumber(m_pico2);
+                            }
+                        }
+                        else {
+                            obj -> AddCurrNumber(pico);
+                        }
                     }
                 }
+                // if (obj -> GetType() == "Square_Box") {
+                //     bool p1Pushing = pico == m_pico1 && Util::Input::IsKeyPressed(Util::Keycode::D);
+                //     bool p2Pushing = pico == m_pico2 && Util::Input::IsKeyPressed(Util::Keycode::RIGHT);
+                //     if (p1Pushing || p2Pushing) {
+                //         obj -> Push(4.0f);
+                //         obj -> AddCurrNumber(pico);
+                //     }
+                // }
             }
             else if (result == 3) {
                 pico -> SetSpeed(2, -pico -> GetSpeed(2));
@@ -214,14 +233,30 @@ void App::Update() {
                 if (obj -> GetType() == "Key" && !obj -> IsBound()) {
                     obj->BindTo(pico);
                 }
-                if (obj -> GetType() == "Box") {
-                    std::shared_ptr<Box> box = std::dynamic_pointer_cast<Box>(obj);
-                    if (box && (pico == m_pico1 && Util::Input::IsKeyPressed(Util::Keycode::A)) ||
-                        (pico == m_pico2 && Util::Input::IsKeyPressed(Util::Keycode::LEFT))) {
-                        pico -> SetSpeed(2, 4.0f);
-                        box -> Push(-pico -> GetSpeed(2));
+                if (obj -> GetType() == "Box" || obj -> GetType() == "Square_Box") {
+                    bool p1Pushing = pico == m_pico1 && Util::Input::IsKeyPressed(Util::Keycode::A);
+                    bool p2Pushing = pico == m_pico2 && Util::Input::IsKeyPressed(Util::Keycode::LEFT);
+                    if (p1Pushing || p2Pushing) {
+                            obj -> Push(-4.0f);
+                        if (pico -> GetSide() == 1) {
+                            if ((pico == m_pico2 && Util::Input::IsKeyPressed(Util::Keycode::A)) || (pico == m_pico1 && Util::Input::IsKeyPressed(Util::Keycode::LEFT))) {
+                                obj -> AddCurrNumber(m_pico1);
+                                obj -> AddCurrNumber(m_pico2);
+                            }
+                        }
+                        else {
+                            obj -> AddCurrNumber(pico);
+                        }
                     }
                 }
+                // if (obj -> GetType() == "Square_Box") {
+                //     bool p1Pushing = pico == m_pico1 && Util::Input::IsKeyPressed(Util::Keycode::A);
+                //     bool p2Pushing = pico == m_pico2 && Util::Input::IsKeyPressed(Util::Keycode::LEFT);
+                //     if (p1Pushing || p2Pushing) {
+                //         obj -> Push(-4.0f);
+                //         obj -> AddCurrNumber(pico);
+                //     }
+                // }
             }
             else if (result == 4) {
                 if (m_key -> GetBoundPico() == pico && obj -> GetImagePath() == GA_RESOURCE_DIR"/Image/Character/door1.png") {
@@ -240,25 +275,32 @@ void App::Update() {
         }
     }
 
-    // 物體與pico的碰撞----------------
+    // 物體與pico的碰撞-----------
     // pico之間的碰撞------------
     int Cha1_result = m_pico1 -> IfCollidesCha(m_pico2);
     if (Cha1_result == 0) {
         m_pico1 -> SetSpeed(1, -m_pico1 -> GetSpeed(1));
         m_pico1 -> ChaPositionCorrection(0, m_pico2);
         m_pico1 -> SetJumpState(true);
+        m_pico1 -> SetSide(0);
     }
     else if (Cha1_result == 1) {
         m_pico1 -> SetSpeed(0, -m_pico1 -> GetSpeed(0));
         m_pico1 -> ChaPositionCorrection(1, m_pico2);
+        m_pico1 -> SetSide(0);
     }
     else if (Cha1_result == 2) {
         m_pico1 -> SetSpeed(3, -m_pico1 -> GetSpeed(3));
         m_pico1 -> ChaPositionCorrection(2, m_pico2);
+        m_pico1 -> SetSide(1);
     }
     else if (Cha1_result == 3) {
         m_pico1 -> SetSpeed(2, -m_pico1 -> GetSpeed(2));
         m_pico1 -> ChaPositionCorrection(3, m_pico2);
+        m_pico1 -> SetSide(2);
+    }
+    else {
+        m_pico1 -> SetSide(0);
     }
     if (Cha1_result == -1) {
         m_key -> SetHoldKey(true);
@@ -272,18 +314,25 @@ void App::Update() {
         m_pico2 -> SetSpeed(1, -m_pico2 -> GetSpeed(1));
         m_pico2 -> ChaPositionCorrection(0, m_pico1);
         m_pico2 -> SetJumpState(true);
+        m_pico2 -> SetSide(0);
     }
     else if (Cha2_result == 1) {
         m_pico2 -> SetSpeed(0, -m_pico2 -> GetSpeed(0));
         m_pico2 -> ChaPositionCorrection(1, m_pico1);
+        m_pico2 -> SetSide(0);
     }
     else if (Cha2_result == 2) {
         m_pico2 -> SetSpeed(3, -m_pico2 -> GetSpeed(3));
         m_pico2 -> ChaPositionCorrection(2, m_pico1);
+        m_pico2 -> SetSide(1);
     }
     else if (Cha2_result == 3) {
         m_pico2 -> SetSpeed(2, -m_pico2 -> GetSpeed(2));
         m_pico2 -> ChaPositionCorrection(3, m_pico1);
+        m_pico2 -> SetSide(2);
+    }
+    else {
+        m_pico2 -> SetSide(0);
     }
     if (Cha2_result == -1) {
         m_key -> SetHoldKey(true);
@@ -291,8 +340,49 @@ void App::Update() {
     else if (m_key -> IsBound()){
         m_key -> BindTo(m_pico2);
     }
-    //------------------------
-
+    //物體與物體的碰撞------------------------
+    for (auto& obj1 : m_Objects) {
+        for (auto& obj2 : m_Objects) {
+            if (obj1 == obj2) continue;
+            if (obj1 -> GetType() == "Box") {
+                //obj1 -> SetSpeed(1, gravity);
+                int result = obj1 -> IfCollidesObj(obj2);
+                if (result == 0) {
+                    // obj1 -> SetSpeed(1, -obj1 -> GetSpeed(1));
+                    obj1 -> ObjPositionCorrection(0, obj2);
+                    obj1 -> SetFall(false);
+                }
+                else if (result == 1) {
+                    // obj1 -> SetSpeed(0, -obj1 -> GetSpeed(0));
+                    obj1 -> ObjPositionCorrection(1, obj2);
+                }
+                else if (result == 2) {
+                    // obj1 -> SetSpeed(3, -obj1 -> GetSpeed(3));
+                    obj1 -> ObjPositionCorrection(2, obj2);
+                }
+                else if (result == 3) {
+                    // obj1 -> SetSpeed(2, -obj1 -> GetSpeed(2));
+                    obj1 -> ObjPositionCorrection(3, obj2);
+                    //LOG_INFO(123123);
+                }
+            }
+            if (obj1 -> GetType() == "Square_Box") {
+                int result = obj1 -> IfCollidesObj(obj2);
+                if (result == 0) {
+                    obj1 -> ObjPositionCorrection(0, obj2);
+                }
+                else if (result == 1) {
+                    obj1 -> ObjPositionCorrection(1, obj2);
+                }
+                else if (result == 2) {
+                    obj1 -> ObjPositionCorrection(2, obj2);
+                }
+                else if (result == 3) {
+                    obj1 -> ObjPositionCorrection(3, obj2);
+                }
+            }
+        }
+    }
 
     //------------------------
     if (m_pico1 -> GetOnHead()) {
@@ -310,31 +400,7 @@ void App::Update() {
         m_pico2 -> SetSpeed(2, m_pico1 -> GetSpeed(2));
         m_pico2 -> SetSpeed(3, m_pico1 -> GetSpeed(3));
     }
-
-// 修改App::Update()中的相机滚动逻辑部分
-
-// 需要替换原代码中的这部分:
-/*
-float centerX = (m_pico1 -> m_Transform.translation.x + m_pico2 -> m_Transform.translation.x) / 2;
-float diff = 0;
-for (auto& pico : m_pico) {
-    if (pico -> m_Transform.translation.x > 430) {
-        diff += pico -> GetSpeed(3);
-    }
-    else if (pico -> m_Transform.translation.x < -430) {
-        diff -= pico -> GetSpeed(2);
-    }
-}
-if (diff == 0) {
-    diff = centerX - 0;
-}
-for (auto& obj : m_Objects) {
-    obj ->m_Transform.translation.x -= diff;
-}
-m_pico1 -> m_Transform.translation.x -= diff;
-m_pico2 -> m_Transform.translation.x -= diff;
-*/
-
+    //------------------------
     // 新的相机邏辑
     float centerX = (m_pico1->m_Transform.translation.x + m_pico2->m_Transform.translation.x) / 2;
     float diff = 0;
@@ -452,9 +518,24 @@ m_pico2 -> m_Transform.translation.x -= diff;
 
     // 掉落重置--------------
     for (auto& pico : m_pico) {
+        // if (pico -> m_Transform.translation.y < -500) {
+        //     float x = pico -> m_Transform.translation.x - 200.0f;
+        //     pico -> SetPosition({x, 200.0f});
+        //     pico -> SetSpeed(1, -pico -> GetSpeed(1));
+        // }
         if (pico -> m_Transform.translation.y < -500) {
-            float x = pico -> m_Transform.translation.x - 200.0f;
-            pico -> SetPosition({x, 200.0f});
+            float x = pico -> m_Transform.translation.x - 200.0f, x1 = pico -> m_Transform.translation.x;
+            if (m_Phase == Phase::STAGE_THREE ) {
+                if (x1>20) {
+                    pico -> SetPosition({x1-100, 200.0f});
+                }
+                else {
+                    pico -> SetPosition({30, 200.0f});
+                }
+            }
+            else {
+                pico -> SetPosition({x, 200.0f});
+            }
             pico -> SetSpeed(1, -pico -> GetSpeed(1));
         }
     }

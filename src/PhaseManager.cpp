@@ -8,13 +8,20 @@ PhaseResourceManger::PhaseResourceManger() {
 }
 
 void PhaseResourceManger::NextPhase() {
-    if (m_Phase == 7) return;
-    LOG_DEBUG("Passed! Next phase: {}", m_Phase);
-    m_Background->NextPhase(m_Phase);
-    m_TaskText->NextPhase(m_Phase++);
-
-    if (m_Phase == 4) {
-        LOG_INFO("Entering Phase 4 - Enabling map display");
-        // 背景已在 NextPhase 中設置為 phase3.png
+    if (m_Phase == 8) return;
+    // LOG_INFO("Passed! Next phase: {}", m_Phase);
+    if (!m_Background) {
+        // LOG_ERROR("m_Background is null!");
+    } else {
+        // LOG_INFO("Calling m_Background->NextPhase");
+        m_Background->NextPhase(m_Phase);  // 可能 crash
+        // LOG_INFO("Finished m_Background->NextPhase");
+    }
+    if (!m_TaskText) {
+        // LOG_ERROR("m_TaskText is null!");
+    } else {
+        // LOG_INFO("Calling m_TaskText->NextPhase");
+        m_TaskText->NextPhase(m_Phase++);  // 可能 crash
+        // LOG_INFO("Finished m_TaskText->NextPhase");
     }
 }

@@ -47,13 +47,10 @@ private:
         STAGE_ONE,
         STAGE_TWO_LOADING,
         STAGE_TWO,
+        STAGE_THREE_LOADING,
+        STAGE_THREE,
+        STAGE_FOUR_LOADING,
         STAGE_FOUR,
-        //CHANGE_CHARACTER_IMAGE,
-        //ABLE_TO_MOVE,
-        //COLLIDE_DETECTION,
-        //BEE_ANIMATION,
-        OPEN_THE_DOORS,
-        COUNTDOWN,
     };
 
     State m_CurrentState = State::START;

@@ -247,3 +247,4 @@ void Character::ChaPositionCorrection(int direction, const std::shared_ptr<Chara
 
 
 
+

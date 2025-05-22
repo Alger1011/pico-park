@@ -12,21 +12,28 @@ public:
             std::make_unique<Util::Image>(GA_RESOURCE_DIR"/Image/Background/Welcome.png"), -10) {
     }
 
-    // void NextPhase(const int phase) {
-    //     auto temp = std::dynamic_pointer_cast<Util::Image>(m_Drawable);
-    //     temp->SetImage(ImagePath(phase));
-    // }
     void NextPhase(const int phase) {
         auto temp = std::dynamic_pointer_cast<Util::Image>(m_Drawable);
-        // 特別處理 Phase 3，使用地圖渲染
-        if (phase ==4) {
-            std::vector<std::vector<int>> map = Map::LoadMap(GA_RESOURCE_DIR"/Map/first.txt");
-            // 這裡可以進一步實現將地圖轉換為背景圖的邏輯
-            temp->SetImage(CreateMapImage(map));
-        } else {
-            temp->SetImage(ImagePath(phase));
-        }
+        temp->SetImage(ImagePath(phase));
+        // auto temp = std::dynamic_pointer_cast<Util::Image>(m_Drawable);
+        //
+        // if (!temp) {
+        //     LOG_ERROR("Failed to cast m_Drawable to Util::Image (phase {})", phase);
+        //     return;
+        // }
+        //
+        // std::string path = ImagePath(phase);
+        //
+        // // 確認檔案是否存在
+        // if (!std::filesystem::exists(path)) {
+        //     LOG_ERROR("Background image not found: {}", path);
+        //     return;
+        // }
+        //
+        // LOG_INFO("Setting background image to {}", path);
+        // temp->SetImage(path);  // 如果 SetImage() 處理不了壞圖，也可能 crash
     }
+
 private:
     inline std::string ImagePath(const int phase) {
         return GA_RESOURCE_DIR"/Image/Background/phase" + std::to_string(phase) + ".png";

@@ -19,6 +19,8 @@ public:
     [[nodiscard]] const std::string& GetImagePath() const { return m_ImagePath; }
     int IfCollidesObj(const std::shared_ptr<Object>& other) const;
     void ObjPositionCorrection(int direction, const std::shared_ptr<Object>& other);
+    void SetSpeed (int direction, float speed);
+    float GetSpeed(int direction) {return m_speed[direction];}
 
     glm::vec2 GetSize() const { return m_size; }
     glm::vec2 GetPosition() const { return m_Transform.translation; }
@@ -30,10 +32,13 @@ public:
     virtual void BindTo(const std::shared_ptr<Character>& character) {};
     virtual bool IsBound() {};
     virtual std::shared_ptr<Character> GetBoundPico() const;
+    virtual void Push(float F) {};
+    virtual void SetFall(bool fall) {};
 
 protected:
     std::string m_ImagePath;
     glm::vec2 m_size;
+    std::vector<float> m_speed = {0, 0, 0, 0}; //上下左右
 };
 
 // 會上下升降的 Board
@@ -128,16 +133,35 @@ public:
     void Move() override;
     std::string GetType() override { return "Box"; }
     void ResetCurrNumber() override { curr_number.clear(); }
-    void Push(float force);
-    void BoxMoving();
+    void Push(float F) override;
+    void SetFall(bool fall) override { isFall = fall; };
 
 private:
-    int max_low = 200;
+    float max_low = -350;
     glm::vec2 origin_position;
     int max_number = 2;
     std::vector<std::shared_ptr<Character>> curr_number;
-    std::vector<float> m_Boxspeed = {0, 0, 0, 0}; //上下左右
-    float m_fallSpeed = 5.0f;
+    bool isFall = true;
+    float force = 0;
+    bool dropped = false;
+};
+
+// 可以推動的正方形箱子
+class Square_Box : public Object {
+public:
+    explicit Square_Box(const std::string& ImagePath, glm::vec2 position, glm::vec2 size);
+
+    void AddCurrNumber(std::shared_ptr<Character>& character) override { curr_number.push_back(character); }
+    void Move() override;
+    std::string GetType() override { return "Square_Box"; }
+    void ResetCurrNumber() override { curr_number.clear(); }
+    void Push(float F) override;
+
+private:
+    glm::vec2 origin_position;
+    int max_number = 1;
+    std::vector<std::shared_ptr<Character>> curr_number;
+    float force = 0;
 };
 
 #endif // OBJECT_HPP
