@@ -59,7 +59,7 @@ int Object::IfCollidesObj(const std::shared_ptr<Object>& other) const {
         }
 
         // 判斷左右碰撞：
-        if (posB.x > posA.x) {
+        else if (posB.x > posA.x) {
             // 物體 B 在物體 A 的右邊
             if (leftB < rightA && (posB.y <= topA && posB.y >= bottomA)) {
                 // 物體 B 往左移動的碰撞反應
@@ -152,7 +152,7 @@ bool Button::Press() {
 }
 
 void Button::Move() {
-    //LOG_ERROR("Press, size={}", curr_number.size());
+    // LOG_INFO("Press, size={}", curr_number.size());
     Press();
 }
 
@@ -230,7 +230,9 @@ void Box::Move() {
         dropped = true;
     }
     if (curr_number.size() == max_number && isFall == false) {
-        m_Transform.translation.x += force;
+        if (force >= 0 && If_Collision[3] == 0) m_Transform.translation.x += force;
+        else if (force <= 0 && If_Collision[2] == 0) m_Transform.translation.x += force;
+        // m_Transform.translation.x += force;
         for (auto pico : curr_number) {
             pico -> m_Transform.translation.x += force;
         }
@@ -257,7 +259,9 @@ void Square_Box::Move() {
         SetImage(GA_RESOURCE_DIR"/Image/Character/square.png");
     }
     if (curr_number.size() >= max_number) {
-        m_Transform.translation.x += force;
+        if (force >= 0 && If_Collision[3] == 0) m_Transform.translation.x += force;
+        else if (force <= 0 && If_Collision[2] == 0) m_Transform.translation.x += force;
+        // m_Transform.translation.x += force;
         for (auto pico : curr_number) {
             pico -> m_Transform.translation.x += force;
         }
@@ -274,24 +278,37 @@ Small_Box::Small_Box(const std::string& ImagePath, glm::vec2 position, glm::vec2
 }
 
 void Small_Box::Move() {
-    if (curr_number.size() == 0) {
+    if (curr_number.size() + curr_pico == 0) {
         SetImage(GA_RESOURCE_DIR"/Image/Character/brick.png");
-    } else if (curr_number.size() >= 1) {
+    } else if (curr_number.size() + curr_pico >= 1) {
         SetImage(GA_RESOURCE_DIR"/Image/Character/brick0.png");
     } else {
         SetImage(GA_RESOURCE_DIR"/Image/Character/brick.png");
     }
-    if (curr_number.size() >= max_number) {
+    if (curr_number.size() + curr_pico >= max_number) {
+        // if (force >= 0 && If_Collision[3] == 0){
+        //      m_Transform.translation.x += force;
+        //     for (auto pico : curr_number) {
+        //         pico -> m_Transform.translation.x += force;
+        //     }
+        // }
+        // else if (force <= 0 && If_Collision[2] == 0) {
+        //     m_Transform.translation.x += force;
+        //     for (auto pico : curr_number) {
+        //         pico -> m_Transform.translation.x += force;
+        //     }
+        // }
         m_Transform.translation.x += force;
         for (auto pico : curr_number) {
             pico -> m_Transform.translation.x += force;
         }
     }
-    if (isFall == true) {
+    if (isFall == true && If_Collision[1] == 0) {
         m_Transform.translation.y -= 7.0f;
     }
     if (m_Transform.translation.y < max_low) {
         SetPosition({origin_position.x, 200});
+        speed = {0, 0};
     }
 
     if (StandOnPico != nullptr) {
@@ -305,8 +322,43 @@ void Square_Box::Push(float F) {
     force = F;
 }
 
+Platform1::Platform1(const std::string& ImagePath, glm::vec2 position, glm::vec2 size) : Object(ImagePath, position, size)
+{
+    origin_position = position;
+}
+
+void Platform1::Move() {
+    // LOG_INFO("Move = {}, {}", moved_distance, max_width);
+    if (!m_Button) return;
+    if (m_Button -> Press() && moved_distance < max_width) {
+        m_Transform.translation.x -= speed;
+        moved_distance += speed;
+    }
+}
+
+void Platform1::SetButton(const std::shared_ptr<Button>& button) {
+    m_Button = button;
+}
 
 
+Platform2::Platform2(const std::string& ImagePath, glm::vec2 position, glm::vec2 size) : Object(ImagePath, position, size)
+{
+    origin_position = position;
+}
+
+void Platform2::Move() {
+    LOG_INFO("Move = {}, {}", moved_distance, max_width);
+    if (!m_Button) return;
+    if (m_Button -> Press() && moved_distance < max_width) {
+        LOG_INFO(111);
+        m_Transform.translation.y -= speed;
+        moved_distance += speed;
+    }
+}
+
+void Platform2::SetButton(const std::shared_ptr<Button>& button) {
+    m_Button = button;
+}
 
 // void Door::SetKey(const std::shared_ptr<Key>& key) {
 //     m_Key = key;

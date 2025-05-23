@@ -173,6 +173,7 @@ void App::Update() {
             if (obj->GetType() == "Key" && obj->IsBound()) continue;
             int result = pico -> IfCollidesObject(obj);
             if (result == 0) {
+                obj -> AddCollision(0);
                 pico -> SetSpeed(1, -pico -> GetSpeed(1));
                 pico -> PositionCorrection(0, obj);
                 pico -> SetJumpState(true);
@@ -195,6 +196,7 @@ void App::Update() {
                 // }
             }
             else if (result == 1) {
+                obj -> AddCollision(1);
                 pico -> SetSpeed(0, -pico -> GetSpeed(0));
                 pico -> PositionCorrection(1, obj);
                 if (obj -> GetType() == "Key" && !obj -> IsBound()) {
@@ -208,6 +210,7 @@ void App::Update() {
                 }
             }
             else if (result == 2) {
+                obj -> AddCollision(2);
                 pico -> SetSpeed(3, -pico -> GetSpeed(3));
                 pico -> PositionCorrection(2, obj);
                 if (obj -> GetType() == "Key" && !obj -> IsBound()) {
@@ -239,6 +242,7 @@ void App::Update() {
                 // }
             }
             else if (result == 3) {
+                obj -> AddCollision(3);
                 pico -> SetSpeed(2, -pico -> GetSpeed(2));
                 pico -> PositionCorrection(3, obj);
                 if (obj -> GetType() == "Key" && !obj -> IsBound()) {
@@ -354,44 +358,78 @@ void App::Update() {
     //物體與物體的碰撞------------------------
     for (auto& obj1 : m_Objects) {
         for (auto& obj2 : m_Objects) {
-            if (obj1 == obj2) continue;
+            //if (obj1 == obj2) continue;
             if (obj1 -> GetType() == "Box" || obj1 -> GetType() == "Small_Box") {
-                //obj1 -> SetSpeed(1, gravity);
                 int result = obj1 -> IfCollidesObj(obj2);
                 if (result == 0) {
+                    obj1 -> AddCollision(1);
                     // obj1 -> SetSpeed(1, -obj1 -> GetSpeed(1));
                     obj1 -> ObjPositionCorrection(0, obj2);
                     obj1 -> SetFall(false);
                 }
                 else if (result == 1) {
+                    obj1 -> AddCollision(0);
                     // obj1 -> SetSpeed(0, -obj1 -> GetSpeed(0));
                     obj1 -> ObjPositionCorrection(1, obj2);
                 }
                 else if (result == 2) {
+                    obj1 -> AddCollision(3);
                     // obj1 -> SetSpeed(3, -obj1 -> GetSpeed(3));
                     obj1 -> ObjPositionCorrection(2, obj2);
                 }
                 else if (result == 3) {
+                    obj1 -> AddCollision(2);
                     // obj1 -> SetSpeed(2, -obj1 -> GetSpeed(2));
                     obj1 -> ObjPositionCorrection(3, obj2);
                     //LOG_INFO(123123);
                 }
             }
-            if (obj1 -> GetType() == "Square_Box") {
+            if ( obj1 -> GetType() == "Square_Box" ){
                 int result = obj1 -> IfCollidesObj(obj2);
                 if (result == 0) {
+                    obj1 -> AddCollision(1);
                     obj1 -> ObjPositionCorrection(0, obj2);
                 }
                 else if (result == 1) {
+                    obj1 -> AddCollision(0);
                     obj1 -> ObjPositionCorrection(1, obj2);
                 }
                 else if (result == 2) {
+                    obj1 -> AddCollision(3);
                     obj1 -> ObjPositionCorrection(2, obj2);
                 }
                 else if (result == 3) {
+                    obj1 -> AddCollision(2);
                     obj1 -> ObjPositionCorrection(3, obj2);
                 }
             }
+            // if (obj1 -> GetType() == "Small_Box" || obj2 -> GetType() == "Small_Box") {
+            //     int result = obj1 -> IfCollidesObj(obj2);
+            //     if (result == 0) {
+            //         obj1 -> AddCollision(1);
+            //         obj1 -> ObjPositionCorrection(0, obj2);
+            //     }
+            //     else if (result == 1) {
+            //         obj1 -> AddCollision(0);
+            //         obj1 -> ObjPositionCorrection(1, obj2);
+            //     }
+            //     else if (result == 2) {
+            //         obj1 -> AddCollision(3);
+            //         obj1 -> ObjPositionCorrection(2, obj2);
+            //         if (!obj1 -> GetCurrNumber().empty() || obj1 -> GetCurrPico() != 0) {
+            //             obj2 -> AddCurrPico();
+            //             obj2 -> Push(4.0f);
+            //         }
+            //     }
+            //     else if (result == 3) {
+            //         obj1 -> AddCollision(2);
+            //         obj1 -> ObjPositionCorrection(3, obj2);
+            //         if (!obj1 -> GetCurrNumber().empty() || obj1 -> GetCurrPico() != 0) {
+            //             obj2 -> AddCurrPico();
+            //             obj2 -> Push(-4.0f);
+            //         }
+            //     }
+            // }
         }
     }
 
@@ -558,7 +596,7 @@ void App::Update() {
     for (auto obj : m_Objects) {
         obj -> Move();
         obj -> ResetCurrNumber();
-
+        obj -> ResetCollision();
     }
 
     m_Root.Update();
