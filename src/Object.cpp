@@ -117,11 +117,11 @@ Board::Board(const std::string& ImagePath, glm::vec2 position, glm::vec2 size) :
 
 void Board::Move() {
     if (curr_number.size() == 0) {
-        SetImage(GA_RESOURCE_DIR"/Image/Character/board0.png");
+        SetImage(GA_RESOURCE_DIR"/Image/Character/board.png");
     } else if (curr_number.size() == 1) {
         SetImage(GA_RESOURCE_DIR"/Image/Character/board1.png");
     } else {
-        SetImage(GA_RESOURCE_DIR"/Image/Character/board.png");
+        SetImage(GA_RESOURCE_DIR"/Image/Character/board0.png");
     }
 
     if (curr_number.size() == max_number  && m_Transform.translation.y - origin_position.y < max_height) {
@@ -252,11 +252,11 @@ Square_Box::Square_Box(const std::string& ImagePath, glm::vec2 position, glm::ve
 
 void Square_Box::Move() {
     if (curr_number.size() == 0) {
-        SetImage(GA_RESOURCE_DIR"/Image/Character/square.png");
+        SetImage(GA_RESOURCE_DIR"/Image/Character/square1.png");
     } else if (curr_number.size() >= 1) {
         SetImage(GA_RESOURCE_DIR"/Image/Character/square0.png");
     } else {
-        SetImage(GA_RESOURCE_DIR"/Image/Character/square.png");
+        SetImage(GA_RESOURCE_DIR"/Image/Character/square1.png");
     }
     if (curr_number.size() >= max_number) {
         if (force >= 0 && If_Collision[3] == 0) m_Transform.translation.x += force;

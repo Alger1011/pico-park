@@ -64,7 +64,7 @@ public:
 
 private:
     float speed = 5;
-    int max_height = 200;
+    int max_height = 210;
     glm::vec2 origin_position;
     int max_number = 2;
     std::vector<std::shared_ptr<Character>> curr_number;
