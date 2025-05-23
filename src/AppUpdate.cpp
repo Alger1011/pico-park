@@ -188,12 +188,23 @@ void App::Update() {
                 if (obj -> GetType() == "Key" && !obj -> IsBound()) {
                     obj->BindTo(pico);
                 }
+                // if (obj -> GetType() == "Small_Box") {
+                //     if (obj -> StandOn() != nullptr) {
+                //         pico -> SetOnHead(true);
+                //     }
+                // }
             }
             else if (result == 1) {
                 pico -> SetSpeed(0, -pico -> GetSpeed(0));
                 pico -> PositionCorrection(1, obj);
                 if (obj -> GetType() == "Key" && !obj -> IsBound()) {
-                    obj->BindTo(pico);
+                    obj -> BindTo(pico);
+                }
+                if (obj -> GetType() == "Small_Box") {
+                    pico -> SetJumpState(false);
+                    obj -> SetFall(false);
+                    obj -> StandOnCharacter(pico);
+                    obj -> GetPicoSpeed( pico -> GetSpeed(2), pico -> GetSpeed(3));
                 }
             }
             else if (result == 2) {
@@ -202,7 +213,7 @@ void App::Update() {
                 if (obj -> GetType() == "Key" && !obj -> IsBound()) {
                     obj -> BindTo(pico);
                 }
-                if (obj -> GetType() == "Box" || obj -> GetType() == "Square_Box") {
+                if (obj -> GetType() == "Box" || obj -> GetType() == "Square_Box" || obj -> GetType() == "Small_Box") {
                     bool p1Pushing = pico == m_pico1 && Util::Input::IsKeyPressed(Util::Keycode::D);
                     bool p2Pushing = pico == m_pico2 && Util::Input::IsKeyPressed(Util::Keycode::RIGHT);
                     if (p1Pushing || p2Pushing) {
@@ -233,7 +244,7 @@ void App::Update() {
                 if (obj -> GetType() == "Key" && !obj -> IsBound()) {
                     obj->BindTo(pico);
                 }
-                if (obj -> GetType() == "Box" || obj -> GetType() == "Square_Box") {
+                if (obj -> GetType() == "Box" || obj -> GetType() == "Square_Box" || obj -> GetType() == "Small_Box") {
                     bool p1Pushing = pico == m_pico1 && Util::Input::IsKeyPressed(Util::Keycode::A);
                     bool p2Pushing = pico == m_pico2 && Util::Input::IsKeyPressed(Util::Keycode::LEFT);
                     if (p1Pushing || p2Pushing) {
@@ -344,7 +355,7 @@ void App::Update() {
     for (auto& obj1 : m_Objects) {
         for (auto& obj2 : m_Objects) {
             if (obj1 == obj2) continue;
-            if (obj1 -> GetType() == "Box") {
+            if (obj1 -> GetType() == "Box" || obj1 -> GetType() == "Small_Box") {
                 //obj1 -> SetSpeed(1, gravity);
                 int result = obj1 -> IfCollidesObj(obj2);
                 if (result == 0) {

@@ -34,6 +34,9 @@ public:
     virtual std::shared_ptr<Character> GetBoundPico() const;
     virtual void Push(float F) {};
     virtual void SetFall(bool fall) {};
+    virtual void StandOnCharacter(std::shared_ptr<Character>& character) {};
+    virtual void GetPicoSpeed(float speed1, float speed2) {};
+    virtual std::shared_ptr<Character> StandOn() {};
 
 protected:
     std::string m_ImagePath;
@@ -162,6 +165,32 @@ private:
     int max_number = 1;
     std::vector<std::shared_ptr<Character>> curr_number;
     float force = 0;
+};
+
+// 第三關的小箱子
+class Small_Box : public Object {
+public:
+    explicit Small_Box(const std::string& ImagePath, glm::vec2 position, glm::vec2 size);
+
+    void AddCurrNumber(std::shared_ptr<Character>& character) override { curr_number.push_back(character); }
+    void Move() override;
+    std::string GetType() override { return "Small_Box"; }
+    void ResetCurrNumber() override { curr_number.clear(); }
+    void Push(float F) override;
+    void SetFall(bool fall) override { isFall = fall; };
+    void StandOnCharacter(std::shared_ptr<Character>& character) override { StandOnPico = character; };
+    void GetPicoSpeed(float speed1, float speed2) override { speed = { speed1, speed2 }; };
+    std::shared_ptr<Character> StandOn() override { return StandOnPico; };
+
+private:
+    glm::vec2 origin_position;
+    int max_number = 1;
+    std::vector<std::shared_ptr<Character>> curr_number;
+    float force = 0;
+    bool isFall = true;
+    float max_low = -500;
+    std::shared_ptr<Character> StandOnPico;
+    std::vector<float> speed = {0, 0}; // 左右速度
 };
 
 #endif // OBJECT_HPP

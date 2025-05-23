@@ -75,8 +75,6 @@ public:
     void SetSide(int side) { OnSide = side; }
 
 
-
-
 private:
     void ResetPosition() { m_Transform.translation = {0, 0}; }
     std::string m_ImagePath;
