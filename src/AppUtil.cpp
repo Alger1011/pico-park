@@ -114,7 +114,7 @@ void App::ValidTask() {
                 m_Objects.push_back(key);
                 m_Root.AddChild(key);
 
-                auto box3 = std::make_shared<Square_Box>(GA_RESOURCE_DIR"/Image/Character/square.png", glm::vec2( 1100, -155), glm::vec2(108,108));
+                auto box3 = std::make_shared<Square_Box>(GA_RESOURCE_DIR"/Image/Character/square.png", glm::vec2( 1100, -155), glm::vec2(150,150));
                 m_Objects.push_back(box3);
                 m_Root.AddChild(box3);
 
@@ -156,11 +156,11 @@ void App::ValidTask() {
                 std::string mapPath = GA_RESOURCE_DIR"/Map/third.txt";
                 CreateMapTiles(mapPath);
                 // 載入物件
-                auto box1 = std::make_shared<Object>(GA_RESOURCE_DIR"/Image/Character/brick.png", glm::vec2( 35, 250), glm::vec2(56,40));
+                auto box1 = std::make_shared<Small_Box>(GA_RESOURCE_DIR"/Image/Character/brick.png", glm::vec2( 35, 250), glm::vec2(57,72));
                 m_Objects.push_back(box1);
                 m_Root.AddChild(box1);
 
-                auto box2 = std::make_shared<Object>(GA_RESOURCE_DIR"/Image/Character/brick.png", glm::vec2( 900, -175), glm::vec2(56,10));
+                auto box2 = std::make_shared<Small_Box>(GA_RESOURCE_DIR"/Image/Character/brick.png", glm::vec2( 900, -175), glm::vec2(57,72));
                 m_Objects.push_back(box2);
                 m_Root.AddChild(box2);
 
@@ -169,7 +169,7 @@ void App::ValidTask() {
                 m_Objects.push_back(key);
                 m_Root.AddChild(key);
 
-                auto box3 = std::make_shared<Object>(GA_RESOURCE_DIR"/Image/Character/brick.png", glm::vec2( 1100, -175), glm::vec2(56,10));
+                auto box3 = std::make_shared<Small_Box>(GA_RESOURCE_DIR"/Image/Character/brick.png", glm::vec2( 1100, -175), glm::vec2(57,72));
                 m_Objects.push_back(box3);
                 m_Root.AddChild(box3);
 

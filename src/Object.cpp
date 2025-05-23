@@ -164,7 +164,6 @@ Platform::Platform(const std::string& ImagePath, glm::vec2 position, glm::vec2 s
 void Platform::Move() {
     if (!m_Button) return;
     if (m_Button->Press() && moved_distance < max_width) {
-        //LOG_ERROR("MOVING");
         m_Transform.translation.x -= speed;
         moved_distance += speed;
     }
@@ -252,7 +251,7 @@ Square_Box::Square_Box(const std::string& ImagePath, glm::vec2 position, glm::ve
 void Square_Box::Move() {
     if (curr_number.size() == 0) {
         SetImage(GA_RESOURCE_DIR"/Image/Character/square.png");
-    } else if (curr_number.size() == 1) {
+    } else if (curr_number.size() >= 1) {
         SetImage(GA_RESOURCE_DIR"/Image/Character/square0.png");
     } else {
         SetImage(GA_RESOURCE_DIR"/Image/Character/square.png");
@@ -265,9 +264,49 @@ void Square_Box::Move() {
     }
 }
 
+void Small_Box::Push(float F) {
+    force = F;
+}
+
+Small_Box::Small_Box(const std::string& ImagePath, glm::vec2 position, glm::vec2 size) : Object(ImagePath, position, size)
+{
+    origin_position = position;
+}
+
+void Small_Box::Move() {
+    if (curr_number.size() == 0) {
+        SetImage(GA_RESOURCE_DIR"/Image/Character/brick.png");
+    } else if (curr_number.size() >= 1) {
+        SetImage(GA_RESOURCE_DIR"/Image/Character/brick0.png");
+    } else {
+        SetImage(GA_RESOURCE_DIR"/Image/Character/brick.png");
+    }
+    if (curr_number.size() >= max_number) {
+        m_Transform.translation.x += force;
+        for (auto pico : curr_number) {
+            pico -> m_Transform.translation.x += force;
+        }
+    }
+    if (isFall == true) {
+        m_Transform.translation.y -= 7.0f;
+    }
+    if (m_Transform.translation.y < max_low) {
+        SetPosition({origin_position.x, 200});
+    }
+
+    if (StandOnPico != nullptr) {
+        m_Transform.translation.x -= speed[0];
+        m_Transform.translation.x += speed[1];
+    }
+    isFall = true;
+}
+
 void Square_Box::Push(float F) {
     force = F;
 }
+
+
+
 
 // void Door::SetKey(const std::shared_ptr<Key>& key) {
 //     m_Key = key;
@@ -280,8 +319,6 @@ void Square_Box::Push(float F) {
 // bool Door::IsBound() {
 //     return m_BoundPico != nullptr;
 // }
-
-
 //bool Character::IfCollides(const std::shared_ptr<Character>& other) const {
 //    glm::vec2 pos1 = this->GetPosition();
 //    glm::vec2 pos2 = other->GetPosition();
