@@ -145,8 +145,10 @@ void App::ValidTask() {
         case Phase::STAGE_THREE_LOADING:
             if (true){
                 m_Phase = Phase::STAGE_THREE;
+
                 m_pico2->SetPosition({60.0f, 100.0f});
                 m_pico1->SetPosition({120.0f, 200.0f});
+
                 m_pico1->SetVisible(true);
                 m_pico2->SetVisible(true);
 
@@ -156,7 +158,9 @@ void App::ValidTask() {
                 std::string mapPath = GA_RESOURCE_DIR"/Map/third.txt";
                 CreateMapTiles(mapPath);
                 // 載入物件
+
                 auto box1 = std::make_shared<Small_Box>(GA_RESOURCE_DIR"/Image/Character/brick.png", glm::vec2( 50, 0), glm::vec2(57,72));
+
                 m_Objects.push_back(box1);
                 m_Root.AddChild(box1);
 
@@ -173,17 +177,19 @@ void App::ValidTask() {
                 m_Objects.push_back(box3);
                 m_Root.AddChild(box3);
 
-                auto rec1 = std::make_shared<Platform>(GA_RESOURCE_DIR"/Image/Character/rectangle 3.png", glm::vec2( 1050, -237), glm::vec2(200,16));
+                auto rec1 = std::make_shared<Platform1>(GA_RESOURCE_DIR"/Image/Character/rectangle 3.png", glm::vec2( 1050, -237), glm::vec2(625,55));
                 m_Objects.push_back(rec1);//向左移650
                 m_Root.AddChild(rec1);
 
                 auto button1 = std::make_shared<Button>(GA_RESOURCE_DIR"/Image/Character/button.png", glm::vec2(700, 145), glm::vec2(22, 51));
                 m_Objects.push_back(button1);//控制rec1及rec2
                 m_Root.AddChild(button1);
+                rec1 -> SetButton(button1);
 
-                auto rec2 = std::make_shared<Platform>(GA_RESOURCE_DIR"/Image/Character/vrec-third.png", glm::vec2( 600, 220), glm::vec2(10,16));
-                m_Objects.push_back(rec2);//按到按鈕後要往下移至目前座標的位置
+                auto rec2 = std::make_shared<Platform2>(GA_RESOURCE_DIR"/Image/Character/vrec-third.png", glm::vec2( 600, 420), glm::vec2(10,16));
+                m_Objects.push_back(rec2);//按到按鈕後要往下移
                 m_Root.AddChild(rec2);
+                rec2 -> SetButton(button1);
 
                 auto rec3 = std::make_shared<Platform>(GA_RESOURCE_DIR"/Image/Character/vrec-third.png", glm::vec2(1515, 220), glm::vec2(200,16));
                 m_Objects.push_back(rec3);//向上移
