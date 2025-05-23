@@ -21,11 +21,15 @@ public:
     void ObjPositionCorrection(int direction, const std::shared_ptr<Object>& other);
     void SetSpeed (int direction, float speed);
     float GetSpeed(int direction) {return m_speed[direction];}
+    void AddCollision(int direction) { If_Collision[direction] += 1; }
+    void ResetCollision() { If_Collision = {0,0,0,0};};
+    int GetCollision(const int direction) { return If_Collision[direction]; };
 
     glm::vec2 GetSize() const { return m_size; }
     glm::vec2 GetPosition() const { return m_Transform.translation; }
 
     virtual void AddCurrNumber(std::shared_ptr<Character>& character) {};
+    virtual std::vector<std::shared_ptr<Character>> GetCurrNumber() {};
     virtual void Move() {};
     virtual std::string GetType() { return "Object"; }
     virtual void ResetCurrNumber() {};
@@ -37,11 +41,15 @@ public:
     virtual void StandOnCharacter(std::shared_ptr<Character>& character) {};
     virtual void GetPicoSpeed(float speed1, float speed2) {};
     virtual std::shared_ptr<Character> StandOn() {};
+    virtual void AddCurrPico() {};
+    virtual int GetCurrPico() {};
+
 
 protected:
     std::string m_ImagePath;
     glm::vec2 m_size;
     std::vector<float> m_speed = {0, 0, 0, 0}; //上下左右
+    std::vector<float> If_Collision = {0, 0, 0, 0}; //上下左右的碰撞
 };
 
 // 會上下升降的 Board
@@ -117,11 +125,7 @@ private:
 class Door : public Object {
 public:
     explicit Door(const std::string& ImagePath, glm::vec2 position, glm::vec2 size);
-    // void Move() override;
     std::string GetType() override { return "Door"; }
-    // void SetKey(const std::shared_ptr<Key>& key);
-    // void BindTo(const std::shared_ptr<Character>& character) override;
-    // bool IsBound() override;
 
 private:
     glm::vec2 origin_position;
@@ -181,6 +185,9 @@ public:
     void StandOnCharacter(std::shared_ptr<Character>& character) override { StandOnPico = character; };
     void GetPicoSpeed(float speed1, float speed2) override { speed = { speed1, speed2 }; };
     std::shared_ptr<Character> StandOn() override { return StandOnPico; };
+    std::vector<std::shared_ptr<Character>> GetCurrNumber() override { return curr_number;};
+    void AddCurrPico() override { curr_pico += 1;};
+    int GetCurrPico() override { return curr_pico; };
 
 private:
     glm::vec2 origin_position;
@@ -191,6 +198,39 @@ private:
     float max_low = -500;
     std::shared_ptr<Character> StandOnPico;
     std::vector<float> speed = {0, 0}; // 左右速度
+    int curr_pico = 0;
+};
+
+// 按按鈕後左右移動的板子(rec1)
+class Platform1 : public Object {
+public:
+    explicit Platform1(const std::string& ImagePath, glm::vec2 position, glm::vec2 size);
+    void Move() override;
+    std::string GetType() override { return "Platform1"; }
+    void SetButton(const std::shared_ptr<Button>& button);
+
+private:
+    int moved_distance = 0;
+    float speed = 10;
+    glm::vec2 origin_position;
+    std::shared_ptr<Button> m_Button;
+    int max_width = 650;
+};
+
+// 按按鈕後移動的板子(rec2)
+class Platform2 : public Object {
+public:
+    explicit Platform2(const std::string& ImagePath, glm::vec2 position, glm::vec2 size);
+    void Move() override;
+    std::string GetType() override { return "Platform2"; }
+    void SetButton(const std::shared_ptr<Button>& button);
+
+private:
+    int moved_distance = 0;
+    float speed = 10;
+    glm::vec2 origin_position;
+    std::shared_ptr<Button> m_Button;
+    int max_width = 200;
 };
 
 #endif // OBJECT_HPP
