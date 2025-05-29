@@ -25,48 +25,6 @@ bool App::CheckTileCollision(glm::vec2 charPos, glm::vec2 charSize, glm::vec2& c
     return false;
 }
 
-// void App::PassCheck() {
-//     std::shared_ptr<Character> picoWithKey = nullptr;
-//     // 找出拿鑰匙的 pico
-//     for (auto& obj : m_Objects) {
-//         if (obj -> GetType() == "Key") {
-//             auto key = std::dynamic_pointer_cast<Key>(obj);
-//             if (key && key->IsBound()) {
-//                 picoWithKey = key->GetBoundPico();
-//                 break;
-//             }
-//         }
-//     }
-//
-//     if (!picoWithKey) return;
-//
-//     for (auto& obj : m_Objects) {
-//         if (obj -> GetType() != "Door") break;
-//         // 拿鑰匙的人撞到門 → 門變開
-//         if (obj -> GetImagePath() == GA_RESOURCE_DIR"/Image/Character/door1.png" &&
-//             picoWithKey -> IfCollidesObject(obj)) {
-//             obj -> SetImage(GA_RESOURCE_DIR"/Image/Character/door2.png");
-//             LOG_INFO("Door opened");
-//             }
-//
-//         // 門必須是 open，角色當下也要撞門，才能進門
-//         if (obj -> GetImagePath() == GA_RESOURCE_DIR"/Image/Character/door2.png") {
-//             if (m_pico1 -> IfCollidesObject(obj) && Util::Input::IsKeyPressed(Util::Keycode::W)) {
-//                 if (m_pico1 -> GetVisibility()) {
-//                     m_pico1 -> SetVisible(false);
-//                     LOG_INFO("pico1 entered the door");
-//                 }
-//             }
-//             if (m_pico2 -> IfCollidesObject(obj) && Util::Input::IsKeyPressed(Util::Keycode::UP)) {
-//                 if (m_pico2 -> GetVisibility()) {
-//                     m_pico2 -> SetVisible(false);
-//                     LOG_INFO("pico2 entered the door");
-//                 }
-//             }
-//         }
-//     }
-// }
-
 
 void App::Update() {
     // ImGui::Begin("gm");
@@ -189,6 +147,10 @@ void App::Update() {
                 if (obj -> GetType() == "Key" && !obj -> IsBound()) {
                     obj->BindTo(pico);
                 }
+                if (obj -> GetType() == "Button1") {
+                    obj -> AddCurrNumber(pico);
+                    pico -> SetPosition({ pico -> GetPosition().x, pico -> GetPosition().y - 5.0f});
+                }
                 // if (obj -> GetType() == "Small_Box") {
                 //     if (obj -> StandOn() != nullptr) {
                 //         pico -> SetOnHead(true);
@@ -210,6 +172,15 @@ void App::Update() {
                 }
             }
             else if (result == 2) {
+                // if (obj -> GetType() != "Small_Box") {
+                //     obj -> AddCollision(2);
+                //     pico -> SetSpeed(3, -pico -> GetSpeed(3));
+                //     pico -> PositionCorrection(2, obj);
+                // }
+                // else {
+                //     pico -> SetSpeed(3, -pico -> GetSpeed(3));
+                //     pico -> PositionCorrection(2, obj);
+                // }
                 obj -> AddCollision(2);
                 pico -> SetSpeed(3, -pico -> GetSpeed(3));
                 pico -> PositionCorrection(2, obj);
@@ -359,7 +330,7 @@ void App::Update() {
     for (auto& obj1 : m_Objects) {
         for (auto& obj2 : m_Objects) {
             //if (obj1 == obj2) continue;
-            if (obj1 -> GetType() == "Box" || obj1 -> GetType() == "Small_Box") {
+            if (obj1 -> GetType() == "Box") {
                 int result = obj1 -> IfCollidesObj(obj2);
                 if (result == 0) {
                     obj1 -> AddCollision(1);
@@ -373,15 +344,13 @@ void App::Update() {
                     obj1 -> ObjPositionCorrection(1, obj2);
                 }
                 else if (result == 2) {
+                    LOG_INFO(111);
                     obj1 -> AddCollision(3);
-                    // obj1 -> SetSpeed(3, -obj1 -> GetSpeed(3));
                     obj1 -> ObjPositionCorrection(2, obj2);
                 }
                 else if (result == 3) {
                     obj1 -> AddCollision(2);
-                    // obj1 -> SetSpeed(2, -obj1 -> GetSpeed(2));
                     obj1 -> ObjPositionCorrection(3, obj2);
-                    //LOG_INFO(123123);
                 }
             }
             if ( obj1 -> GetType() == "Square_Box" ){
@@ -403,33 +372,87 @@ void App::Update() {
                     obj1 -> ObjPositionCorrection(3, obj2);
                 }
             }
-            // if (obj1 -> GetType() == "Small_Box" || obj2 -> GetType() == "Small_Box") {
-            //     int result = obj1 -> IfCollidesObj(obj2);
-            //     if (result == 0) {
-            //         obj1 -> AddCollision(1);
-            //         obj1 -> ObjPositionCorrection(0, obj2);
-            //     }
-            //     else if (result == 1) {
-            //         obj1 -> AddCollision(0);
-            //         obj1 -> ObjPositionCorrection(1, obj2);
-            //     }
-            //     else if (result == 2) {
-            //         obj1 -> AddCollision(3);
-            //         obj1 -> ObjPositionCorrection(2, obj2);
-            //         if (!obj1 -> GetCurrNumber().empty() || obj1 -> GetCurrPico() != 0) {
-            //             obj2 -> AddCurrPico();
-            //             obj2 -> Push(4.0f);
-            //         }
-            //     }
-            //     else if (result == 3) {
-            //         obj1 -> AddCollision(2);
-            //         obj1 -> ObjPositionCorrection(3, obj2);
-            //         if (!obj1 -> GetCurrNumber().empty() || obj1 -> GetCurrPico() != 0) {
-            //             obj2 -> AddCurrPico();
-            //             obj2 -> Push(-4.0f);
-            //         }
-            //     }
-            // }
+            if ( obj1 -> GetType() == "Small_Box" ) {
+                int result = obj1 -> IfCollidesObj(obj2);
+                if (result == 0) {
+                    if (obj2 -> GetType() == "Button1") {
+                        obj2 -> AddCurrPico();
+                        // obj1 -> SetPosition({ obj1 -> GetPosition().x, obj1 -> GetPosition().y - 5.0f});
+                    }
+                    else {
+                        obj1 -> AddCollision(1);
+                        obj1 -> ObjPositionCorrection(0, obj2);
+                        obj1 -> SetFall(false);
+                    }
+                }
+                else if (result == 1) {
+                    obj1 -> AddCollision(0);
+                    // obj1 -> SetSpeed(0, -obj1 -> GetSpeed(0));
+                    obj1 -> ObjPositionCorrection(1, obj2);
+                }
+                else if (result == 2) {
+                    if (obj2 -> GetType() != "Small_Box" && obj2 -> GetType() != "Button1") {
+                        obj1 -> AddCollision(3);
+                        obj1 -> ObjPositionCorrection(2, obj2);
+                    }
+                    if (!obj1 -> GetCurrNumber().empty()) {
+                        if (obj2 -> GetType() == "Small_Box" && obj1 -> GetCurrNumber().size() + obj1 -> GetCurrPico() >= 1 && obj2 -> GetCollision(3) == 0) {
+                            obj2 -> AddCurrPico();
+                            obj2 -> Push(4);
+                            for (auto& next : m_Objects) {
+                                if (next == obj1) continue;
+                                int result1 = obj2 -> IfCollidesObj(next);
+                                if (result1 == 2 && next -> GetType() == "Small_Box" && next -> GetCollision(3) == 0) {
+                                    next -> AddCurrPico();
+                                    next -> Push(4);
+                                }
+                                else if (next -> GetCollision(3) != 0) {
+                                    obj1 -> AddCollision(3);
+                                    obj2 -> AddCollision(3);
+                                }
+                            }
+                        }
+                        else if (obj2 -> GetType() != "Small_Box" && obj2 -> GetType() != "Button1") {
+                            obj2 -> Push(0);
+                        }
+                        if (obj2 -> GetType() == "Button1") {
+                            obj2 -> AddCurrPico();
+                            obj1 -> SetPosition({ obj1 -> GetPosition().x, obj1 -> GetPosition().y - 5.0f});
+                        }
+                    }
+                }
+                else if (result == 3) {
+                    if (obj2 -> GetType() != "Small_Box" && obj2 -> GetType() != "Button1") {
+                        obj1 -> AddCollision(2);
+                        obj1 -> ObjPositionCorrection(3, obj2);
+                    }
+                    if (!obj1 -> GetCurrNumber().empty()) {
+                        if (obj2 -> GetType() == "Small_Box" && obj1 -> GetCurrNumber().size() + obj1 -> GetCurrPico() >= 1 && obj2 -> GetCollision(2) == 0) {
+                            obj2 -> AddCurrPico();
+                            obj2 -> Push(-4);
+                            for (auto& next : m_Objects) {
+                                if (next == obj1) continue;
+                                int result1 = obj2 -> IfCollidesObj(next);
+                                if (result1 == 3 && next -> GetType() == "Small_Box" &&  next -> GetCollision(2) == 0) {
+                                    next -> AddCurrPico();
+                                    next -> Push(-4);
+                                }
+                                else if (next -> GetCollision(2) != 0) {
+                                    obj1 -> AddCollision(2);
+                                    obj2 -> AddCollision(2);
+                                }
+                            }
+                        }
+                        else if (obj2->GetType() != "Small_Box"  && obj2 -> GetType() != "Button1") {
+                            obj2 -> Push(0);
+                        }
+                    }
+                    if (obj2 -> GetType() == "Button1") {
+                        obj2 -> AddCurrPico();
+                        obj1 -> SetPosition({ obj1 -> GetPosition().x, obj1 -> GetPosition().y - 5.0f});
+                    }
+                }
+            }
         }
     }
 
@@ -597,6 +620,7 @@ void App::Update() {
         obj -> Move();
         obj -> ResetCurrNumber();
         obj -> ResetCollision();
+        obj -> ResetCurrPico();
     }
 
     m_Root.Update();
