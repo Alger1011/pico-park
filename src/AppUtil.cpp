@@ -12,8 +12,6 @@
  * @note See README.md for the task details.
  */
 void App::ValidTask() {
-    bool isBeeLooping;
-    bool isBeePlaying;
 
     LOG_DEBUG("Validating the task {}", static_cast<int>(m_Phase));
     switch (m_Phase) {
@@ -114,7 +112,7 @@ void App::ValidTask() {
                 m_Objects.push_back(key);
                 m_Root.AddChild(key);
 
-                auto box3 = std::make_shared<Square_Box>(GA_RESOURCE_DIR"/Image/Character/square1.png", glm::vec2( 1100, -190), glm::vec2(125,125));
+                auto box3 = std::make_shared<Square_Box>(GA_RESOURCE_DIR"/Image/Character/square1.png", glm::vec2( 1100, -155), glm::vec2(125,125));
                 m_Objects.push_back(box3);
                 m_Root.AddChild(box3);
 
@@ -170,6 +168,7 @@ void App::ValidTask() {
 
                 auto key = std::make_shared<Key>(GA_RESOURCE_DIR"/Image/Character/key.png", glm::vec2(1000, 250), glm::vec2(31, 61));
                 key -> SetZIndex(10);
+                m_key = key;
                 m_Objects.push_back(key);
                 m_Root.AddChild(key);
 
@@ -183,50 +182,60 @@ void App::ValidTask() {
 
                 auto button1 = std::make_shared<Button>(GA_RESOURCE_DIR"/Image/Character/button.png", glm::vec2(700, 145), glm::vec2(22, 51));
                 m_Objects.push_back(button1);//控制rec1及rec2
+                button1 -> SetZIndex(-5);
                 m_Root.AddChild(button1);
                 rec1 -> SetButton(button1);
 
-                auto rec2 = std::make_shared<Platform2>(GA_RESOURCE_DIR"/Image/Character/vrec-third.png", glm::vec2( 600, 420), glm::vec2(10,16));
+                auto rec2 = std::make_shared<Platform2>(GA_RESOURCE_DIR"/Image/Character/vrec-third.png", glm::vec2( 600, 420), glm::vec2(36,150));
                 m_Objects.push_back(rec2);//按到按鈕後要往下移
                 m_Root.AddChild(rec2);
                 rec2 -> SetButton(button1);
 
-                auto rec3 = std::make_shared<Platform>(GA_RESOURCE_DIR"/Image/Character/vrec-third.png", glm::vec2(1515, 220), glm::vec2(200,16));
+                auto rec3 = std::make_shared<Platform3>(GA_RESOURCE_DIR"/Image/Character/vrec-third.png", glm::vec2(1515, 220), glm::vec2(36,150));
                 m_Objects.push_back(rec3);//向上移
                 m_Root.AddChild(rec3);
 
-                auto button3 = std::make_shared<Button>(GA_RESOURCE_DIR"/Image/Character/button.png", glm::vec2(1325, -225), glm::vec2(22, 51));
+                auto button3 = std::make_shared<Button1>(GA_RESOURCE_DIR"/Image/Character/button.png", glm::vec2(1325, -225), glm::vec2(25, 51));
                 m_Objects.push_back(button3);//控制rec3
                 m_Root.AddChild(button3);
+                button3 -> SetZIndex(-5);
+                rec3 -> SetButton(button3);
 
-                auto rec4 = std::make_shared<Platform>(GA_RESOURCE_DIR"/Image/Character/vrec-third.png", glm::vec2(1590, 220), glm::vec2(200,16));
+                auto rec4 = std::make_shared<Platform3>(GA_RESOURCE_DIR"/Image/Character/vrec-third.png", glm::vec2(1590, 220), glm::vec2(35,150));
                 m_Objects.push_back(rec4);//向上移
                 m_Root.AddChild(rec4);
 
-                auto button4 = std::make_shared<Button>(GA_RESOURCE_DIR"/Image/Character/button.png", glm::vec2(1400, -225), glm::vec2(22, 51));
+                auto button4 = std::make_shared<Button1>(GA_RESOURCE_DIR"/Image/Character/button.png", glm::vec2(1375, -225), glm::vec2(25, 51));
                 m_Objects.push_back(button4);//控制rec4
                 m_Root.AddChild(button4);
+                button4 -> SetZIndex(-5);
+                rec4 -> SetButton(button4);
 
-                auto rec5 = std::make_shared<Platform>(GA_RESOURCE_DIR"/Image/Character/vrec-third.png", glm::vec2(1665, 220), glm::vec2(200,16));
+                auto rec5 = std::make_shared<Platform3>(GA_RESOURCE_DIR"/Image/Character/vrec-third.png", glm::vec2(1665, 220), glm::vec2(36,150));
                 m_Objects.push_back(rec5);//向上移
                 m_Root.AddChild(rec5);
 
-                auto button5 = std::make_shared<Button>(GA_RESOURCE_DIR"/Image/Character/button.png", glm::vec2(1475, -225), glm::vec2(22, 51));
+                auto button5 = std::make_shared<Button1>(GA_RESOURCE_DIR"/Image/Character/button.png", glm::vec2(1425, -225), glm::vec2(25, 51));
                 m_Objects.push_back(button5);//控制rec5
                 m_Root.AddChild(button5);
+                button5 -> SetZIndex(-5);
+                rec5 -> SetButton(button5);
 
-                auto rec6 = std::make_shared<Platform>(GA_RESOURCE_DIR"/Image/Character/vrec-third.png", glm::vec2(1740, 220), glm::vec2(200,16));
+                auto rec6 = std::make_shared<Platform3>(GA_RESOURCE_DIR"/Image/Character/vrec-third.png", glm::vec2(1740, 220), glm::vec2(36,150));
                 m_Objects.push_back(rec6);//向上移
                 m_Root.AddChild(rec6);
 
-                auto button6 = std::make_shared<Button>(GA_RESOURCE_DIR"/Image/Character/button.png", glm::vec2(1550, -225), glm::vec2(22, 51));
-                m_Objects.push_back(button6);//控制rec5
+                auto button6 = std::make_shared<Button1>(GA_RESOURCE_DIR"/Image/Character/button.png", glm::vec2(1475, -225), glm::vec2(25, 51));
+                m_Objects.push_back(button6);//控制rec6
                 m_Root.AddChild(button6);
+                button6 -> SetZIndex(-5);
+                rec6 -> SetButton(button6);
 
                 auto door = std::make_shared<Door>(GA_RESOURCE_DIR"/Image/Character/door1.png", glm::vec2(2000, -170), glm::vec2(83, 80));
-                door -> SetZIndex(5);
+                door -> SetZIndex(-5);
                 m_Objects.push_back(door);
                 m_Root.AddChild(door);
+
                 m_PRM->NextPhase();
             } else {
                 LOG_DEBUG("The door doesn't open or doesn't get the key.");
@@ -234,7 +243,8 @@ void App::ValidTask() {
         break;
 
         case Phase::STAGE_THREE:
-            if (!m_pico1->GetVisibility() && !m_pico2->GetVisibility()){
+            if (true){
+                // !m_pico1->GetVisibility() && !m_pico2->GetVisibility()
                 m_Phase = Phase::STAGE_FOUR_LOADING;
                 Reset();
                 m_pico1->SetVisible(false);
@@ -247,7 +257,6 @@ void App::ValidTask() {
         break;
 
         case Phase::STAGE_FOUR_LOADING:
-
               if (true){
                 m_Phase = Phase::STAGE_FOUR;
                 m_pico2->SetPosition({50.0f, 0.0f});
@@ -265,7 +274,11 @@ void App::ValidTask() {
                 auto down_board = std::make_shared<Board>(GA_RESOURCE_DIR"/Image/Character/board.png", glm::vec2( 960, 32), glm::vec2(200,16));
                 m_Objects.push_back(down_board);//由上往下移，其他條件一樣
                 m_Root.AddChild(down_board);
+                auto down_board = std::make_shared<Board>(GA_RESOURCE_DIR"/Image/Character/board.png", glm::vec2( 960, 32), glm::vec2(200,16));
+                m_Objects.push_back(down_board);//由上往下移，其他條件一樣
+                m_Root.AddChild(down_board);
 
+                auto key = std::make_shared<Key>(GA_RESOURCE_DIR"/Image/Character/key.png", glm::vec2(1300, -100), glm::vec2(31, 61));
                 auto key = std::make_shared<Key>(GA_RESOURCE_DIR"/Image/Character/key.png", glm::vec2(1300, -100), glm::vec2(31, 61));
                 key -> SetZIndex(10);
                 m_Objects.push_back(key);
@@ -282,7 +295,19 @@ void App::ValidTask() {
                 auto board = std::make_shared<Board>(GA_RESOURCE_DIR"/Image/Character/board.png", glm::vec2( 2075, -180), glm::vec2(200,16));
                 m_Objects.push_back(board);//由上往下移，其他條件一樣
                 m_Root.AddChild(board);
+                auto rec1 = std::make_shared<Object>(GA_RESOURCE_DIR"/Image/Character/rectangle4.png", glm::vec2( 475, -180), glm::vec2(180,14));
+                m_Objects.push_back(rec1); //持續上下移動，移動55，先向上移
+                m_Root.AddChild(rec1);
 
+                auto rec2 = std::make_shared<Object>(GA_RESOURCE_DIR"/Image/Character/vrec4.png", glm::vec2( 620, 127), glm::vec2(180,14));
+                m_Objects.push_back(rec2); //持續左右移動，移動480，先向右移
+                m_Root.AddChild(rec2);
+
+                auto board = std::make_shared<Board>(GA_RESOURCE_DIR"/Image/Character/board.png", glm::vec2( 2075, -180), glm::vec2(200,16));
+                m_Objects.push_back(board);//由上往下移，其他條件一樣
+                m_Root.AddChild(board);
+
+                auto door = std::make_shared<Door>(GA_RESOURCE_DIR"/Image/Character/door1.png", glm::vec2(2350, 79), glm::vec2(83, 80));
                 auto door = std::make_shared<Door>(GA_RESOURCE_DIR"/Image/Character/door1.png", glm::vec2(2350, 79), glm::vec2(83, 80));
                 door -> SetZIndex(5);
                 m_Objects.push_back(door);
@@ -306,7 +331,6 @@ void App::ValidTask() {
                 LOG_DEBUG("ERROR.");
             }
         break;
-
     }
 }
 

@@ -41,11 +41,11 @@ void App::Start() {
     m_Giraffe->SetZIndex(50);
     m_Root.AddChild(m_Giraffe);
 
-    m_Chest = std::make_shared<Character>(GA_RESOURCE_DIR"/Image/Character/chest.png");
-    m_Chest->SetZIndex(5);
-    m_Chest->SetPosition({197.5f, -3.5f});
-    m_Chest->SetVisible(false);
-    m_Root.AddChild(m_Chest);
+    // m_Chest = std::make_shared<Character>(GA_RESOURCE_DIR"/Image/Character/chest.png");
+    // m_Chest->SetZIndex(5);
+    // m_Chest->SetPosition({197.5f, -3.5f});
+    // m_Chest->SetVisible(false);
+    // m_Root.AddChild(m_Chest);
 
     m_key = std::make_shared<Key>(GA_RESOURCE_DIR"/Image/Character/key.png", glm::vec2(2050, 110), glm::vec2(31, 61));
     m_key->SetZIndex(5);
@@ -86,16 +86,16 @@ void App::Start() {
         tile->SetVisible(false);
     }
 
-    std::vector<std::string> beeImages;
-    beeImages.reserve(2);
-    for (int i = 0; i < 2; ++i) {
-        beeImages.emplace_back(GA_RESOURCE_DIR"/Image/Character/bee_" + std::to_string(i + 1) + ".png");
-    }
-
-    m_Bee = std::make_shared<AnimatedCharacter>(beeImages);
-    m_Bee->SetZIndex(5);
-    m_Bee->SetVisible(false);
-    m_Root.AddChild(m_Bee);
+    // std::vector<std::string> beeImages;
+    // beeImages.reserve(2);
+    // for (int i = 0; i < 2; ++i) {
+    //     beeImages.emplace_back(GA_RESOURCE_DIR"/Image/Character/bee_" + std::to_string(i + 1) + ".png");
+    // }
+    //
+    // m_Bee = std::make_shared<AnimatedCharacter>(beeImages);
+    // m_Bee->SetZIndex(5);
+    // m_Bee->SetVisible(false);
+    // m_Root.AddChild(m_Bee);
 
     for (int i = 0; i < 3; ++i) {
         m_Doors.push_back(std::make_shared<Character>(GA_RESOURCE_DIR"/Image/Character/door_close.png"));

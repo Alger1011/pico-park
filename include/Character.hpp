@@ -62,6 +62,8 @@ public:
 
     bool GetOnHead() { return OnHead; };
 
+    // bool CanPushChain(std::shared_ptr<Object> box, int direction);
+
     glm::vec2 GetScaledSize() const {
         // 假設有一個原始大小
         glm::vec2 originalSize(100.0f, 100.0f); // 根據實際情況調整

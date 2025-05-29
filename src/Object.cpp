@@ -124,7 +124,7 @@ void Board::Move() {
         SetImage(GA_RESOURCE_DIR"/Image/Character/board0.png");
     }
 
-    if (curr_number.size() == max_number  && m_Transform.translation.y - origin_position.y < max_height) {
+    if (curr_number.size() == max_number && m_Transform.translation.y - origin_position.y < max_height) {
         m_Transform.translation.y += speed;
         for (auto pico : curr_number) {
             pico -> m_Transform.translation.y += speed;
@@ -230,13 +230,30 @@ void Box::Move() {
         dropped = true;
     }
     if (curr_number.size() == max_number && isFall == false) {
-        if (force >= 0 && If_Collision[3] == 0) m_Transform.translation.x += force;
-        else if (force <= 0 && If_Collision[2] == 0) m_Transform.translation.x += force;
-        // m_Transform.translation.x += force;
-        for (auto pico : curr_number) {
-            pico -> m_Transform.translation.x += force;
+        if (force > 0 && If_Collision[3] == 0) {
+            speed[1] += force;
+            for (auto pico : curr_number) {
+                pico -> m_Transform.translation.x += force;
+            }
         }
+        else if (force < 0 && If_Collision[2] == 0) {
+            speed[0] += force;
+            for (auto pico : curr_number) {
+                pico -> m_Transform.translation.x += force;
+            }
+            // m_Transform.translation.x += force;
+        }
+
     }
+    if (If_Collision[3] != 0) {
+        speed[1] = 0;
+    }
+    else if (If_Collision[2] != 0) {
+        speed[0] = 0;
+    }
+    m_Transform.translation.x += speed[0];
+    m_Transform.translation.x += speed[1];
+    speed = {0, 0};
     isFall = true;
 }
 
@@ -285,23 +302,35 @@ void Small_Box::Move() {
     } else {
         SetImage(GA_RESOURCE_DIR"/Image/Character/brick.png");
     }
+
     if (curr_number.size() + curr_pico >= max_number) {
-        // if (force >= 0 && If_Collision[3] == 0){
-        //      m_Transform.translation.x += force;
-        //     for (auto pico : curr_number) {
-        //         pico -> m_Transform.translation.x += force;
-        //     }
-        // }
-        // else if (force <= 0 && If_Collision[2] == 0) {
-        //     m_Transform.translation.x += force;
-        //     for (auto pico : curr_number) {
-        //         pico -> m_Transform.translation.x += force;
-        //     }
-        // }
-        m_Transform.translation.x += force;
-        for (auto pico : curr_number) {
-            pico -> m_Transform.translation.x += force;
+        if (force >= 0 && If_Collision[3] == 0){
+             // m_Transform.translation.x += force;
+            speed[1] += force;
+            for (auto pico : curr_number) {
+                pico -> m_Transform.translation.x += force;
+            }
         }
+        else if (force <= 0 && If_Collision[2] == 0) {
+            // m_Transform.translation.x += force;
+            speed[0] += force;
+            for (auto pico : curr_number) {
+                pico -> m_Transform.translation.x += force;
+            }
+        }
+        //
+        // m_Transform.translation.x += force;
+        // for (auto pico : curr_number) {
+        //     pico -> m_Transform.translation.x += force;
+        // }
+
+        if (If_Collision[3] != 0) {
+            speed[1] = 0;
+        }
+        else if (If_Collision[2] != 0) {
+            speed[0] = 0;
+        }
+
     }
     if (isFall == true && If_Collision[1] == 0) {
         m_Transform.translation.y -= 7.0f;
@@ -311,11 +340,15 @@ void Small_Box::Move() {
         speed = {0, 0};
     }
 
-    if (StandOnPico != nullptr) {
-        m_Transform.translation.x -= speed[0];
-        m_Transform.translation.x += speed[1];
-    }
+    // if (StandOnPico != nullptr) {
+    //     m_Transform.translation.x -= speed[0];
+    //     m_Transform.translation.x += speed[1];
+    // }
+    m_Transform.translation.x += speed[0];
+    m_Transform.translation.x += speed[1];
+    speed = {0, 0};
     isFall = true;
+    force = 0;
 }
 
 void Square_Box::Push(float F) {
@@ -347,10 +380,10 @@ Platform2::Platform2(const std::string& ImagePath, glm::vec2 position, glm::vec2
 }
 
 void Platform2::Move() {
-    LOG_INFO("Move = {}, {}", moved_distance, max_width);
+    // LOG_INFO("Move = {}, {}", moved_distance, max_width);
     if (!m_Button) return;
     if (m_Button -> Press() && moved_distance < max_width) {
-        LOG_INFO(111);
+        // LOG_INFO(111);
         m_Transform.translation.y -= speed;
         moved_distance += speed;
     }
@@ -360,24 +393,47 @@ void Platform2::SetButton(const std::shared_ptr<Button>& button) {
     m_Button = button;
 }
 
-// void Door::SetKey(const std::shared_ptr<Key>& key) {
-//     m_Key = key;
-// }
-//
-// void Door::BindTo(const std::shared_ptr<Character>& character) {
-//     if (!IsBound()) m_BoundPico = character;
-// }
-//
-// bool Door::IsBound() {
-//     return m_BoundPico != nullptr;
-// }
-//bool Character::IfCollides(const std::shared_ptr<Character>& other) const {
-//    glm::vec2 pos1 = this->GetPosition();
-//    glm::vec2 pos2 = other->GetPosition();
-//
-//    float distance = glm::length(pos1 - pos2);
-//    return distance < 50.0f;
-//}
+Button1::Button1(const std::string& ImagePath, glm::vec2 position, glm::vec2 size) : Object(ImagePath, position, size)
+{
+    origin_position = position;
+}
+
+
+void Button1::Move() {
+    if (curr_number.size() + curr_pico >= 1 && origin_position.y - m_Transform.translation.y < max_low) {
+        m_Transform.translation.y -= 5.0f;
+        is_press = true;
+    }
+    else if (curr_number.size() + curr_pico == 0 && m_Transform.translation.y - origin_position.y < max_height) {
+        m_Transform.translation.y += 5.0f;
+        is_press = false;
+    }
+}
+
+bool Button1::Press() {
+    return is_press;
+}
+
+void Platform3::SetButton(const std::shared_ptr<Button1>& button) {
+    m_Button = button;
+}
+
+
+Platform3::Platform3(const std::string& ImagePath, glm::vec2 position, glm::vec2 size) : Object(ImagePath, position, size)
+{
+    origin_position = position;
+}
+
+void Platform3::Move() {
+    if (!m_Button) return;
+    if (m_Button -> Press() && m_Transform.translation.y - origin_position.y < max) {
+        m_Transform.translation.y += speed;
+    }
+    else if (!m_Button -> Press() && m_Transform.translation.y > origin_position.y) {
+        m_Transform.translation.y -= speed;
+    }
+}
+
 
 
 
