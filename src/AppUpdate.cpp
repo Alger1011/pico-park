@@ -595,14 +595,14 @@ void App::Update() {
         //     pico -> SetPosition({x, 200.0f});
         //     pico -> SetSpeed(1, -pico -> GetSpeed(1));
         // }
-        if (pico -> m_Transform.translation.y < -500) {
+        if (pico -> m_Transform.translation.y < -300) {
             float x = pico -> m_Transform.translation.x - 200.0f, x1 = pico -> m_Transform.translation.x;
             if (m_Phase == Phase::STAGE_THREE ) {
-                if (x1>20) {
-                    pico -> SetPosition({x1-100, 200.0f});
+                if (x1>0) {
+                    pico -> SetPosition({x1-150, 200.0f});
                 }
                 else {
-                    pico -> SetPosition({30, 200.0f});
+                    pico -> SetPosition({70, 200.0f});
                 }
             }
             else {

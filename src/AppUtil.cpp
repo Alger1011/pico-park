@@ -143,8 +143,10 @@ void App::ValidTask() {
         case Phase::STAGE_THREE_LOADING:
             if (true){
                 m_Phase = Phase::STAGE_THREE;
-                m_pico2->SetPosition({40.0f, 100.0f});
-                m_pico1->SetPosition({50.0f, 0.0f});
+
+                m_pico2->SetPosition({60.0f, 100.0f});
+                m_pico1->SetPosition({120.0f, 200.0f});
+
                 m_pico1->SetVisible(true);
                 m_pico2->SetVisible(true);
 
@@ -154,7 +156,9 @@ void App::ValidTask() {
                 std::string mapPath = GA_RESOURCE_DIR"/Map/third.txt";
                 CreateMapTiles(mapPath);
                 // 載入物件
-                auto box1 = std::make_shared<Small_Box>(GA_RESOURCE_DIR"/Image/Character/brick.png", glm::vec2( 55, 250), glm::vec2(57,72));
+
+                auto box1 = std::make_shared<Small_Box>(GA_RESOURCE_DIR"/Image/Character/brick.png", glm::vec2( 50, 0), glm::vec2(57,72));
+
                 m_Objects.push_back(box1);
                 m_Root.AddChild(box1);
 
@@ -270,7 +274,11 @@ void App::ValidTask() {
                 auto down_board = std::make_shared<Board>(GA_RESOURCE_DIR"/Image/Character/board.png", glm::vec2( 960, 32), glm::vec2(200,16));
                 m_Objects.push_back(down_board);//由上往下移，其他條件一樣
                 m_Root.AddChild(down_board);
+                auto down_board = std::make_shared<Board>(GA_RESOURCE_DIR"/Image/Character/board.png", glm::vec2( 960, 32), glm::vec2(200,16));
+                m_Objects.push_back(down_board);//由上往下移，其他條件一樣
+                m_Root.AddChild(down_board);
 
+                auto key = std::make_shared<Key>(GA_RESOURCE_DIR"/Image/Character/key.png", glm::vec2(1300, -100), glm::vec2(31, 61));
                 auto key = std::make_shared<Key>(GA_RESOURCE_DIR"/Image/Character/key.png", glm::vec2(1300, -100), glm::vec2(31, 61));
                 key -> SetZIndex(10);
                 m_Objects.push_back(key);
@@ -287,7 +295,19 @@ void App::ValidTask() {
                 auto board = std::make_shared<Board>(GA_RESOURCE_DIR"/Image/Character/board.png", glm::vec2( 2075, -180), glm::vec2(200,16));
                 m_Objects.push_back(board);//由上往下移，其他條件一樣
                 m_Root.AddChild(board);
+                auto rec1 = std::make_shared<Object>(GA_RESOURCE_DIR"/Image/Character/rectangle4.png", glm::vec2( 475, -180), glm::vec2(180,14));
+                m_Objects.push_back(rec1); //持續上下移動，移動55，先向上移
+                m_Root.AddChild(rec1);
 
+                auto rec2 = std::make_shared<Object>(GA_RESOURCE_DIR"/Image/Character/vrec4.png", glm::vec2( 620, 127), glm::vec2(180,14));
+                m_Objects.push_back(rec2); //持續左右移動，移動480，先向右移
+                m_Root.AddChild(rec2);
+
+                auto board = std::make_shared<Board>(GA_RESOURCE_DIR"/Image/Character/board.png", glm::vec2( 2075, -180), glm::vec2(200,16));
+                m_Objects.push_back(board);//由上往下移，其他條件一樣
+                m_Root.AddChild(board);
+
+                auto door = std::make_shared<Door>(GA_RESOURCE_DIR"/Image/Character/door1.png", glm::vec2(2350, 79), glm::vec2(83, 80));
                 auto door = std::make_shared<Door>(GA_RESOURCE_DIR"/Image/Character/door1.png", glm::vec2(2350, 79), glm::vec2(83, 80));
                 door -> SetZIndex(5);
                 m_Objects.push_back(door);
