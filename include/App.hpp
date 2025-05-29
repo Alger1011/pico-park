@@ -36,6 +36,8 @@ public:
 
     void CreateMapTiles(const std::string& filename);
 
+    void Reset();
+
 private:
     void ValidTask();
 
@@ -45,13 +47,10 @@ private:
         STAGE_ONE,
         STAGE_TWO_LOADING,
         STAGE_TWO,
+        STAGE_THREE_LOADING,
+        STAGE_THREE,
+        STAGE_FOUR_LOADING,
         STAGE_FOUR,
-        //CHANGE_CHARACTER_IMAGE,
-        //ABLE_TO_MOVE,
-        //COLLIDE_DETECTION,
-        //BEE_ANIMATION,
-        OPEN_THE_DOORS,
-        COUNTDOWN,
     };
 
     State m_CurrentState = State::START;
@@ -68,7 +67,7 @@ private:
 
     std::vector<std::shared_ptr<Character>> m_pico;
 
-    std::shared_ptr<Character> m_key;
+    std::shared_ptr<Key> m_key;
     std::shared_ptr<Character> m_door1;
     std::shared_ptr<Character> m_board1;
 

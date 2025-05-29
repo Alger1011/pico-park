@@ -47,11 +47,11 @@ void App::Start() {
     m_Chest->SetVisible(false);
     m_Root.AddChild(m_Chest);
 
-    m_key = std::make_shared<Character>(GA_RESOURCE_DIR"/Image/Character/key.png");
+    m_key = std::make_shared<Key>(GA_RESOURCE_DIR"/Image/Character/key.png", glm::vec2(2050, 110), glm::vec2(31, 61));
     m_key->SetZIndex(5);
-    m_key->SetPosition({50.5f, -10.5f});
-    m_key->SetVisible(false);
-    m_key->m_Transform.scale = glm::vec2(0.5f, 0.5f);
+    // m_key->SetPosition({50.5f, -10.5f});
+    // m_key->SetVisible(false);
+    // m_key->m_Transform.scale = glm::vec2(0.5f, 0.5f);
     m_Root.AddChild(m_key);
 
     m_door1 = std::make_shared<Character>(GA_RESOURCE_DIR"/Image/Character/door1.png");
@@ -61,12 +61,12 @@ void App::Start() {
     m_door1->SetVisible(false);
     m_Root.AddChild(m_door1);
 
-    m_board1 = std::make_shared<Character>(GA_RESOURCE_DIR"/Image/Character/board2.png");
-    m_board1->SetZIndex(5);
-    m_board1->SetPosition({320.5f, -150.5f});
-    //m_board1->m_Transform.scale = glm::vec2(0.5f, 0.5f);
-    m_board1->SetVisible(false);
-    m_Root.AddChild(m_board1);
+    // m_board1 = std::make_shared<Character>(GA_RESOURCE_DIR"/Image/Character/board2.png");
+    // m_board1->SetZIndex(5);
+    // m_board1->SetPosition({320.5f, -150.5f});
+    // //m_board1->m_Transform.scale = glm::vec2(0.5f, 0.5f);
+    // m_board1->SetVisible(false);
+    // m_Root.AddChild(m_board1);
 
     m_MapManager = std::make_unique<MapManager>(m_Root);
 
@@ -104,8 +104,6 @@ void App::Start() {
         m_Doors[i]->SetVisible(false);
         m_Root.AddChild(m_Doors[i]);
     }
-
-    // TODO: The counting down ball for phase 6
 
     m_PRM = std::make_shared<PhaseResourceManger>();
     m_Root.AddChildren(m_PRM->GetChildren());

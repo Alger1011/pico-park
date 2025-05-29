@@ -70,6 +70,10 @@ public:
 
     bool CheckTileCollision();
 
+    int GetSide() { return OnSide;};
+
+    void SetSide(int side) { OnSide = side; }
+
 
 private:
     void ResetPosition() { m_Transform.translation = {0, 0}; }
@@ -78,6 +82,7 @@ private:
     std::vector<float> m_speed = {0, 0, 0, 0}; //上下左右
     bool CanJump = false;
     bool OnHead = false;
+    int OnSide = 0; //無左右
 };
 
 
