@@ -43,13 +43,6 @@ void App::Update() {
     //    ValidTask();
     //}
 
-    // 使用空格鍵報告pico1的座標位置
-
-    if (Util::Input::IsKeyPressed(Util::Keycode::SPACE)) {
-        // 在按下空格鍵時報告 X 座標
-        LOG_INFO("Pico1 X {}", m_pico1->GetPosition().x);
-    }
-
     if (m_EnterDown) {
         if (!Util::Input::IsKeyPressed(Util::Keycode::RETURN)) {
             ValidTask();
@@ -658,16 +651,6 @@ void App::Update() {
     }
 
     m_Root.Update();
-
-    // === 🔽 讓長頸鹿碰到門，門就打開 🔽 ===
-    // if (m_Phase == Phase::STAGE_ONE) {
-    //     for (const auto& door : m_Doors) {
-    //         if (m_Giraffe->IfCollides(door)) {  // ✅ 碰撞檢測
-    //             door->SetVisible(true);  // ✅ 門打開
-    //             door->SetImage(GA_RESOURCE_DIR"/Image/Character/door_open.png");
-    //         }
-    //     }
-    // }
 
     // Key 位子測試
     // ImGui::Begin("test");
