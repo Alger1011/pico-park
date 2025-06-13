@@ -46,7 +46,7 @@ void App::ValidTask() {
                 m_Objects.push_back(key);
                 m_Root.AddChild(key);
 
-                auto door = std::make_shared<Door>(GA_RESOURCE_DIR"/Image/Character/door1.png", glm::vec2(2500, 75), glm::vec2(83, 80));
+                auto door = std::make_shared<Door>(GA_RESOURCE_DIR"/Image/Character/door1.png", glm::vec2(2500, 78), glm::vec2(83, 80));
                 door -> SetZIndex(5);
                 m_Objects.push_back(door);
                 m_Root.AddChild(door);
